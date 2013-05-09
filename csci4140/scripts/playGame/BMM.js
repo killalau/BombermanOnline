@@ -63,6 +63,8 @@ BMO.BMM.prototype.setMap = function(name,onProgress,onComplete){
 					}
 				}
 				onComplete();
+				BMO.webPageBMM.setPlayer({"name":"scripts/playGame/json/demo.json","p1":{"row":1,"col":1}},false,false);
+				BMO.webPageBMM.setController();
 			}catch(e){throw e;};		
 		};
 		loader.load();

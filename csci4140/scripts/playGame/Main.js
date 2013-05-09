@@ -38,8 +38,8 @@ BMO.webPageInit_phase2 = function(handlers,wsClient){
 	BMO.webPageBMM.setMap("scripts/playGame/json/pixi5-MAP1.json",false,function(){
 		requestAnimFrame(BMO.screenRefresh);
 	});
-	BMO.webPageBMM.setPlayer({"name":"scripts/playGame/json/demo.json","p1":{"row":1,"col":1}},false,false);
-	BMO.webPageBMM.setController();
+	//BMO.webPageBMM.setPlayer({"name":"scripts/playGame/json/demo.json","p1":{"row":1,"col":1}},false,false);
+	//BMO.webPageBMM.setController();
 	
 }
 
