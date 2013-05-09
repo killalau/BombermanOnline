@@ -9,7 +9,10 @@ BMO.webPageBMM = null;
 Entry of the web page
 **/
 BMO.webPageInit = function (){
-	var wsClient, handlers = {};
+	var url = document.location.hostname + ":18128";
+	var handlers = webSocket.createHandlers();
+	var client = null;
+	
 	
 	BMO.webPageBMM = new BMO.BMM(wsClient, handlers);
 	BMO.webPageStage = new PIXI.autoDetectRenderer(960, 560);
