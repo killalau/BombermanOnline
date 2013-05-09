@@ -2,26 +2,33 @@
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
-$cookieName = 'BomberManCookie';
+class SimpleCookie{
 
-function cookieExist(){
-	if (isset($_COOKIE[$cookieName])){
-		return true;
-	}else
-		return false;
-}
+	var $cookieValue = null;
 
-function parseCookieSession(){
-	$cookieValue = $_COOKIE[$cookieName];
-	$colonPos = strpos($cookieValue, '%');
-	$session = substr($cookieValue, $colonPos+3);
-	return $session;
-}
+	function __construct(){
+		if (isset($_COOKIE['BomberManCookie'])){
+			$this->cookieValue = $_COOKIE['BomberManCookie'];
+		}
+	}
 
-function parseCookieId(){
-	$cookieValue = $_COOKIE[$cookieName];
-	$colonPos = strpos($cookieValue, '%');
-	$id = substr($cookieValue, 0, $colonPos-1);
-	return $id;
+	function cookieExist(){
+		if (isset($this->cookieValue)){
+			return true;
+		}else
+			return false;
+	}
+
+	function parseCookieSession(){
+		$colonPos = strpos($this->cookieValue, ':');
+		$session = substr($this->cookieValue, $colonPos+1);
+		return $session;
+	}
+
+	function parseCookieId(){
+		$colonPos = strpos($this->cookieValue, ':');
+		$id = substr($this->cookieValue, 0, $colonPos-1);
+		return $id;
+	}
 }
 ?>

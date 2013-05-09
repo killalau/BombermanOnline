@@ -41,7 +41,7 @@
             //     ====set client cookie====
 			$id = $myDB->getIdBySession($session_key);
 				//setcookie("BomberManCookie", $session_key, $expiry_time, '/');
-			setcookie("BomberManCookie", $id.':'.$session_key, $expiry_time, '/');
+			setrawcookie("BomberManCookie", $id.':'.$session_key, $expiry_time, '/');
             //     =========================
             //        ====redirect====
             header("Location:http://$my_host:$nodejs_port$lobby_url");            

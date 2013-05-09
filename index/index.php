@@ -3,14 +3,14 @@ error_reporting(E_ALL);
 ini_set('display_errors', '1');
 include("../internal/dbms.php");
 include("../internal/cookie.php");
-
-$lobby_url = '../lobby/lobby.php';
+include("../internal/myPath.php");
 
 $myDB = new SimpleDB();
+$myCookie = new SimpleCookie();
 
 //====================HAS COOKIE====================
-if (cookieExist()){
-    $usr_session = parseCookieSession();
+if ($myCookie->cookieExist()){
+    $usr_session = $myCookie->parseCookieSession();
     $db_session = $myDB->getSessionKeyBySession($usr_session);
     
     if ($db_session != null){        
@@ -18,7 +18,7 @@ if (cookieExist()){
             //update session key (TO BE DONE IN PROTECTED ZONE)
             //setcookie("BomberManCookie", $usr_session, time()+$session_duration, '/');        
             //redirect
-            header("Location: $lobby_url");
+            header("Location:http://$my_host:$nodejs_port$lobby_url");
             exit;
         }
     }
@@ -66,5 +66,5 @@ if (cookieExist()){
                 ?>
             </div>
         </div>
-
+        
     </body></html>
