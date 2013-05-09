@@ -1,0 +1,75 @@
+<html>
+<head>
+<title>Chatroom</title>
+</head>
+
+<body>
+<form onsubmit="return false">
+	Username: <input type="text" id="username" /><br>
+	Session: <input type="text" id="session" /><br>
+	<input type="button" id="loginBtn" value="Login" />
+	<input type="button" id="logoutBtn" value="Logout" /><br>
+	<br>
+	<div id="chatroom"></div>
+</form>
+
+<script src="scripts/webSocket.js"></script>
+<script src="scripts/chatroom.js"></script>
+<link rel="stylesheet" type="text/css" href="styles/chatroom.css">
+<script>
+var url = document.location.hostname + ":18128";
+var handlers = webSocket.createHandlers();
+var client = null;
+
+handlers["setNameACK"] = function(data, client){
+	if(data === true){
+		console.log("Login success in websocket");
+
+		// Create chatroom
+		var div = document.getElementById('chatroom');
+		div.innerHTML = "";
+		div.appendChild(chatroom.createChatroom(handlers, client));
+	}else{
+		console.log("Login fail in websocket");
+	}
+}
+
+handlers["onclose"] = function(){
+	// When disconnect, change GUI
+	var user = document.getElementById('username');
+	user.disabled = false;
+	user.value = "";
+	var session = document.getElementById('session');
+	session.disabled = false;
+	session.value = "";
+	document.getElementById('loginBtn').disabled = false;
+	document.getElementById('chatroom').innerHTML = "";
+	
+}
+
+// The ID, session may get in form / cookies
+function login(){
+	// Change GUI
+	var username = document.getElementById('username').value;
+	var session = document.getElementById('session').value;
+	document.getElementById('username').disabled = true;
+	document.getElementById('session').disabled = true;
+	document.getElementById('loginBtn').disabled = true;
+
+	// Create client object and websocket connection
+	client = webSocket.createConnection(url, handlers, username, session);
+}
+
+function logout(){
+	if(client && client.connection)
+		client.connection.close();
+}
+
+function init(){
+	document.getElementById("loginBtn").addEventListener('click', login, false);
+	document.getElementById("logoutBtn").addEventListener('click', logout, false);
+}
+init();
+</script>
+</body>
+</html>

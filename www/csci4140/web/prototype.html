@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Bomberman</title>
+</head>
+
+<body>
+<h1>Bomberman network latency testing</h1>
+
+<form onsubmit="return false;">
+	<div id="status"></div><br />
+	
+	Username: <input type="text" id="username" onkeydown="if (event.keyCode == 13) login()"/>
+	<input type="button" id="loginBtn" value="Login" onclick="login()" /><br />
+	
+	Ping: <span id="ping"></span><br />
+	
+	User List:
+	<!-- div style="width:100px; height:150px; border:1px solid black; overflow:auto" -->
+	<div style="border:1px solid black">
+		<ul id="userList"></ul>
+	</div><br/>
+	
+	<input type="button" value="Logout" onclick="logout()" /> <br />
+	
+	<input type="button" value="Ping" onclick="pingServer()" /><br />
+	
+	<h3>Payload latency test</h3>
+	Payload type: <input type="number" id="payloadType" value="0" min="0" max="14" /><br />
+	Payload length: <span id="payloadLengthDiv">1</span> char<br />
+	Duration(ms): <input type="number" id="duration" value="500" min="0" max="1000" /><br />
+	Round: <input type="number" id="round" value="50" min="1" /><br />
+	Packet sent: <span id="count">0</span><br />
+	<input type="button" id="startTestBtn" value="Start test" onclick="startTest()" /><br />
+	
+	</div>
+</form>
+
+
+<script type="text/javascript">
+var ws = null;
+var client = null;
+(function (){
+	if(!("WebSocket" in window)){
+		alert("WebSocket is not supported");
+	}
+})();
+
+var wsUrl = document.location.href.split('/')[2];
+
+function login(){
+	if(!ws){
+		//ws = new WebSocket("ws://123.202.57.54:8080");
+		ws = new WebSocket("ws://" + wsUrl);
+		client = {
+			username: false,
+			connected: false,
+			ping: {
+				ping: -1,
+				avgping: -1,
+				maxping: -1,
+				minping: 1000000,
+				cping: 0,
+				pingCount: 0
+			}
+		};
+		ws.sendData = function(type, data){
+			clearTimeout(ws.timeoutFunc);
+			var ctime = new Date();
+			var obj = {
+				username: client.username,
+				requestTimestamp: ctime,
+				ping: client.ping,
+				type: type,
+				data: data
+			};
+			ws.send(JSON.stringify(obj));
+			if(client.ping.avgping && client.ping.avgping != -1)
+				ws.timeoutFunc = setTimeout(function(){
+					pingServer();
+					console.log("Packet block");	
+				}, client.ping.avgping*1.5);
+		};
+		
+		ws.onopen = function(){
+			var username = document.getElementById('username').value;
+			client.username = username;
+			var message = {
+				username : username,
+				session : false
+			};
+			ws.sendData('setName', message);
+		};
+
+		ws.onerror = function(error){
+			alert(error);
+		};
+		ws.onmessage = function(message){
+			try{
+				var obj = JSON.parse(message.data);
+				
+				if(obj.username == client.username){
+					updatePing(new Date() - new Date(obj.requestTimestamp));
+				}
+				
+				if(obj.type == "setNameACK"){
+					clearTimeout(ws.timeoutFunc);
+					client.connected = true;
+					updateStatus();
+					pingServer();
+				}else if(obj.type == "updateUserList"){
+					var ul = document.getElementById('userList');
+					ul.innerHTML = "";
+					for(var i = 0, d; d = obj.data[i]; i++){
+						var li = document.createElement('li');
+						li.id = d;
+						li.style.position = 'relative';
+						li.style.left = '0px';
+						li.innerHTML = d;
+						ul.appendChild(li);
+					}
+				}else if(obj.type == 'pong'){
+					clearTimeout(ws.timeoutFunc);
+				}else if(obj.type == 'payloadTestStartACK'){
+					client.ping = {
+						ping: -1,
+						avgping: -1,
+						maxping: -1,
+						minping: 1000000,
+						cping: 0,
+						pingCount: 0
+					};
+					var ul = document.getElementById('userList');
+					for(var i = 0; i < ul.childNodes.length; i++){
+						ul.childNodes[i].style.left = "0px";
+					}
+					payloadType = obj.data.payloadType;
+					document.getElementById('payloadType').value = payloadType;
+					document.getElementById('payloadLengthDiv').innerHTML = payload[payloadType].length;
+					document.getElementById('duration').value = obj.data.duration;
+					document.getElementById('round').value = obj.data.round;
+					
+					var newObj = {count:1, data: payload[payloadType]};
+					document.getElementById('count').innerHTML = 1;
+					ws.sendData('payloadTest', newObj);
+					document.getElementById('startTestBtn').disabled = true;
+				}else if(obj.type == 'payloadTestACK'){
+					clearTimeout(ws.timeoutFunc);
+					setTimeout(function(){
+						if(obj.data < document.getElementById('round').value){
+							document.getElementById('count').innerHTML = obj.data+1;
+							var newObj = {count:obj.data+1, data: payload[payloadType]};
+							ws.sendData('payloadTest', newObj);
+						}else{
+							document.getElementById('startTestBtn').disabled = false;
+						}
+					}, document.getElementById('duration').value);					
+				}else if(obj.type == 'payloadTestUpdate'){
+					var username = obj.data.username;
+					var div = document.getElementById(username);
+					var left = parseInt(div.style.left.slice(0, div.style.left.length));
+					left += 10;
+					div.style.left = left + "px";
+				}
+				
+			}catch(e){
+				alert(' WebSocket: invalid message from server.');
+			}
+		};
+		ws.onclose = function(){
+			ws = null;
+			updateStatus();
+		};
+		
+		document.getElementById('loginBtn').disabled = true;
+		document.getElementById('username').disabled = true;
+	}
+}
+
+function logout(){
+	ws.close();
+	document.getElementById('userList').innerHTML = "";
+	document.getElementById('ping').innerHTML = "";
+}
+
+function updateStatus(){
+	var div = document.getElementById('status');
+	var login = document.getElementById('loginBtn');
+	var username = document.getElementById('username');
+	if(ws && client.connected){
+		div.innerHTML = 'Online';
+		div.style.color = 'green';
+		login.disabled = true;
+		username.disabled = true;
+	}else{
+		div.innerHTML = 'Offline';
+		div.style.color = 'red';
+		login.disabled = false;
+		username.disabled = false;
+	}
+}
+updateStatus();
+
+function pingServer(data){
+	data = data ? data : false;
+	ws.sendData('ping', data);
+}
+
+function updatePing(newping){
+	var div = document.getElementById('ping');
+	if(client.connected){
+		var ping = client.ping;
+		ping.ping = newping;
+		ping.cping += newping;
+		ping.pingCount++;
+		ping.avgping = ping.cping / ping.pingCount;
+		ping.maxping = newping > ping.maxping ? newping : ping.maxping;
+		ping.minping = newping < ping.minping ? newping : ping.minping;
+		div.innerHTML = JSON.stringify(ping);
+	}else{
+		div.innerHTML = "";
+	}
+}
+
+payloadType = 0;
+var payload = ['0', '00', '00000'];
+for(var i = 1; i < 5; i++){
+	for(var j = 0; j < 3; j++){
+		var str = "";
+		for(var k = 0; k < 10; k++){
+			var index = (i-1)*3+j;
+			str += payload[index];
+		}
+		payload.push(str);
+	}
+}
+
+function startTest(){
+	var obj = {
+		payloadType: document.getElementById('payloadType').value,
+		duration: document.getElementById('duration').value,
+		round: document.getElementById('round').value
+	};
+	ws.sendData('payloadTestStart', obj);
+}
+
+
+</script>
+
+</body>
+</html>

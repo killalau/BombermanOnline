@@ -1,0 +1,3 @@
+AuthName "Forbidden"
+AuthType Digest
+require user admin

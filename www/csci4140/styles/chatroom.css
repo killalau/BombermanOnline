@@ -1,0 +1,57 @@
+.chatroom_container {
+	width: 596px;
+	height: 166px;
+	background-color: #ffffff;
+}
+
+.chatroom_content {
+	width: 596px;
+	height: 146px;
+}
+
+.chatroom_chat {
+	width: 410px;
+	height: 146px;
+	border-right: 1px solid black;
+	overflow: auto;
+}
+
+.chatroom_clientList {
+	width: 186px;
+	height: 146px;
+	position: relative;
+	top: -146px;
+	left: 410px;
+	overflow: auto;
+}
+
+.chatroom_typearea {
+	height: 20px;
+	border-top: 1px solid black;
+	padding: 0px 4px 0px 4px;
+}
+
+.chatroom_container ul {
+	margin: 0px;
+	padding: 4px;
+}
+
+.chatroom_container li {
+	list-style-type: none;
+}
+
+.chatroom_privateChatWith {
+	cursor: pointer;
+	background: #cccccc;
+	border-radius: 4px;
+	padding: 0px 4px 0px 4px;
+	margin: 0px 4px 0px 0px;
+}
+
+.chat_privateMsg {
+	color: #3366ff;
+}
+
+.chat_privateSay {
+	color: #cc33ff;
+}

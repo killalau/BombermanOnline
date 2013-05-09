@@ -1,0 +1,92 @@
+.page-wrap{
+	width: 960;
+	height: 560;
+	margin: 0px auto;
+	border: 2px solid;
+	position: relative;
+	display:blcok;/***/
+}
+
+.titlebar{
+	top: 100;
+	position: relative;
+	margin: 0px auto;
+	text-align: center;
+	display:block;/***/
+}
+
+.titlebar-bigtitle{
+	font-size: 40;
+}
+
+.titlebar-smalltitle{
+	font-size: 21;
+}
+
+.subtitlebar{
+	position: inherit;
+	top: 100;
+	font-size: 14;
+	color: grey;
+	padding-left: 570;
+	display: inline;
+}
+
+.subsubtitlebar{
+	position: inherit;
+	top: 120px;
+	text-align: center;
+}
+
+.login-canvas{
+	position: relative;
+	top: 151px;
+	border: 1px solid;
+	width: 500;
+	height: 200;
+	margin: 0px auto;
+	text-align: center;
+	display:block;
+}
+
+.login-form{
+	margin: 0px auto;
+}
+
+#id-notify-node{
+	position: absolute;
+	font-size: 12px;
+	text-align: left;
+}
+
+#pwd-notify-node{
+	position: absolute;
+	font-size: 12px;
+	text-align: left;
+}
+
+.login-rightbutton{
+	float: right;
+	left: 35px;
+	position: relative;
+	top: -15px;
+}
+
+.login-leftbutton{
+	float: left;
+	right: 40px;
+	position: relative;
+	top: -15;	
+}
+
+.login-notify-node{
+	position: relative;
+	top: 129px;
+	text-align: center;
+	display: inline-block;
+	width: 100%;
+	color: red;
+}
+
+
+

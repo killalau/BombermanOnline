@@ -1,0 +1,29 @@
+<html>
+<head>
+</head>
+
+<body>
+<form onsubmit="return false">
+	Username: <input type="text" id="username" /><br>
+	Session: <input type="text" id="session" /><br>
+	<input type="button" id="loginBtn" value="Login" />
+</form>
+<a href="prototype.html">prototype.html</a>
+<br>
+<a href="chatroom.html">chatroom.html</a>
+<br>
+<a href="Lobby.html">Lobby.html</a>
+
+<script>
+function setCookie(c_name,value,exdays){
+	var exdate=new Date();
+	exdate.setDate(exdate.getDate() + exdays);
+	var c_value=value + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+	document.cookie=c_name + "=" + c_value;
+}
+loginBtn.addEventListener("click",function(e){
+	setCookie("BomberManCookie",username.value+":"+session.value,1);
+},false);
+</script>
+</body>
+</html>

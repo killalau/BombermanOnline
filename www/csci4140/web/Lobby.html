@@ -1,0 +1,81 @@
+<html>
+	<head>
+		<title>BomberMan Online</title>
+		<script type="text/javascript" src="scripts/Lobby.js"></script>
+		<script type="text/javascript" src="scripts/webSocket.js"></script>
+		<link rel="stylesheet" type="text/css" href="styles/Lobby.css">
+		<script src="scripts/webSocket.js"></script>
+		<script src="scripts/chatroom.js"></script>
+		<link rel="stylesheet" type="text/css" href="styles/chatroom.css">
+		<script>window.addEventListener("load",Lobby.init_phase1,false);</script>
+	</head>
+	<body>	
+	<div id="game" class="centerLobby">
+		<!--Title Bar-->
+		<div id="title" class="title">
+		BomberMan Online
+			<div id="logout" class="logout">
+			Logout
+			</div>
+			<div style="width:100%;height:2px;background-color:white;border-bottom:2px solid red"></div>
+		</div>
+		
+		<!--Lobby-->
+		<div id="lobby" class="lobby">
+			<!--Lobby interface L-->		
+			<div id="lobby_left" class="lobbyLeft">
+			<!--Lobby Bar-->
+			<div class="llbar">
+				<div class="rm">Room Name</div>
+				<div class="np">Num of Player</div>
+				<div class="ping">Ping</div>			
+			</div>		
+			<!------------->
+			<div class="space"><img id="up" style="height:21;" src="images/up.png"></div>
+			<!------------->
+			
+			<!--Room List-->		
+			<div id="room_list" class="rmList">
+				<div id="row0" style="width:600;height:25;">
+
+				</div>
+				<div id="row1" class="space"></div>
+				<div id="row2" style="width:600;height:25;">
+
+				</div>
+				<div id="row3" class="space"></div>
+				<div id="row4" style="width:600;height:25;">
+
+				</div>
+				<div id="row5" class="space"></div>
+				<div id="row6" style="width:600;height:25;">
+
+				</div>
+				<div id="row7" class="space"></div>
+				<div id="row8" style="width:600;height:25;">
+
+				</div>
+			</div>
+			
+			<!------------->		
+			<div class="space"><img id="down" style="height:21;" src="images/down.png"></div>
+			<!------------->
+			
+			<!--Chat room-->
+			<div id="chat_room" class="chat">
+			<div id="chat_content" class="content"></div>
+			<div id="chat_list" class="list"></div>
+			<div id="chat_box" class="box">abc</div>
+			</div>
+			<!------------->
+			</div>
+			<!--Lobby interface R-->
+			<div id="lobby_right" class="lobbyRight">
+				<div id="profile" class="profile" style="border:2px solid black;"></div>
+				<div id="player_name" class="pn"></div>
+				<div id="player_stat" class="ps"></div>
+			</div>
+		</div>	
+	</div>
+	</body>
+</html>

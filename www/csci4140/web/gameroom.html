@@ -1,0 +1,86 @@
+<html>
+    
+    <head>
+        <link rel="stylesheet" type="text/css" href="../styles/gameroom.css">
+		<script type="text/javascript" src="../scripts/gameroom_action.js"></script>
+		<script type="text/javascript" src="../scripts/gameroom_init.js"></script>
+		<script type="text/javascript" src="../scripts/helper_function.js"></script>
+		<script type="text/javascript" src="../scripts/webSocket.js"></script>
+		<script>window.addEventListener("load",init,false);</script>
+        <title>BomberMan Online</title>
+        
+    </head>
+    <body>
+        <div id = "title" class = "title">
+            
+            
+            <div id = "goback" class = "goback">  
+                Back
+            </div>
+            <div style="width:824; float:left">BomberMan Online</div>
+            
+            <div id = "logout" class = "logout">
+                logout
+            </div>
+            
+        </div>
+        
+        <div id = "room_name" class = "room_name">
+            Room Name
+        </div>
+        
+        <div id = "host_div" class = "host_div"></div>
+        
+        <div id = "player_div" class = "player_div">
+            <div id = "player1" class = "player" style = "left:61px"></div>
+            <div id = "player2" class = "player" style = "left:291px">
+			</div>
+            <div id = "player3" class = "player" style = "left:521px">
+			</div>
+            <div id = "player4" class = "player" style = "left:751px">
+			</div>		
+        </div>
+        <div id = "ping_div" class = "ping_div">
+            <div id = "ping_1" class  = "ping" style = "left:61px">ping: 888</div>
+            <div id = "ping_1" class  = "ping" style = "left:291px">ping: 888</div>
+            <div id = "ping_1" class  = "ping" style = "left:521px">ping: 888</div>
+            <div id = "ping_1" class  = "ping" style = "left:751px">ping: 888</div>
+        </div>
+        
+        <div id = "lower_div" class = "lower_div">
+            <div id = "left" class= "left">
+				<div id = "chat_content" class = "chat_content"></div>
+				<div id = "chat_type" class = "chat_type"></div>
+			
+			
+			</div>
+            <div id = "right" class = "right">
+                <div id = "map_div" class = "map_div">
+                    <div id = "map_choose" class = "map_choose">
+					<img id = "map_img" class = "map_img" src = "../images/map1.jpg">
+					
+					</div>
+                    <div id = "map_setting" class = "map_setting">
+						<div id = "rounds" class = "setting_text"># of Rounds: 1</div>
+						<div id = "duration" class = "setting_text">Duration: 10 mins</div>
+					</div>                   
+                </div>
+				
+                <div id = "second_div" class = "second_div">
+                    <div id = "map_change" class = "map_change">
+						<img id = "map_back" class = "back" src = "../images/back.png">
+						<img id = "map_next" class = "next"  src = "../images/next.png">
+					</div>
+                    <div id = "State" class = "State">State</div>
+                </div>
+				
+
+            </div>
+            
+            
+        </div>
+        
+        
+        
+    </body>
+</html>

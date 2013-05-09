@@ -1,0 +1,207 @@
+<html>
+    <script>
+        var valid_id = false;
+        var valid_pwd = false;
+        
+        function post_to_url(path, params, method){
+            method = method || "post"; // Set method to post by default, if not specified.
+        
+            var form = document.createElement("form");
+            form.setAttribute("method", method);
+            form.setAttribute("action", path);
+        
+            for(var key in params) {
+                if(params.hasOwnProperty(key)) {
+                    var hiddenField = document.createElement("input");
+                    hiddenField.setAttribute("type", "hidden");
+                    hiddenField.setAttribute("name", key);
+                    hiddenField.setAttribute("value", params[key]);
+        
+                    form.appendChild(hiddenField);
+                 }
+            }
+        
+            document.body.appendChild(form);
+            form.submit();
+        }                            
+        
+        function submit_request(){
+            var id = document.getElementById("id-box").value;
+            var pwd = document.getElementById("pwd-box").value;
+            //var encoded_pwd = window.btoa(pwd);
+            
+            var acc_xhr = new XMLHttpRequest();
+            var url = '../internal/create_acc.php';
+            acc_xhr.open('POST', url, true);
+            acc_xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+            acc_xhr.send('id='+id+'&pwd='+pwd);
+            var nofify_node = document.getElementById("login-notify-node");
+            nofify_node.innerHTML = 'Please wait...';
+            acc_xhr.onreadystatechange = function(){
+                if (acc_xhr.readyState == 4){
+                    if (acc_xhr.status != 200){
+                        console.log('id_xhr request error:'+acc_xhr.status);
+                    }else{
+                        if (acc_xhr.responseText == 'Success'){
+                            //====Account creation success====
+                            nofify_node.innerHTML = 'Logging in...';                           
+                            //        ====login====
+                            url = '../internal/login.php';
+                            var param_wrap = new Array();
+                            param_wrap["id"] = id;
+                            param_wrap["pwd"] = pwd;
+                            post_to_url(url, param_wrap, 'POST');
+                            //        =============
+                            //================================
+                        }else{
+                            //====Account creation failed====
+                            if (acc_xhr.responseText == 'Fail'){
+                                nofify_node.innerHTML = 'Registration failed. Please try again.';
+                            }else{                            
+                                nofify_node.innerHTML = 'Invalid registration. Please try again.';
+                            }
+                            //===============================
+                        }
+                    }
+                }
+            }            
+        }
+        
+        function show_register_btn(){
+            var register_btn = document.getElementById("register-btn");            
+            if ((valid_id == true) && (valid_pwd == true)){                
+                register_btn.style.display = '';
+            }else{
+                register_btn.style.display = 'none';                
+            }
+        }
+        
+        function check_string(str){
+            var len = str.length;
+            for (var i = 0; i < len; i++){
+                if (!(  ((str[i] >= '0') && (str[i] <= '9')) ||
+                        ((str[i] >= 'A') && (str[i] <= 'Z')) ||
+                        ((str[i] >= 'a') && (str[i] <= 'z')) ))
+                    return false;                
+            }
+            return true;
+        }
+        
+        function get_id_status(e){
+            var id_node = document.getElementById("id-box");
+            var pwd_node = document.getElementById("pwd-box");
+            var id_entry = id_node.value;
+            var notify_node = document.getElementById("id-notify-node");
+            if (id_entry.length == 0){                
+                var register_btn = document.getElementById("register-btn");
+                notify_node.innerHTML = 'Cannot be empty';                
+                valid_id = false;
+                pwd_node.disabled = true;
+                show_register_btn();
+            }else{
+                if (check_string(id_entry) == true){
+                    var url = '../internal/check_exist_acc.php?id_entry='+id_entry;
+                    var id_xhr = new XMLHttpRequest();
+                    id_xhr.open('GET', url, true);
+                    id_xhr.send();
+                    id_xhr.onreadystatechange = function(){
+                        if (id_xhr.readyState == 4){
+                            if (id_xhr.status != 200){
+                                console.log('id_xhr request error:'+id_xhr.status);
+                            }else{                                
+                                notify_node.innerHTML = id_xhr.responseText;
+                                console.log('id_xhr.responseText:'+id_xhr.responseText);                            
+                                if (id_xhr.responseText == 'Valid ID'){                                
+                                    pwd_node.disabled = false;
+                                    valid_id = true;
+                                    console.log(valid_id);
+                                }else{                                
+                                    pwd_node.disabled = true;
+                                    valid_id = false;         
+                                }   
+                            }
+                            show_register_btn();
+                        }
+                    }
+                }else{
+                    notify_node.innerHTML = 'Please use letters and numbers only';
+                    pwd_node.disabled = true;
+                    valid_id = false;
+                    show_register_btn();
+                }
+            }
+            if ((e.keyCode == 13) && (valid_id == true) && (valid_pwd == true)){
+                submit_request();
+            }
+        }
+        
+        function get_pwd_status(e){
+            var pwd_node = document.getElementById("pwd-box");
+            var pwd_entry = pwd_node.value;
+            var notify_node = document.getElementById("pwd-notify-node");            
+            
+            if (pwd_entry.length >= 6){
+                notify_node.innerHTML = 'OK';
+                valid_pwd = true;
+            }else{
+                notify_node.innerHTML = 'At least 6 characters are needed';
+                valid_pwd = false;
+            }            
+            console.log('get_pwd_status');
+            console.log(e.keyCode);
+            if ((e.keyCode == 13) && (valid_id == true) && (valid_pwd == true)){
+                submit_request();
+            }
+            show_register_btn();
+        }
+        
+        function init(e){            
+            var register_btn = document.getElementById("register-btn");            
+            register_btn.style.display = 'none';
+            register_btn.addEventListener('click', submit_request, false);
+            var id_node = document.getElementById("id-box");
+            id_node.addEventListener('keyup', get_id_status, false);
+            var pwd_box = document.getElementById("pwd-box");
+            pwd_box.disabled = true;
+            pwd_box.addEventListener('keyup', get_pwd_status, false);            
+            //document.addEventListener('keyup', show_register_btn, false);
+        }
+        window.addEventListener('load', init, false);
+    </script>
+    
+    <head>
+		<link rel="stylesheet" type="text/css" href="../css/frontpagestyle.css">
+		<title>Register - BomberMan by I4s</title>
+	</head>
+	<body style="font-family: 'Century Gothic';">
+		<div class="page-wrap">
+				<div class="titlebar">
+					<text class="titlebar-bigtitle">BomberMan</text>
+					<text class="titlebar-smalltitle">Online!</text>
+				</div>	
+				<div class="subtitlebar">
+				By Irresistible 4s
+				</div>
+				<div class="subsubtitlebar">
+				Registration Page</div>
+				
+				<div class="login-canvas">				
+                    <br>
+                    <br>
+                    <form class="login-form" id="login_form" method="POST" >
+                    Player ID<br>
+                    <input id="id-box" type="text" name="id" autofocus>
+                    <span id="id-notify-node" ></span>
+                    <br>
+                    <br>				
+                    Password<br>				
+                    <input id="pwd-box" type="password" name="pwd">
+                    <span id="pwd-notify-node" ></span>
+                    
+                    </form>
+                    <input class="login-rightbutton" id="register-btn" type="image" src="./Login_register_button.png" >				
+				</div>
+            <div class="login-notify-node" id="login-notify-node" ></div>
+		</div>
+	
+</body></html>
