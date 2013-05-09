@@ -1,0 +1,20 @@
+{"frames": {
+"box":
+{
+	"frame": {"x":52,"y":2,"w":48,"h":48},
+	"trimmed": false
+},
+"tile":
+{
+	"frame": {"x":2,"y":52,"w":48,"h":48},
+	"trimmed": false
+},
+"wall":
+{
+	"frame": {"x":2,"y":2,"w":48,"h":48},
+	"trimmed": false
+}},
+"meta": {
+	"image": "../../../images/pixi5-MAP1.png"
+}
+}
