@@ -67,5 +67,6 @@ if (cookieExist()){
                 ?>
             </div>
         </div>
+    Edited on Github Testing
         
     </body></html>
