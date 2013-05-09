@@ -67,10 +67,15 @@ if (cookieExist()){
                 ?>
             </div>
         </div>
+<<<<<<< HEAD
+        		
+	Fith test. Change before sync using GitHub for windows.
+=======
     Edited on Github Testing
 	
 	Forth Test using GitHub for windows
         
         Franky Hack this.
         Franky second hack.
+>>>>>>> 20749c63ce34dc3c70e2f62f9e1ce3e056574fb6
     </body></html>
