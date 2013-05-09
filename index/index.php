@@ -36,7 +36,6 @@ if (cookieExist()){
     <title>Index - BomberMan by I4s</title>
     </head>
     <body style="font-family: 'Century Gothic';">
-	<?echo $usr_session?>
         <div class="page-wrap">
     <div class="titlebar">
     <text class="titlebar-bigtitle">BomberMan</text>
@@ -67,12 +66,5 @@ if (cookieExist()){
                 ?>
             </div>
         </div>
-	Fith test. Change before sync using GitHub for windows.
 
-    Edited on Github Testing
-	
-	Forth Test using GitHub for windows
-        
-        Franky Hack this.
-        Franky second hack.
     </body></html>
