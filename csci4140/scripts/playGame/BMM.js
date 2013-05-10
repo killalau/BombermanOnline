@@ -94,6 +94,16 @@ BMO.BMM.prototype.setMap = function(data,onProgress,onComplete){
 	}catch(e){throw e;};
 }
 
+BMO.BMM.prototype.getElementById = function(id){
+	if(typeof id === 'string'){
+		for(var i = 0, e; e = this.elementList[i]; i++){
+			if(e.id == id){
+				return e;
+			}
+		}
+	}
+}
+
 /*
 @public method setPlayer
 @param msg: 
@@ -109,7 +119,7 @@ BMO.BMM.prototype.setPlayer = function(msg,onProgress,onComplete){
 	console.log("setPlayer");
 	var playerSkin = [msg.name];//demo.json eg
 	var self = this;
-	console.log("self="+self+" "+"playerSkin="+playerSkin);
+	console.log("self="+msg.id+" "+"playerSkin="+playerSkin);
 	//if (typeof(onComplete) !== "function" ) throw "I need a call-back for onLoadend";
 	try{
 		var loader = new PIXI.AssetLoader(playerSkin);
@@ -137,10 +147,12 @@ BMO.BMM.prototype.setController = function(){
 	var self = this;
 	
 	document.body.addEventListener("keydown",function(e){
-		self.elementList[0].eventProcesser(e);
+		//self.elementList[0].eventProcesser(e);
+		self.getElementById( self.wsClient.username).eventProcesser(e);
 	},false);
 	document.body.addEventListener("keyup",function(e){
-		self.elementList[0].eventProcesser(e);
+		//self.elementList[0].eventProcesser(e);
+		self.getElementById( self.wsClient.username).eventProcesser(e);
 	},false);
 	
 	self.handlers["playerMoveACK"] = function(){};

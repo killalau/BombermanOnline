@@ -553,17 +553,17 @@ function game_mapInit(data, gServer, gClient){
 	
 	for(var i = 0, c; c = gServer.roomList[gClient.room].clientList[i]; i++){
 		var px = py = 1;
-		if(i == 1 || i == 2){
+		if(c.seat == 1 || c.seat == 2){
 			px = json.mapsize.width - 2;
 		}
-		if(i == 1 || i == 3){
+		if(c.seat == 1 || c.seat == 3){
 			py = json.mapsize.height - 2;
 		}
 		json.players.push({
 			username : c.username,
 			seat : c.seat,
-			view : "scripts/playGame/json/hamster_" + (i + 1) + ".json",
-			viewPrefix : "hamster" + (i+1) + "_",
+			view : "scripts/playGame/json/hamster_" + (c.seat + 1) + ".json",
+			viewPrefix : "hamster" + (c.seat+1) + "_",
 			pos : { x : px, y : py}
 		});
 	}
