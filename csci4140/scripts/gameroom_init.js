@@ -50,7 +50,10 @@ function AddEventListenter(handlers, wsClient) {
 			//console.log(message[0][0]);
 			console.log(message.length);
 
-			
+			//create chatroom
+			var div = document.getElementById('left');
+                div.innerHTML = "";
+                div.appendChild(chatroom.createChatroom(handlers, wsClient));
 		}
 		
 		
