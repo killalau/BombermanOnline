@@ -9,6 +9,7 @@ var BMO = window.BMO ? window.BMO : {};
 BMO.BM =function(_grid,_BMM,wsClient){
 	try{
 		BMO.Element.call(this,_grid,_BMM);
+		this.id = false;
 		this.speed = 4;
 		this.direction = "D";		
 		this.animationIndex = 0;
@@ -144,7 +145,7 @@ BMO.BM.prototype.move = function(dest_row,dest_col){
 				}
 				break;		
 		}
-		var _id = this.direction + this.animationIndex;
+		var _id = this.viewPrefix + this.direction + this.animationIndex;
 		this.setView(_id);
 		/*
 		this.view.position.x = this.X;
