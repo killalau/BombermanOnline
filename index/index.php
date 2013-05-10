@@ -3,14 +3,14 @@ error_reporting(E_ALL);
 ini_set('display_errors', '1');
 include("../internal/dbms.php");
 include("../internal/cookie.php");
-
-$lobby_url = '../lobby/lobby.php';
+include("../internal/myPath.php");
 
 $myDB = new SimpleDB();
+$myCookie = new SimpleCookie();
 
 //====================HAS COOKIE====================
-if (cookieExist()){
-    $usr_session = parseCookieSession();
+if ($myCookie->cookieExist()){
+    $usr_session = $myCookie->parseCookieSession();
     $db_session = $myDB->getSessionKeyBySession($usr_session);
     
     if ($db_session != null){        
@@ -18,7 +18,7 @@ if (cookieExist()){
             //update session key (TO BE DONE IN PROTECTED ZONE)
             //setcookie("BomberManCookie", $usr_session, time()+$session_duration, '/');        
             //redirect
-            header("Location: $lobby_url");
+            header("Location:http://$my_host:$nodejs_port$lobby_url");
             exit;
         }
     }
@@ -36,7 +36,6 @@ if (cookieExist()){
     <title>Index - BomberMan by I4s</title>
     </head>
     <body style="font-family: 'Century Gothic';">
-	<?echo $usr_session?>
         <div class="page-wrap">
     <div class="titlebar">
     <text class="titlebar-bigtitle">BomberMan</text>
@@ -67,7 +66,9 @@ if (cookieExist()){
                 ?>
             </div>
         </div>
+<<<<<<< HEAD
     Edited on Github Testing
+=======
+>>>>>>> 00fe44f0148009f6d86837a504f72198367cc777
         
-        Franky Hack this.
     </body></html>
