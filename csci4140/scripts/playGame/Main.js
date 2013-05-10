@@ -35,7 +35,7 @@ BMO.webPageInit_phase2 = function(handlers,wsClient){
 	BMO.webPageStage = new PIXI.autoDetectRenderer(960, 560);
 	document.body.appendChild(BMO.webPageStage.view);
 	//somehow get the map's skin name and player's skin
-	BMO.webPageBMM.setMap("scripts/playGame/json/pixi5-MAP1.json",false,function(){
+	BMO.webPageBMM.setMap("scripts/playGame/json/pixi-MAP1.json",false,function(){
 		requestAnimFrame(BMO.screenRefresh);
 	});
 	//BMO.webPageBMM.setPlayer({"name":"scripts/playGame/json/demo.json","p1":{"row":1,"col":1}},false,false);
