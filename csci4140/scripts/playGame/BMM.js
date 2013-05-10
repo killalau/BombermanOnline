@@ -5,6 +5,8 @@ var BMO = window.BMO ? window.BMO : {};
 @construtor	
 **/
 BMO.BMM = function(wsClient, handlers){
+	this.width = 17;
+	this.height = 11;
 	this.gridList = [];
 	this.elementList = [];
 	this.view = new PIXI.Stage(0x000000); 
@@ -17,14 +19,18 @@ BMO.BMM.consturctor = BMO.BMM;
 
 /*
 @public method setMap
-@param name: name of the map file (JSON format)
+@param data: map data given by server
 @param onProgress: callback for loading in progress
 @param onComplete: callback for loading end
 **/
-BMO.BMM.prototype.setMap = function(name,onProgress,onComplete){
+BMO.BMM.prototype.setMap = function(data,onProgress,onComplete){
 	console.log("setMap");
+	var name = data.mapname;
 	var mapSkin = [name];//pixi5-MAP1.json eg
 	var self = this;
+	self.width = data.mapsize.width;
+	self.height = data.mapsize.height;
+	
 	console.log("self="+self+" "+"mapSkin="+mapSkin+"onComplete="+onComplete);
 	if (typeof(onComplete) !== "function" ) throw "I need a call-back for onLoadend";
 	try{
@@ -38,16 +44,16 @@ BMO.BMM.prototype.setMap = function(name,onProgress,onComplete){
 			Game_Area_Max Resolution: 11 rows x 17 cols ( including the border )
 			**/
 			try{
-				for(var i = 0;i<11;i++){
+				for(var i = 0; i < self.height; i++){
 					self.gridList[i] = [];
-					for(var j =0;j<17;j++){						
+					for(var j =0; j < self.width; j++){						
 						var _grid = new BMO.Grid(j,i,self);
 						self.gridList[i].push(_grid);
 						_grid.view.addChild(PIXI.Sprite.fromFrame("tile"));
 						//Wall.............
-						if ( i == 0 || i == 10) _grid.view.addChild(PIXI.Sprite.fromFrame("wall"));				
+						if ( i == 0 || i == self.height-1) _grid.view.addChild(PIXI.Sprite.fromFrame("wall"));				
 						else{
-							if ( j == 0 || j == 16)	_grid.view.addChild(PIXI.Sprite.fromFrame("wall"));	
+							if ( j == 0 || j == self.width-1)	_grid.view.addChild(PIXI.Sprite.fromFrame("wall"));	
 							else{
 								if ( (i%2) == 0 && (j%2) == 0) _grid.view.addChild(PIXI.Sprite.fromFrame("wall"));	
 							}
@@ -55,16 +61,32 @@ BMO.BMM.prototype.setMap = function(name,onProgress,onComplete){
 						//End of wall......
 						//Box..............
 						
-						if ( i > 2 && j >2 && i < 8 && j<15 && ((i%2) != 0 || (j%2) !=0)){
+						if ( i > 2 && j > 2 && i < self.height-3 && j < self.width-3 && ((i%2) != 0 || (j%2) !=0)){
 							_grid.view.addChild(PIXI.Sprite.fromFrame("box"));
 						}
 						//End of Box.......
 						self.view.addChild(_grid.view);
 					}
 				}
-				onComplete();
-				BMO.webPageBMM.setPlayer({"name":"scripts/playGame/json/hamster_1.json","p1":{"row":1,"col":1}},false,false);
+				
+				//Players.........
+				for(var i = 0, p; p = data.players[i]; i++){
+					var msg = {
+						name : p.view,
+						id : p.username,
+						seat : p.seat,
+						p1 : {
+							row : p.pos.y,
+							col : p.pos.x
+						}
+					};
+					//BMO.webPageBMM.setPlayer({"name":"scripts/playGame/json/hamster_1.json","p1":{"row":1,"col":1}},false,false);
+					BMO.webPageBMM.setPlayer(msg,false,false);
+				}
 				BMO.webPageBMM.setController();
+				//End of players.........
+				
+				onComplete();
 			}catch(e){throw e;};		
 		};
 		loader.load();
@@ -74,7 +96,9 @@ BMO.BMM.prototype.setMap = function(name,onProgress,onComplete){
 /*
 @public method setPlayer
 @param msg: 
-		msg.name = name of the map file ;
+		msg.name = name of the view file ;
+		msg.id = player username
+		msg.seat = player game room seat number [0 - 3]
 		msg.p1.row = p1 init row pos
 		msg.p1.col = p1 init col pos		
 @param onProgress: callback for loading in progress
@@ -89,11 +113,12 @@ BMO.BMM.prototype.setPlayer = function(msg,onProgress,onComplete){
 	try{
 		var loader = new PIXI.AssetLoader(playerSkin);
 		if (typeof(onProgress) === "function") loader.onProgress = onProgress;		
-		loader.onComplete = function(){			
+		loader.onComplete = function(){
 			console.log("setPlayer:onComplete");
 			var _grid = self.gridList[msg.p1.row][msg.p1.col];
 			var _BM = new BMO.BM(_grid,self);
 			self.elementList.push(_BM);
+			_BM.id = msg.id;
 			_BM.setView("D0");
 			_grid.view.addChild(_BM.view);
 			if (onComplete) onComplete();

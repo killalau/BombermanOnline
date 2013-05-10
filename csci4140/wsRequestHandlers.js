@@ -530,6 +530,46 @@ function seat_update(data, gServer, gClient){
 	
 }
 
+function game_mapInit(data, gServer, gClient){
+	//Some game room / status validation
+	var valid = true;
+	if(gServer.roomList[gClient.room].isLobby){
+		valid = false;
+	}
+	
+	if(!valid){
+		gClient.sendData("game_mapInitACK", false);
+		return;
+	}
+	
+	var json = {
+		mapname : "scripts/playGame/json/pixi-MAP1.json",
+		mapsize : {
+			width : 17,
+			height : 11
+		},
+		players : []
+	};
+	
+	for(var i = 0, c; c = gServer.roomList[gClient.room].clientList[i]; i++){
+		var px = py = 1;
+		if(i == 1 || i == 2){
+			px = json.mapsize.width - 2;
+		}
+		if(i == 1 || i == 3){
+			py = json.mapsize.height - 2;
+		}
+		json.players.push({
+			username : c.username,
+			seat : c.seat,
+			view : "scripts/playGame/json/hamster_" + (i + 1) + ".json",
+			pos : { x : px, y : py}
+		});
+	}
+	
+	gClient.sendData("game_mapInitACK", json);
+}
+
 // Public function
 exports.setName = setName;
 exports.ping = ping;
@@ -549,3 +589,5 @@ exports.host_update = host_update;
 exports.seat_update = seat_update;
 //Anthony function
 //exports.host_Notify = host_Notify;
+
+exports.game_mapInit = game_mapInit;

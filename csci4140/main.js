@@ -41,6 +41,7 @@ wsHandlers.utf8["disconnect"] = wsRequestHandlers.disconnect;
 
 wsHandlers.utf8["payloadTestStart"] = wsRequestHandlers.payloadTestStart;
 wsHandlers.utf8["payloadTest"] = wsRequestHandlers.payloadTest;
+//chatroom handler-----------------------------------------------
 wsHandlers.utf8["chat_updateClientList"] = wsRequestHandlers.chat_updateClientList;
 wsHandlers.utf8["chat_say"] = wsRequestHandlers.chat_say;
 //Lobby handler-----------------------------------------------
@@ -52,7 +53,8 @@ wsHandlers.utf8["joinRoom"] = wsRequestHandlers.joinRoom;
 //Gameroom handler--------------------------------------------
 wsHandlers.utf8["host_update"] = wsRequestHandlers.host_update;
 wsHandlers.utf8["seat_update"] = wsRequestHandlers.seat_update;
-
+//playGame handler--------------------------------------------
+wsHandlers.utf8["game_mapInit"] = wsRequestHandlers.game_mapInit;
 
 // Create and start websocket server
 var wsServerObj = wsServer.start(serverObj, wsRouter.route, wsHandlers);
