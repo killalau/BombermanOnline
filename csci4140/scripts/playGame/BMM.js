@@ -73,6 +73,7 @@ BMO.BMM.prototype.setMap = function(data,onProgress,onComplete){
 				for(var i = 0, p; p = data.players[i]; i++){
 					var msg = {
 						name : p.view,
+						viewPrefix : p.viewPrefix,
 						id : p.username,
 						seat : p.seat,
 						p1 : {
@@ -119,7 +120,8 @@ BMO.BMM.prototype.setPlayer = function(msg,onProgress,onComplete){
 			var _BM = new BMO.BM(_grid,self);
 			self.elementList.push(_BM);
 			_BM.id = msg.id;
-			_BM.setView("D0");
+			_BM.viewPrefix = msg.viewPrefix;
+			_BM.setView(msg.viewPrefix + "D0");
 			_grid.view.addChild(_BM.view);
 			if (onComplete) onComplete();
 		};

@@ -563,6 +563,7 @@ function game_mapInit(data, gServer, gClient){
 			username : c.username,
 			seat : c.seat,
 			view : "scripts/playGame/json/hamster_" + (i + 1) + ".json",
+			viewPrefix : "hamster" + (i+1) + "_",
 			pos : { x : px, y : py}
 		});
 	}
