@@ -1,5 +1,6 @@
 var fs = require("fs");
 var exec = require('child_process').exec;
+var mysqlConnection = require('./node-mysql').createConnection();
 
 /* Authentication for username session
  *
@@ -12,13 +13,6 @@ function auth(username, session, callback){
 
 	//TO-DO checking
 	//var result = true;
-	var mysql = require('mysql');
-	var mysqlConnection = mysql.createConnection({
-		host     : 'localhost',
-		user     : '****',
-		password : '****',
-		database : '****',
-	});
 		
 	var query = 'SELECT id, expiry_time  FROM bbm_session WHERE session=' + mysqlConnection.escape(session);
 	console.log(query);
@@ -30,24 +24,23 @@ function auth(username, session, callback){
 				//case: id field not empty
 				console.log(rows[0].id);
 				var currentTime = new Date();
-				console.log(' Expiry time: ' + rows[0].expiry_time);
-				console.log('Current time: ' + currentTime);			
+				console.log('[wsHandler] Session expiry time:' + rows[0].expiry_time);	
 				
 				if (rows[0].expiry_time.getTime() > currentTime.getTime()){
 					//case session not expired
-					console.log('expiry time bigger');
+					console.log('[wsHandler] Session valid');
 					callback(true);
 					
 				}else{				
-					console.log('expiry time smaller');
+					console.log('[wsHandler] Session expired');
 					callback(false);
 				}			
 			}else{
-				console.log('rows[0].id is empty');
+				console.log('[wsHandler] Empty MySQL query result');
 				callback(false);
 			}			
 		}else{
-			console.log('session not exist');
+			console.log('[wsHandler] Session does not exist');
 			callback(false);
 		}
 			
@@ -100,9 +93,10 @@ function setName(data, server, client){
 			}
 			client.broadcastData('updateUserList', response);
 		}else{
-			if(client.connection)
+			if(client.connection){
 				client.connection.close();
-			disconnectFully(null, server, client);
+			}
+			disconnectFully(server, client);
 		}
 	}
 	
