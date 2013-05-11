@@ -196,8 +196,7 @@ function error302(url, response, request){
 	console.log("[Handler] Request for 'error302': " + url);
 
 	response.writeHead(302, {
-		'Location': url,
-		'Set-Cookie':'BomberManCookies=; expires='+new Date(new Date().getTime()-86400).toUTCString()
+		'Location': url
 	});
 	response.end();
 }
