@@ -12,53 +12,51 @@ function auth(username, session, callback){
 
 	//TO-DO checking
 	//var result = true;
-	var result = function(){
-		var mysql = require('mysql');
-		var connection = mysql.createConnection({
-		  host     : 'localhost',
-		  user     : '****',
-		  password : '****',
-		  database : '****',
-		});
+	var mysql = require('mysql');
+	var mysqlConnection = mysql.createConnection({
+		host     : 'localhost',
+		user     : '****',
+		password : '****',
+		database : '****',
+	});
 		
-		var query = 'SELECT id, expiry_time  FROM bbm_session WHERE session=' + mysqlConnection.escape(session);
-		console.log(query);
-		mysqlConnection.query(query, function(err, rows){
-			if (rows.length > 0){
-				//case: session exist
-				console.log(rows);
-				if (rows[0].id.length > 0){
-					//case: id field not empty
-					console.log(rows[0].id);
-					var currentTime = new Date();
-					console.log(' Expiry time: ' + rows[0].expiry_time);
-					console.log('Current time: ' + currentTime);			
+	var query = 'SELECT id, expiry_time  FROM bbm_session WHERE session=' + mysqlConnection.escape(session);
+	console.log(query);
+	mysqlConnection.query(query, function(err, rows){
+		if (rows.length > 0){
+			//case: session exist
+			console.log(rows);
+			if (rows[0].id.length > 0){
+				//case: id field not empty
+				console.log(rows[0].id);
+				var currentTime = new Date();
+				console.log(' Expiry time: ' + rows[0].expiry_time);
+				console.log('Current time: ' + currentTime);			
+				
+				if (rows[0].expiry_time.getTime() > currentTime.getTime()){
+					//case session not expired
+					console.log('expiry time bigger');
+					callback(true);
 					
-					if (rows[0].expiry_time.getTime() > currentTime.getTime()){
-						//case session not expired
-						console.log('expiry time bigger');
-						return true;
-						
-					}else{				
-						console.log('expiry time smaller');
-						return false;
-					}			
-				}else{
-					console.log('rows[0].id is empty');
-					return false;
+				}else{				
+					console.log('expiry time smaller');
+					callback(false);
 				}			
 			}else{
-				console.log('session not exist');
-				return false;
-			}
-				
-			if (err){
-				console.log('[wsHandler] MySQL mysqlConnection error code:' + err.code);
-				return false;
-			}	
-		});
-	}
-	callback(result);
+				console.log('rows[0].id is empty');
+				callback(false);
+			}			
+		}else{
+			console.log('session not exist');
+			callback(false);
+		}
+			
+		if (err){
+			console.log('[wsHandler] MySQL mysqlConnection error code:' + err.code);
+			callback(false);
+		}	
+	});
+	//callback(result());
 }
 
 /* Handler for 'setName' message

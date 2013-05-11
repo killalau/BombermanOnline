@@ -31,7 +31,8 @@ if ($myCookie->cookieExist()){
 -->will stay in this index.html
 */
 ?>
-<html><head>
+<html>
+	<head>
 	<link rel="stylesheet" type="text/css" href="../css/frontpagestyle.css">
     <title>Index - BomberMan by I4s</title>
     </head>
@@ -66,9 +67,6 @@ if ($myCookie->cookieExist()){
                 ?>
             </div>
         </div>
-<<<<<<< HEAD
-    Edited on Github Testing
-=======
->>>>>>> 00fe44f0148009f6d86837a504f72198367cc777
         
-    </body></html>
+    </body>
+</html>
