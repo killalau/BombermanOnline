@@ -10,6 +10,7 @@ BMO.BM =function(_grid,_BMM,wsClient){
 	try{
 		BMO.Element.call(this,_grid,_BMM);
 		this.id = false;
+		this.viewPrefix = null;
 		this.speed = 4;
 		this.direction = "D";		
 		this.animationIndex = 0;
@@ -57,7 +58,7 @@ BMO.BM.prototype.startMove = function(self){
 }
 
 /*
-@private method startMove
+@private method stopMove
 @param self: BMO.BM
 **/
 BMO.BM.prototype.stopMove = function(self){
