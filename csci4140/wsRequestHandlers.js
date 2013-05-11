@@ -1,73 +1,6 @@
 var fs = require("fs");
 var exec = require('child_process').exec;
-var mysqlConnection = require('./node-mysql').createConnection();
-
-/* Authentication for username session
- *
- * username : user login name
- * session : session ID / login token
- * callback : function callback(bool)
- */
-function auth(username, session, callback){
-	console.log("[wsHandler] Request for 'auth'");
-
-	//TO-DO checking
-	//var result = true;
-	
-	function result(valid, session, callback){
-		if (valid){
-			callback(true);
-		}else{
-			var query = 'DELETE FROM bbm_session WHERE session=' + mysqlConnection.escape(session);			
-			mysqlConnection.query(query, function(err, rows){
-				console.log('[wsHandler] Delete session ');
-				if (err){
-					console.log('[wsHandler] MySQL mysqlConnection error code:' + err.code);
-				}
-			});
-			callback(false);
-		}
-	}
-		
-	//var query = 'SELECT id, expiry_time  FROM bbm_session WHERE session=' + mysqlConnection.escape(session);
-	var query = 'SELECT id FROM bbm_session WHERE session=' + mysqlConnection.escape(session);
-	mysqlConnection.query(query, function(err, rows){
-		var s = session;
-
-		if (rows.length > 0){
-			//case: session exist
-			console.log(rows);
-			if (rows[0].id.length > 0){
-				//case: id field not empty
-				console.log(rows[0].id);
-				//var currentTime = new Date();
-				//console.log('[wsHandler] Session expiry time:' + rows[0].expiry_time);	
-				
-				//if (rows[0].expiry_time.getTime() > currentTime.getTime()){
-					//case session not expired
-					//console.log('[wsHandler] Session valid');
-					result(true, s, callback);
-					
-				//}else{				
-					//console.log('[wsHandler] Session expired');
-					//result(false, s, callback);
-				//}			
-			}else{
-				console.log('[wsHandler] Empty MySQL query result');
-				result(false, s, callback);
-			}			
-		}else{
-			console.log('[wsHandler] Session does not exist');
-			result(false, s, callback);
-		}
-			
-		if (err){
-			console.log('[wsHandler] MySQL mysqlConnection error code:' + err.code);
-			result(false, s, callback);
-		}
-	});
-	//callback(result());
-}
+var requestHandlers = require("./requestHandlers");
 
 /* Handler for 'setName' message
  *
@@ -117,7 +50,7 @@ function setName(data, server, client){
 		}
 	}
 	
-	auth(data.username, data.session, callback);
+	requestHandlers.auth(data.username, data.session, callback);
 }
 
 /* Handler for 'ping' message

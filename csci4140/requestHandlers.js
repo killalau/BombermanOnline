@@ -1,6 +1,85 @@
 // Include node.js library
 var fs = require("fs");
 var exec = require("child_process").exec;
+var mysqlConnection = require('./node-mysql').createConnection();
+
+/* Authentication for username session
+ *
+ * username : user login name
+ * session : session ID / login token
+ * callback : function callback(bool)
+ */
+function auth(username, session, callback){
+	console.log("[wsHandler] Request for 'auth'");
+
+	//TO-DO checking
+	//var result = true;
+	
+	function result(valid, session, callback){
+		if (valid){
+			callback(true);
+		}else{
+			var query = 'DELETE FROM bbm_session WHERE session=' + mysqlConnection.escape(session);			
+			mysqlConnection.query(query, function(err, rows){
+				console.log('[wsHandler] Delete session ');
+				if (err){
+					console.log('[wsHandler] MySQL mysqlConnection error code:' + err.code);
+				}
+			});
+			callback(false);
+		}
+	}
+		
+	//var query = 'SELECT id, expiry_time  FROM bbm_session WHERE session=' + mysqlConnection.escape(session);
+	var query = 'SELECT id FROM bbm_session WHERE session=' + mysqlConnection.escape(session);
+	mysqlConnection.query(query, function(err, rows){
+		var s = session;
+
+		if (rows.length > 0){
+			//case: session exist
+			console.log(rows);
+			if (rows[0].id.length > 0){
+				//case: id field not empty
+				console.log(rows[0].id);
+				//var currentTime = new Date();
+				//console.log('[wsHandler] Session expiry time:' + rows[0].expiry_time);	
+				
+				//if (rows[0].expiry_time.getTime() > currentTime.getTime()){
+					//case session not expired
+					//console.log('[wsHandler] Session valid');
+					result(true, s, callback);
+					
+				//}else{				
+					//console.log('[wsHandler] Session expired');
+					//result(false, s, callback);
+				//}			
+			}else{
+				console.log('[wsHandler] Empty MySQL query result');
+				result(false, s, callback);
+			}			
+		}else{
+			console.log('[wsHandler] Session does not exist');
+			result(false, s, callback);
+		}
+			
+		if (err){
+			console.log('[wsHandler] MySQL mysqlConnection error code:' + err.code);
+			result(false, s, callback);
+		}
+	});
+	//callback(result());
+}
+
+
+// Get Cookies from request header
+function getCookies(request){
+	var cookies = {};
+	request.headers.cookie && request.headers.cookie.split(';').forEach(function( cookie ) {
+		var parts = cookie.split('=');
+		cookies[ parts[ 0 ].trim() ] = ( parts[ 1 ] || '' ).trim();
+	});
+	return cookies;
+}
 
 // Sample: explicity define response content
 function index(response, request){
@@ -107,6 +186,22 @@ function readFromFS(path, isBinary, type, response, request){
 	});
 }
 
+/* Standard 302 Redirect response
+ *
+ * url:      redirect URL
+ * response: HTTP response object
+ * request:  HTTP request object
+ */
+function error302(url, response, request){
+	console.log("[Handler] Request for 'error302': " + url);
+
+	response.writeHead(302, {
+		'Location': url,
+		'Set-Cookie':'BomberManCookies=; expires='+new Date(new Date().getTime()-86400).toUTCString()
+	});
+	response.end();
+}
+
 /* Standard 404 Not Found error response
  *
  * response: HTTP response object
@@ -135,11 +230,15 @@ function error500(error, response, request){
 }
 
 // Public function
+exports.getCookies = getCookies;
+
 exports.index = index;
 
 exports.readHTML = readHTML;
 exports.readJS = readJS;
 exports.readCSS = readCSS;
 exports.readImage = readImage;
+exports.error302 = error302;
 exports.error404 = error404;
 exports.error500 = error500;
+exports.auth = auth;

@@ -13,16 +13,22 @@ port = isNaN(port) ? 8080 : parseInt(port);
 var handlers = {
 	valid:{},	// Valid URL with specific handler
 	read:{},	// Special handler for specifc folder
-	invalid:{}	// Error handler
+	invalid:{},	// Error handler
+	auth:{}		// Require authentication
 };
 
 handlers.valid["/"] = requestHandlers.index;
 handlers.valid["/index"] = requestHandlers.index;
 
+handlers.auth["/Lobby.html"] = true;
+handlers.auth["/gameroom.html"] = true;
+handlers.auth["/playGame.html"] = true;
+
 handlers.read["html"] = requestHandlers.readHTML;
 handlers.read["scripts"] = requestHandlers.readJS;
 handlers.read["styles"] = requestHandlers.readCSS;
 handlers.read["images"] = requestHandlers.readImage;
+handlers.invalid[302] = requestHandlers.error302;
 handlers.invalid[404] = requestHandlers.error404;
 handlers.invalid[500] = requestHandlers.error500;
 
