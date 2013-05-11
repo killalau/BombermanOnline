@@ -141,6 +141,13 @@ BMO.BMM.prototype.setPlayer = function(msg,onProgress,onComplete){
 
 /*
 @public method setController
+@usage: register Handlers[tag]
+PS. Data flow
+	^>>>wsRequesHandler[tag]
+	^			v	
+gServer <-- wsClient --> handlers[tag]->eventProcesser->private methods
+				^
+			sendata(tag)
 **/
 BMO.BMM.prototype.setController = function(){
 	console.log("BMM:setController");
