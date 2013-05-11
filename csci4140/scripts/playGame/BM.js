@@ -22,6 +22,10 @@ BMO.BM =function(_grid,_BMM,wsClient){
 BMO.BM.construtor = BMO.BM;
 BMO.BM.prototype = Object.create( BMO.Element );
 
+/*
+@private method startMove
+@param self: BMO.BM
+**/
 BMO.BM.prototype.startMove = function(self){
 	if(self.moveFunction == null){
 		if(self.id == self.wsClient.username){
@@ -52,6 +56,10 @@ BMO.BM.prototype.startMove = function(self){
 	}
 }
 
+/*
+@private method startMove
+@param self: BMO.BM
+**/
 BMO.BM.prototype.stopMove = function(self){
 	clearInterval(self.moveFunction);
 	self.moveFunction = null;
@@ -61,7 +69,7 @@ BMO.BM.prototype.stopMove = function(self){
 }
 
 /*
-@public method move
+@private method move
 @param dest_row : 2D array index row
 @param dest_col : 2D array index col
 **/
@@ -174,7 +182,7 @@ BMO.BM.prototype.move = function(dest_row,dest_col){
 }
 
 /*
-@public method setDirection
+@private method setDirection
 @param _direction ("U":up ...)
 **/
 BMO.BM.prototype.setDirection = function(_direction){
