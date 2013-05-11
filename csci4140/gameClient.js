@@ -32,8 +32,8 @@ function create(connection, server, room){
 			if(client.connection)
 				client.connection.sendUTF(JSON.stringify(msg));
 		},
-		boardcastData : function(type, data){	// boardcast data to the room which the client is stay in
-			console.log("[Client] Boardcast data: " + type + " from user: " + client.username + " to room :" + server.roomList[client.room].name);
+		broadcastData : function(type, data){	// broadcast data to the room which the client is stay in
+			console.log("[Client] Broadcast data: " + type + " from user: " + client.username + " to room :" + server.roomList[client.room].name);
 
 			var stime = new Date();
 			var msg = {

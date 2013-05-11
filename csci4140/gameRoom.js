@@ -57,7 +57,7 @@ function create(isLobby, name){
 				}
 			}
 		},
-		boardcastData : function(eventType, data, srcName){
+		broadcastData : function(eventType, data, srcName){
 			var stime = new Date();
 			var msg = {
 				username: srcName,
@@ -68,8 +68,8 @@ function create(isLobby, name){
 			for(var i = 0, c; c = room.clientList[i]; i++){
 				if(c.connection)
 					c.connection.sendUTF(JSON.stringify(msg));
-				console.log("[gameRoom.boardcastData] src="+srcName+" target="+c.username);
-				console.log("[gameRoom.boardcastData] data="+data);
+				console.log("[gameRoom.broadcastData] src="+srcName+" target="+c.username);
+				console.log("[gameRoom.broadcastData] data="+data);
 			}
 		}
 

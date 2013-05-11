@@ -6,21 +6,25 @@ var gameServer = GameServer.create();
 
 function start(httpServer, route, handlers){
 	var wsServer = new WebSocketServer({
-		httpServer: httpServer
-		
-		//Andy: I found this, not sure it is important or not
-			// You should not use autoAcceptConnections for production
-			// applications, as it defeats all standard cross-origin protection
-			// facilities built into the protocol and the browser.  You should
-			// *always* verify the connection's origin and decide whether or not
-			// to accept it.
-		//autoAcceptConnections: false
+		httpServer: httpServer,
+		autoAcceptConnections: false
 	});
 
+	function originIsAllowed(origin){
+		if(origin == "http://137.189.89.214:18128")
+			return true;
+		else
+			return false;
+	}
+	
 	wsServer.on('request', function(request){
 		console.log("[wsServer] Connection: " + request.origin);
 
 		//var connection = request.accept('echo-protocol', request.origin);
+		if(!originIsAllowed(request.origin)){
+			console.log("[wsServer] Connection rejected");
+			request.reject();
+		}
 		var connection = request.accept(null, request.origin);
 		var client = GameClient.create(connection, gameServer, 0);
 		gameServer.clientList.push(client);

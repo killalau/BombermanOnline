@@ -94,6 +94,16 @@ BMO.BMM.prototype.setMap = function(data,onProgress,onComplete){
 	}catch(e){throw e;};
 }
 
+BMO.BMM.prototype.getElementById = function(id){
+	if(typeof id === 'string'){
+		for(var i = 0, e; e = this.elementList[i]; i++){
+			if(e.id == id){
+				return e;
+			}
+		}
+	}
+}
+
 /*
 @public method setPlayer
 @param msg: 
@@ -109,7 +119,7 @@ BMO.BMM.prototype.setPlayer = function(msg,onProgress,onComplete){
 	console.log("setPlayer");
 	var playerSkin = [msg.name];//demo.json eg
 	var self = this;
-	console.log("self="+self+" "+"playerSkin="+playerSkin);
+	console.log("self="+msg.id+" "+"playerSkin="+playerSkin);
 	//if (typeof(onComplete) !== "function" ) throw "I need a call-back for onLoadend";
 	try{
 		var loader = new PIXI.AssetLoader(playerSkin);
@@ -117,7 +127,7 @@ BMO.BMM.prototype.setPlayer = function(msg,onProgress,onComplete){
 		loader.onComplete = function(){
 			console.log("setPlayer:onComplete");
 			var _grid = self.gridList[msg.p1.row][msg.p1.col];
-			var _BM = new BMO.BM(_grid,self);
+			var _BM = new BMO.BM(_grid,self,BMO.webPageBMM.wsClient);
 			self.elementList.push(_BM);
 			_BM.id = msg.id;
 			_BM.viewPrefix = msg.viewPrefix;
@@ -137,16 +147,18 @@ BMO.BMM.prototype.setController = function(){
 	var self = this;
 	
 	document.body.addEventListener("keydown",function(e){
-		self.elementList[0].eventProcesser(e);
+		//self.elementList[0].eventProcesser(e);
+		self.getElementById( self.wsClient.username).eventProcesser(e);
 	},false);
 	document.body.addEventListener("keyup",function(e){
-		self.elementList[0].eventProcesser(e);
+		//self.elementList[0].eventProcesser(e);
+		self.getElementById( self.wsClient.username).eventProcesser(e);
 	},false);
 	
-	self.handlers["playerMoveACK"] = function(){};
-	self.handlers["broadcastPlayerMove"] = self.broadcastPlayerMove;
-	self.handlers["broadcastPlayerMove"] = self.broadcastPlayerMove;
-	self.handlers["broadcastPlayerStopMove"] = self.broadcastPlayerStopMove;
+	self.handlers["game_playerMoveACK"] = function(){};
+	self.handlers["game_playerStopMoveACK"] = function(){};
+	self.handlers["game_broadcastPlayerMove"] = self.broadcastPlayerMove;
+	self.handlers["game_broadcastPlayerStopMove"] = self.broadcastPlayerStopMove;
 }
 
 BMO.BMM.prototype.broadcastPlayerMove = function(data, wsClient){
@@ -157,19 +169,23 @@ BMO.BMM.prototype.broadcastPlayerMove = function(data, wsClient){
 		payload: payload you want
 	}
 	*/
-	var element = search(this.elementList, classname, id);
-	var newData ={
-		type: "otherPlayerMove",
-		payload: data.payload
+	if(data.classname == "BM" && data.id != BMO.webPageBMM.wsClient.username){
+		var element = BMO.webPageBMM.getElementById(data.id);
+		var e ={
+			type: "otherPlayerMove",
+			payload: data.payload
+		}
+		element.eventProcesser(e);
 	}
-	element.eventProcesser(newData);
 };
 
 BMO.BMM.prototype.broadcastPlayerStopMove = function(data, wsClient){
-	var element = search(this.elementList, classname, id);
-	var newData ={
-		type: "otherPlayerStopMove",
-		payload: null,
+	if(data.classname == "BM" && data.id != BMO.webPageBMM.wsClient.username){
+		var element = BMO.webPageBMM.getElementById(data.id);
+		var e ={
+			type: "otherPlayerStopMove",
+			payload: null,
+		}
+		element.eventProcesser(e);
 	}
-	element.eventProcesser(newData);
 };
