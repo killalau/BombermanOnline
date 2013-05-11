@@ -15,7 +15,6 @@ function route(handlers, pathname, response, request){
 		
 		var redirectURL = 'http://137.189.89.214:18028/index';
 		var cookies = requestHandlers.getCookies(request);
-		console.log(JSON.stringify(cookies));
 		if(!cookies["BomberManCookie"]){
 			console.log("[Router] Session cookies is null");
 			handlers.invalid[302](redirectURL, response, request);
@@ -27,8 +26,10 @@ function route(handlers, pathname, response, request){
 		
 		requestHandlers.auth(username, session, function(result){
 			if(result){
+				console.log("[Router] Auth success");
 				routeCore();
 			}else{
+				console.log("[Router] Auth fail");
 				handlers.invalid[302](redirectURL, response, request);
 				return;
 			}
