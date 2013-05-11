@@ -330,6 +330,7 @@ Lobby.init_phase1 = function(){
 	//============================================
 	//var url = document.location.hostname +":8080";	
 	var url = document.location.hostname +":18128";
+	var indexUrl = 'http://'+document.location.hostname+':18028'+'/index/';
 	var handlers = webSocket.createHandlers();
 	var wsClient = null;
 	handlers["setNameACK"]=function(data,wsClient){
@@ -340,6 +341,10 @@ Lobby.init_phase1 = function(){
 		var div = document.getElementById('chat_room');
                 div.innerHTML = "";
                 div.appendChild(chatroom.createChatroom(handlers, wsClient));
+		}else{
+			console.log("Login fail in websocket");
+			console.log(indexUrl);
+			window.location.replace(indexUrl);
 		}
 	};
 	//no onclose
