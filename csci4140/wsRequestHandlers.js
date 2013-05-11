@@ -29,7 +29,8 @@ function auth(username, session, callback){
 		}
 	}
 		
-	var query = 'SELECT id, expiry_time  FROM bbm_session WHERE session=' + mysqlConnection.escape(session);
+	//var query = 'SELECT id, expiry_time  FROM bbm_session WHERE session=' + mysqlConnection.escape(session);
+	var query = 'SELECT id FROM bbm_session WHERE session=' + mysqlConnection.escape(session);
 	mysqlConnection.query(query, function(err, rows){
 		var s = session;
 

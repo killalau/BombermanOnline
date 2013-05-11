@@ -14,13 +14,13 @@ if ($myCookie->cookieExist()){
     $db_session = $myDB->getSessionKeyBySession($usr_session);
     
     if ($db_session != null){        
-        if ($myDB->getSessionExpiryTime($usr_session) > time()){//e.g. 1366845192
+        //if ($myDB->getSessionExpiryTime($usr_session) > time()){//e.g. 1366845192
             //update session key (TO BE DONE IN PROTECTED ZONE)
             //setcookie("BomberManCookie", $usr_session, time()+$session_duration, '/');        
             //redirect
             header("Location:http://$my_host:$nodejs_port$lobby_url");
-            exit;
-        }
+
+        //}
     }
 }
 //==================================================
