@@ -571,6 +571,30 @@ function game_mapInit(data, gServer, gClient){
 	gClient.sendData("game_mapInitACK", json);
 }
 
+function game_playerMove(data, gServer, gClient){
+	if(data != 'U' && data != 'D' && data != 'L' && data != 'R'){
+		gClient.sendData("game_playerMoveACK", false);
+	}else{
+		gClient.sendData("game_playerMoveACK", true);
+		var json = {
+			classname : "BM",
+			id: gClient.username,
+			payload: data
+		};
+		gClient.boardcastData("game_broadcastPlayerMove", json);
+	}
+}
+
+function game_playerStopMove(data, gServer, gClient){
+	gClient.sendData("game_playerStopMoveACK", true);
+	var json = {
+		classname : "BM",
+		id: gClient.username,
+		payload: data
+	};
+	gClient.boardcastData("game_broadcastPlayerStopMove", json);
+}
+
 // Public function
 exports.setName = setName;
 exports.ping = ping;
@@ -592,3 +616,5 @@ exports.seat_update = seat_update;
 //exports.host_Notify = host_Notify;
 
 exports.game_mapInit = game_mapInit;
+exports.game_playerMove = game_playerMove;
+exports.game_playerStopMove = game_playerStopMove;

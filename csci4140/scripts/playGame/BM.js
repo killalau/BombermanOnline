@@ -24,6 +24,9 @@ BMO.BM.prototype = Object.create( BMO.Element );
 
 BMO.BM.prototype.startMove = function(self){
 	if(self.moveFunction == null){
+		if(self.id == self.wsClient.username){
+			self.wsClient.sendData("game_playerMove", self.direction);
+		}
 		self.moveFunction = setInterval(function(){
 			var gy,gx;
 			switch (self.direction){
@@ -52,6 +55,9 @@ BMO.BM.prototype.startMove = function(self){
 BMO.BM.prototype.stopMove = function(self){
 	clearInterval(self.moveFunction);
 	self.moveFunction = null;
+	if(self.id == self.wsClient.username){
+		self.wsClient.sendData("game_playerStopMove", true);
+	}
 }
 
 /*
