@@ -49,12 +49,12 @@ function setName(data, server, client){
 					break;
 				}
 			}
-			// Boardcast new client list
+			// Broadcast new client list
 			var response = [];
 			for(var i = 0, c; c = server.roomList[client.room].clientList[i]; i++){
 				response.push(c.username);
 			}
-			client.boardcastData('updateUserList', response);
+			client.broadcastData('updateUserList', response);
 		}else{
 			if(client.connection)
 				client.connection.close();
@@ -126,7 +126,7 @@ function disconnectFully(server, client){
  */
 function payloadTestStart(data, server, client){
 	console.log("[wsHandler] Request for 'payloadTestStart'");
-	client.boardcastData('payloadTestStartACK', data);
+	client.broadcastData('payloadTestStartACK', data);
 }
 
 /* Handler for 'payloadTest' message
@@ -144,7 +144,7 @@ function payloadTest(data, server, client){
 		username: client.username,
 		data:	data.data
 	};
-	client.boardcastData('payloadTestUpdate', response);
+	client.broadcastData('payloadTestUpdate', response);
 }
 
 function chat_updateClientList(data, server, client){
@@ -156,7 +156,7 @@ function chat_updateClientList(data, server, client){
 		}
 	}
 	client.sendData('chat_updateClientListACK', true);
-	client.boardcastData('chat_updateClientList', json);
+	client.broadcastData('chat_updateClientList', json);
 }
 
 function chat_say(data, server, client){
@@ -172,7 +172,7 @@ function chat_say(data, server, client){
 	if(!message || message.replace(/&nbsp;/g, " ").replace(/<br>/g, "").replace(/\s/g, "").length == 0){
 		return;
 	}else if(!receiver){
-		client.boardcastData('chat_say', json);
+		client.broadcastData('chat_say', json);
 	}else if(receiver == client.username){
 		return;
 	}else{
@@ -265,9 +265,9 @@ function rmList(data,gServer,gClient){
 					var obj = JSON.parse(data);
 					//for (var i in obj) if( !((i === "ping") || (i==="np")) ) gServer.roomList[obj.rid][i] = obj[i]; 
 					//console.log(gServer.roomList[obj.rid].np());
-					//var _boardCastData = [];
-					//_boardCastData.push(reply[obj.rid+1]);//reply[*] follow franky definition
-					gServer.roomList[0].boardcastData("rmListACK",JSON.stringify(reply[obj.rid+1]),gClient.username);
+					//var _broadcastData = [];
+					//_broadcastData.push(reply[obj.rid+1]);//reply[*] follow franky definition
+					gServer.roomList[0].broadcastData("rmListACK",JSON.stringify(reply[obj.rid+1]),gClient.username);
 			}catch(e){
 					console.log("[rmList]e=",e);
 					console.log("[rmList]data=",data);
@@ -347,7 +347,7 @@ function joinRoom(data,gServer,gClient){
 				var _data = {
 				host_seat: host.seat
 				};
-				gServer.roomList[bufRm].boardcastData('host_update_ACK', JSON.stringify(_data));
+				gServer.roomList[bufRm].broadcastData('host_update_ACK', JSON.stringify(_data));
 			}
 			//Anthony's Code End
 			
@@ -360,7 +360,7 @@ function joinRoom(data,gServer,gClient){
                 	       	 	tmpjson.push(c.username);
                		 	}
         		}
-			gServer.roomList[bufRm].boardcastData("chat_updateClientList",tmpjson,gClient.username);
+			gServer.roomList[bufRm].broadcastData("chat_updateClientList",tmpjson,gClient.username);
 
 			var _data = {
 				rid : gServer.roomList[message.rid+1].rid,
@@ -510,7 +510,7 @@ function host_update(data, gServer, gClient){
 				//isHost : gClient.isHost,
 				host_seat: host.seat
 			};
-	gServer.roomList[clientRm].boardcastData('host_update_ACK', JSON.stringify(_data));
+	gServer.roomList[clientRm].broadcastData('host_update_ACK', JSON.stringify(_data));
 	//gClient.sendData('gameroom_Update', JSON.stringify(_data));
 };
 
@@ -526,7 +526,7 @@ function seat_update(data, gServer, gClient){
 		reply[i].push(gServer.roomList[clientRm].clientList[i].seat);
 	}
 	//console.log(reply);
-	gServer.roomList[clientRm].boardcastData('seat_update_ACK', JSON.stringify(reply));
+	gServer.roomList[clientRm].broadcastData('seat_update_ACK', JSON.stringify(reply));
 	
 }
 
@@ -581,7 +581,7 @@ function game_playerMove(data, gServer, gClient){
 			id: gClient.username,
 			payload: data
 		};
-		gClient.boardcastData("game_broadcastPlayerMove", json);
+		gClient.broadcastData("game_broadcastPlayerMove", json);
 	}
 }
 
@@ -592,7 +592,7 @@ function game_playerStopMove(data, gServer, gClient){
 		id: gClient.username,
 		payload: data
 	};
-	gClient.boardcastData("game_broadcastPlayerStopMove", json);
+	gClient.broadcastData("game_broadcastPlayerStopMove", json);
 }
 
 // Public function
