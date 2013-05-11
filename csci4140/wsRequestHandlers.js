@@ -13,41 +13,57 @@ function auth(username, session, callback){
 
 	//TO-DO checking
 	//var result = true;
+	
+	function result(valid, session, callback){
+		if (valid){
+			callback(true);
+		}else{
+			var query = 'DELETE FROM bbm_session WHERE session=' + mysqlConnection.escape(session);			
+			mysqlConnection.query(query, function(err, rows){
+				console.log('[wsHandler] Delete session ');
+				if (err){
+					console.log('[wsHandler] MySQL mysqlConnection error code:' + err.code);
+				}
+			});
+			callback(false);
+		}
+	}
 		
 	var query = 'SELECT id, expiry_time  FROM bbm_session WHERE session=' + mysqlConnection.escape(session);
-	console.log(query);
 	mysqlConnection.query(query, function(err, rows){
+		var s = session;
+
 		if (rows.length > 0){
 			//case: session exist
 			console.log(rows);
 			if (rows[0].id.length > 0){
 				//case: id field not empty
 				console.log(rows[0].id);
-				var currentTime = new Date();
-				console.log('[wsHandler] Session expiry time:' + rows[0].expiry_time);	
+				//var currentTime = new Date();
+				//console.log('[wsHandler] Session expiry time:' + rows[0].expiry_time);	
 				
-				if (rows[0].expiry_time.getTime() > currentTime.getTime()){
+				//if (rows[0].expiry_time.getTime() > currentTime.getTime()){
 					//case session not expired
-					console.log('[wsHandler] Session valid');
-					callback(true);
+					//console.log('[wsHandler] Session valid');
+					result(true, s, callback);
 					
-				}else{				
-					console.log('[wsHandler] Session expired');
-					callback(false);
-				}			
+				//}else{				
+					//console.log('[wsHandler] Session expired');
+					//result(false, s, callback);
+				//}			
 			}else{
 				console.log('[wsHandler] Empty MySQL query result');
-				callback(false);
+				result(false, s, callback);
 			}			
 		}else{
 			console.log('[wsHandler] Session does not exist');
-			callback(false);
+			result(false, s, callback);
 		}
 			
 		if (err){
 			console.log('[wsHandler] MySQL mysqlConnection error code:' + err.code);
-			callback(false);
-		}	
+			result(false, s, callback);
+		}
 	});
 	//callback(result());
 }

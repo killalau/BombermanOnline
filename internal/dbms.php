@@ -11,7 +11,7 @@ class SimpleDB{
 	var $dbPassword = 'fr5zbbqf';
 	var $sessionTable = 'bbm_session';
 	var $accountTable = 'bbm_account';
-	const session_duration = 20;//20s for experimental use
+	//const session_duration = 20;//20s for experimental use
 	
 	function __construct(){
 		$this->dbh = new PDO("mysql:host=$this->dbIP;dbname=$this->dbName", $this->dbLoginName, $this->dbPassword);
@@ -29,13 +29,13 @@ class SimpleDB{
 		}
 	}		
 
-	function getSessionExpiryTime($usr_session){
+	function getLoginTime($usr_session){
 		//=========get DB expiry time =========
-        $query = $this->dbh->prepare("SELECT expiry_time FROM $this->sessionTable WHERE session=?");    
+        $query = $this->dbh->prepare("SELECT login_time FROM $this->sessionTable WHERE session=?");    
         $query->execute(array($usr_session));
-        $db_expiry_time = $query->fetch(PDO::FETCH_ASSOC);//e.g. 2013-04-25 07:13:12
-		if ($db_expiry_time != null){
-			return strtotime($db_expiry_time['expiry_time']);
+        $db_login_time = $query->fetch(PDO::FETCH_ASSOC);//e.g. 2013-04-25 07:13:12
+		if ($db_login_time != null){
+			return strtotime($db_login_time['login_time']);
 		}else{
 			return null;
 		}
@@ -43,9 +43,9 @@ class SimpleDB{
 	
 	function updateSession($usr_session){
 		//=====update session key=====
-        $new_expiry_time = time()+self::session_duration;        
-        $query = $this->dbh->prepare("UPDATE $this->sessionTable SET expiry_time=? WHERE session=?");
-        $query->execute(array(date('Y-m-d H:i:s',$new_expiry_time), $usr_session));
+        $new_login_time = time();        
+        $query = $this->dbh->prepare("UPDATE $this->sessionTable SET login_time=? WHERE session=?");
+        $query->execute(array(date('Y-m-d H:i:s',$new_login_time), $usr_session));
 	}
 	
 	function getPassword($id){
@@ -76,9 +76,9 @@ class SimpleDB{
             $query->execute(array($id));
         }
             //append session
-        $expiry_time = time()+self::session_duration;
-        $query = $this->dbh->prepare("INSERT INTO $this->sessionTable (id, session, expiry_time) VALUES (?,?,?)");
-        $query->execute(array($id, $session_key, date('Y-m-d H:i:s',$expiry_time)));
+        $login_time = time();
+        $query = $this->dbh->prepare("INSERT INTO $this->sessionTable (id, session, login_time) VALUES (?,?,?)");
+        $query->execute(array($id, $session_key, date('Y-m-d H:i:s',$login_time)));
         //        ====================
 		return $session_key;
 	}
@@ -139,7 +139,7 @@ class SimpleDB{
 	
 #Test getSessionExpiryTime()
 	$MyDB = new SimpleDB();
-	$expiry_time = $MyDB->getSessionExpiryTime('2');
-	echo $expiry_time;
+	$login_time = $MyDB->getSessionExpiryTime('2');
+	echo $login_time;
 	*/
 ?>

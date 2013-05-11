@@ -37,10 +37,15 @@
         if ($pwd == $db_pwd){
             //=========Correct Password=========
             $session_key = $myDB->createSession($id);
-			$expiry_time = $myDB->getSessionExpiryTime($session_key);
+				//$expiry_time = $myDB->getSessionExpiryTime($session_key);
             //     ====set client cookie====
-			$id = $myDB->getIdBySession($session_key);
-				//setcookie("BomberManCookie", $session_key, $expiry_time, '/');
+			$id = $myDB->getIdBySession($session_key);				
+			$persistent = $_POST["persistent"];
+			if ($persistent){
+				$expiry_time = time() + 60*60*24*365*10;
+			}else{
+				$expiry_time = 0;
+			}
 			setrawcookie("BomberManCookie", $id.':'.$session_key, $expiry_time, '/');
             //     =========================
             //        ====redirect====
