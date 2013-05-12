@@ -12,6 +12,7 @@ BMO.BMM = function(wsClient, handlers){
 	this.view = new PIXI.Stage(0x000000); 
 	this.wsClient = wsClient;
 	this.handlers = handlers;
+	this.gameState = 0;
 };
 
 //constructor
@@ -31,7 +32,7 @@ BMO.BMM.prototype.setMap = function(data,onProgress,onComplete){
 	self.width = data.mapsize.width;
 	self.height = data.mapsize.height;
 	
-	console.log("self="+self+" "+"mapSkin="+mapSkin+"onComplete="+onComplete);
+	//console.log("self="+self+" "+"mapSkin="+mapSkin+"onComplete="+onComplete);
 	if (typeof(onComplete) !== "function" ) throw "I need a call-back for onLoadend";
 	try{
 		var loader = new PIXI.AssetLoader(mapSkin);
@@ -97,8 +98,9 @@ BMO.BMM.prototype.setMap = function(data,onProgress,onComplete){
 					};
 					//BMO.webPageBMM.setPlayer({"name":"scripts/playGame/json/hamster_1.json","p1":{"row":1,"col":1}},false,false);
 					if(msg.id == self.wsClient.username) self.setPlayer(msg,false,function(){
+															self.gameState++;
 															self.setController();});
-					else self.setPlayer(msg,false,false);
+					else self.setPlayer(msg,false,function(){self.gameState++;});
 				}				
 				//End of players.........
 				
@@ -152,6 +154,33 @@ BMO.BMM.prototype.setPlayer = function(msg,onProgress,onComplete){
 		};
 		loader.load();
 	}catch(e){throw e;};
+}
+
+/*
+@public method setBomb
+@param self BMO.BMM
+**/
+BMO.BMM.prototype.setBomb = function(self){
+	this.handlers["game_setBombACK"] = function(data,wsClient){
+		var _in = JSON.parse(data);
+		var bombSkin = [_in.src];
+		try{
+			var loader = new PIXI.AssetLoader(bombSkin);
+			loader.onComplete = function(){self.gameState++;};
+			loader.load();
+		}catch(e){throw e;};	
+	};
+	this.wsClient.sendData("game_setBomb",null);
+}
+
+/*
+@public method setBuff
+@param self BMO.BMM
+**/
+BMO.BMM.prototype.setBuff = function(self){
+	this.handlers["game_setBuffACK"] = function(data,wsClient){
+	};
+	this.wsClient.sendData("game_setBuff",null);
 }
 
 /*

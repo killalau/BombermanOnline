@@ -40,17 +40,13 @@ BMO.webPageInit_phase2 = function(handlers,wsClient){
 			BMO.webPageBMM.setMap(data,false,function(){
 				requestAnimFrame(BMO.screenRefresh);
 			});
-			/*
-			BMO.webPageBMM.setMap("scripts/playGame/json/pixi-MAP1.json",false,function(){
-				requestAnimFrame(BMO.screenRefresh);
-			});
-			*/
-			//BMO.webPageBMM.setPlayer({"name":"scripts/playGame/json/demo.json","p1":{"row":1,"col":1}},false,false);
-			//BMO.webPageBMM.setController();
+			BMO.webPageBMM.setBomb(BMO.webPageBMM);
+			BMO.webPageBMM.setBuff(BMO.webPageBMM);
 		}else{
 			alert("You should not in this page");
 		}
 	};
+
 	wsClient.sendData("game_mapInit", true);
 }
 

@@ -261,14 +261,18 @@ BMO.BM.prototype.plantBomb = function(payload){
 						bombNum: this.bombNum
 				};
 				this.bombNum--;
-				this.wsClient.sendData("game_playerPlantBomb",req);
+				this.wsClient.sendData("game_playerPlantBomb",JSON.stringify(req));
 		}	
 	}else{//payload is not null
 		console.log("plantBomb: payload.y="+payload.y+",payload.x="+payload.x);
 		if ( payload.x < 0 || payload.y < 0){//invalid plantBomb
-				console.log("plantBomb: invalid");				
+			console.log("plantBomb: invalid");				
 		}else{//valid plantBomb
-				console.log("plantBomb");
+			console.log("plantBomb: valid");
+			var _grid = this.BMM.gridList[payload.y][payload.x];
+			var _bomb = new BMO.Bomb(_grid,this,this.wsClient);
+			_bomb.setView("Normal_0");
+			_grid.view.addChild(_bomb.view);
 		}
 		this.bombNum = payload.bombNum;
 	}	
