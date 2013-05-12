@@ -82,9 +82,9 @@ BMO.BMM.prototype.setMap = function(data,onProgress,onComplete){
 						}
 					};
 					//BMO.webPageBMM.setPlayer({"name":"scripts/playGame/json/hamster_1.json","p1":{"row":1,"col":1}},false,false);
-					BMO.webPageBMM.setPlayer(msg,false,false);
+					self.setPlayer(msg,false,false);
 				}
-				BMO.webPageBMM.setController();
+				self.setController();
 				//End of players.........
 				
 				onComplete();
@@ -127,7 +127,7 @@ BMO.BMM.prototype.setPlayer = function(msg,onProgress,onComplete){
 		loader.onComplete = function(){
 			console.log("setPlayer:onComplete");
 			var _grid = self.gridList[msg.p1.row][msg.p1.col];
-			var _BM = new BMO.BM(_grid,self,BMO.webPageBMM.wsClient);
+			var _BM = new BMO.BM(_grid,self,self.wsClient);
 			self.elementList.push(_BM);
 			_BM.id = msg.id;
 			_BM.viewPrefix = msg.viewPrefix;
@@ -155,6 +155,7 @@ BMO.BMM.prototype.setController = function(){
 	
 	document.body.addEventListener("keydown",function(e){
 		//self.elementList[0].eventProcesser(e);
+		e.payload = null;
 		self.getElementById( self.wsClient.username).eventProcesser(e);
 	},false);
 	document.body.addEventListener("keyup",function(e){
@@ -166,6 +167,9 @@ BMO.BMM.prototype.setController = function(){
 	self.handlers["game_playerStopMoveACK"] = function(){};
 	self.handlers["game_broadcastPlayerMove"] = self.broadcastPlayerMove;
 	self.handlers["game_broadcastPlayerStopMove"] = self.broadcastPlayerStopMove;
+	self.handlers["game_broadcastPlantBomb"] = self.broadcastPlantBomb;
+	self.handlers["game_broadcastExplodeBomb"] = self.broadcastExplodeBomb;
+	
 }
 
 BMO.BMM.prototype.broadcastPlayerMove = function(data, wsClient){
@@ -176,6 +180,8 @@ BMO.BMM.prototype.broadcastPlayerMove = function(data, wsClient){
 		payload: payload you want
 	}
 	*/
+	try{
+	//console.log("broadcastPlayerMove,this="+this);
 	if(data.classname == "BM" && data.id != BMO.webPageBMM.wsClient.username){
 		var element = BMO.webPageBMM.getElementById(data.id);
 		var e ={
@@ -184,9 +190,12 @@ BMO.BMM.prototype.broadcastPlayerMove = function(data, wsClient){
 		}
 		element.eventProcesser(e);
 	}
+	}catch(e){throw "broadcastPlayerMove fail";}
 };
 
 BMO.BMM.prototype.broadcastPlayerStopMove = function(data, wsClient){
+	try{
+	//console.log("broadcastPlayerStopMove,this="+this);
 	if(data.classname == "BM" && data.id != BMO.webPageBMM.wsClient.username){
 		var element = BMO.webPageBMM.getElementById(data.id);
 		var e ={
@@ -195,4 +204,41 @@ BMO.BMM.prototype.broadcastPlayerStopMove = function(data, wsClient){
 		}
 		element.eventProcesser(e);
 	}
+	}catch(e){throw "broadcastPlayerStopMove fail";}
+};
+
+/*
+@private method broadcastPlantBomb
+@param data: {
+		classname : "",
+		id: "username" / {x:x ,y:y},
+		payload: {x: target.grid.X,y:target.grid.Y}
+	}
+@param wsClient: wsClient
+**/
+BMO.BMM.prototype.broadcastPlantBomb = function(data,wsClient){
+	try{
+	if(data.classname == "BM" && data.id != BMO.webPageBMM.wsClient.username){
+		var element = BMO.webPageBMM.getElementById(data.id);
+		var e ={
+			type: "plantBomb",
+			payload: data.payload,
+		}
+		element.eventProcesser(e);
+	}
+	}catch(e){throw "plantBombErr="+e;};
+};
+
+/*
+@private method broadcastPlantBomb
+@param data: {
+		classname : "",
+		id: "username" / {x:x ,y:y},
+		payload: Not yet define
+	}
+@param wsClient: wsClient
+**/
+BMO.BMM.prototype.broadcastExplodeBomb =function(data,wsClient){
+	try{
+	}catch(e){throw "explodeBombErr="+e};
 };

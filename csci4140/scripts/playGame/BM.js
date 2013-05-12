@@ -196,7 +196,7 @@ BMO.BM.prototype.setDirection = function(_direction){
 @param _id: frame_id in player.json
 **/
 BMO.BM.prototype.setView = function(_id){
-	console.log("setAF:"+_id);
+	//console.log("setAF:"+_id);
 	if (!this.view) this.view = PIXI.Sprite.fromFrame(_id);
 	else this.view.setTexture(PIXI.Texture.fromFrame(_id));
 }
@@ -215,6 +215,7 @@ BMO.BM.prototype.eventProcesser = function(e){
 			else if(e.keyCode == 38) self.setDirection("U");
 			else if(e.keyCode == 37) self.setDirection("L");
 			else if(e.keyCode == 39) self.setDirection("R");
+			else if(e.keyCode == 32){self.eventProcesser({'type':'plantBomb','payload':e.payload});return;}
 			else return;
 			
 			self.startMove(self);
@@ -228,5 +229,18 @@ BMO.BM.prototype.eventProcesser = function(e){
 		
 	}else if( e.type === "otherPlayerStopMove"){
 		self.stopMove(self);
+	}else if( e.type === "plantBomb"){
+		self.plantBomb(e.payload);
 	}
+}
+
+/*
+@private method plantBomb
+@param payload{
+			x: target.Grid.X;
+			y: target.Grid.y;
+		}
+**/
+BMO.BM.prototype.plantBomb = function(payload){
+	console.log("plantBomb");
 }
