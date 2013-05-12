@@ -64,6 +64,8 @@ wsHandlers.utf8["game_mapInit"] = wsRequestHandlers.game_mapInit;
 wsHandlers.utf8["game_playerMove"] = wsRequestHandlers.game_playerMove;
 wsHandlers.utf8["game_playerStopMove"] = wsRequestHandlers.game_playerStopMove;
 wsHandlers.utf8["game_playerPlantBomb"] = wsRequestHandlers.game_playerPlantBomb;
+wsHandlers.utf8["game_setBomb"] = wsRequestHandlers.game_setBomb;
+wsHandlers.utf8["game_setBuff"] = wsRequestHandlers.game_setBuff;
 // Create and start websocket server
 var wsServerObj = wsServer.start(serverObj, wsRouter.route, wsHandlers);
 

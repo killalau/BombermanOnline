@@ -583,6 +583,12 @@ function game_playerStopMove(data, gServer, gClient){
 	gClient.broadcastData("game_broadcastPlayerStopMove", json);
 }
 
+/* Handler for 'game_playerPlantBomb' message
+ *
+ * data : data of message
+ * gServer : game server object
+ * gClient : game client object
+ */
 function game_playerPlantBomb(data, gServer, gClient){
 	//"game_broadcastPlantBomb"
 	/*
@@ -610,9 +616,34 @@ function game_playerPlantBomb(data, gServer, gClient){
 	var pass = true;
 	//End of validation.......
 	console.log("plantBomb:in=",_in,"out="+out);
-	if ( pass )	out.payload = {'x': _in.x ,'y': _in.y,'bombNum':(_in.bombNum--)};
+	if ( pass )	out.payload = {'x': _in.x ,'y': _in.y,'bombNum':(--_in.bombNum)};
 	gClient.broadcastData("game_broadcastPlantBomb", JSON.stringify(out));
 	}catch(e){throw e;};
+}
+
+/* Handler for 'game_setBomb' message
+ *
+ * data : data of message
+ * gServer : game server object
+ * gClient : game client object
+ */
+function game_setBomb(data, gServer, gClient){
+	var out = {
+			src: "scripts/playGame/json/bomb.json"
+	};
+	gClient.sendData("game_setBombACK",JSON.stringify(out));
+
+}
+
+/* Handler for 'game_setBuff' message
+ *
+ * data : data of message
+ * gServer : game server object
+ * gClient : game client object
+ */
+function game_setBuff(data, gServer, gClient){
+	gClient.sendData("game_setBuffACK",null);
+
 }
 
 // Public function
@@ -640,3 +671,5 @@ exports.game_playerMove = game_playerMove;
 exports.game_playerStopMove = game_playerStopMove;
 
 exports.game_playerPlantBomb = game_playerPlantBomb;
+exports.game_setBomb = game_setBomb;
+exports.game_setBuff = game_setBuff;
