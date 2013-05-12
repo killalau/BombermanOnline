@@ -50,18 +50,25 @@ BMO.BMM.prototype.setMap = function(data,onProgress,onComplete){
 						var _grid = new BMO.Grid(j,i,self);
 						self.gridList[i].push(_grid);
 						_grid.view.addChild(PIXI.Sprite.fromFrame("tile"));
-						//Wall.............
-						var _sprite = PIXI.Sprite.fromFrame("wall");
+						//Wall.............						
 						if ( i == 0 || i == self.height-1){
-								_grid.view.addChild(_sprite);
-								//_grid.addElement
+							var _wall = new BMO.Wall(_grid,self,self.wsClient);							
+							_wall.setView("wall");
+							_grid.addElement(_wall);
+							_grid.view.addChild(_wall.view);
+							//_grid.addElement
 						}else{
 							if ( j == 0 || j == self.width-1){
-								_grid.view.addChild(_sprite);
+								var _wall = new BMO.Wall(_grid,self,self.wsClient);							
+								_wall.setView("wall");							
+								_grid.addElement(_wall);
+								_grid.view.addChild(_wall.view);
 							}else{
 								if ( (i%2) == 0 && (j%2) == 0){
-									_grid.view.addChild(_sprite);
-
+									var _wall = new BMO.Wall(_grid,self,self.wsClient);							
+									_wall.setView("wall");
+									_grid.addElement(_wall);
+									_grid.view.addChild(_wall.view);
 								}
 							}
 						}
