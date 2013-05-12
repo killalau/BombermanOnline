@@ -14,6 +14,11 @@
     }
     $id = $_POST["id"];
     $pwd = $_POST["pwd"];
+	if (isset($_POST["persistent"])){
+		$persistent = $_POST["persistent"];        
+    }else{
+		$persistent = 'false';
+	}
 
     //validate the id only contains valid characters
     for ($i = 0; $i < strlen($id); $i++){
@@ -25,6 +30,11 @@
         }
     }
 
+	if ($persistent == 'true'){
+		$persistency = 'true';
+	}else{
+		$persistency = 'false';
+	}
     $myDB = new SimpleDB();
 
     $db_pwd = $myDB->getPassword($id);
@@ -33,19 +43,19 @@
         header("Location:http://$my_host:$http_port$index_url?return=1");
         #header("Location:". $index_url.'?return=1');
         //echo 'No such ID';
-    }else{        
+    }else{
         if ($pwd == $db_pwd){
             //=========Correct Password=========
-            $session_key = $myDB->createSession($id);
+            $session_key = $myDB->createSession($id, $persistency);
 				//$expiry_time = $myDB->getSessionExpiryTime($session_key);
             //     ====set client cookie====
-			$id = $myDB->getIdBySession($session_key);				
-			$persistent = $_POST["persistent"];
-			if ($persistent){
+			$id = $myDB->getIdBySession($session_key);
+			
+			if ($persistency == 'true'){
 				$expiry_time = time() + 60*60*24*365*10;
 			}else{
 				$expiry_time = 0;
-			}
+			}			
 			setrawcookie("BomberManCookie", $id.':'.$session_key, $expiry_time, '/');
             //     =========================
             //        ====redirect====

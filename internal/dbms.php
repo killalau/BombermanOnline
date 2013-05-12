@@ -17,18 +17,6 @@ class SimpleDB{
 		$this->dbh = new PDO("mysql:host=$this->dbIP;dbname=$this->dbName", $this->dbLoginName, $this->dbPassword);
 	}
 
-	function getSessionKeyBySession($usr_session){
-		//    =========get DB session key===========    
-		$query = $this->dbh->prepare("SELECT session FROM $this->sessionTable WHERE session=?");
-		$query->execute(array($usr_session));
-		$db_session = $query->fetch(PDO::FETCH_ASSOC);
-		if ($db_session != null){
-			return $db_session['session'];
-		}else{
-			return null;
-		}
-	}		
-
 	function getLoginTime($usr_session){
 		//=========get DB expiry time =========
         $query = $this->dbh->prepare("SELECT login_time FROM $this->sessionTable WHERE session=?");    
@@ -39,13 +27,6 @@ class SimpleDB{
 		}else{
 			return null;
 		}
-	}
-	
-	function updateSession($usr_session){
-		//=====update session key=====
-        $new_login_time = time();        
-        $query = $this->dbh->prepare("UPDATE $this->sessionTable SET login_time=? WHERE session=?");
-        $query->execute(array(date('Y-m-d H:i:s',$new_login_time), $usr_session));
 	}
 	
 	function getPassword($id){
@@ -59,10 +40,15 @@ class SimpleDB{
 		}
 	}
 	
-	function createSession($id){
+	function createSession($id, $persistent){
 		//        ===prepare cookie===
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $session_key = null;
+		$persistency = 0;
+		if ($persistent == 'true'){
+			$persistency = 1;
+		}
+		
         for ($i = 0; $i < 20; $i++){
             $session_key = $session_key.$characters[rand(0,strlen($characters)-1)];
         }
@@ -75,11 +61,39 @@ class SimpleDB{
             $query = $this->dbh->prepare("DELETE FROM $this->sessionTable WHERE id=?");
             $query->execute(array($id));
         }
-            //append session
+            //append session		
         $login_time = time();
-        $query = $this->dbh->prepare("INSERT INTO $this->sessionTable (id, session, login_time) VALUES (?,?,?)");
-        $query->execute(array($id, $session_key, date('Y-m-d H:i:s',$login_time)));
+        $query = $this->dbh->prepare("INSERT INTO $this->sessionTable (id, session, login_time, persistent) VALUES (?,?,?,?)");
+        $query->execute(array($id, $session_key, date('Y-m-d H:i:s',$login_time), $persistency));
         //        ====================
+		return $session_key;
+	}
+	
+	function getSessionKeyBySession($usr_session){
+		//    =========get DB session key===========    
+		$query = $this->dbh->prepare("SELECT session FROM $this->sessionTable WHERE session=?");
+		$query->execute(array($usr_session));
+		$db_session = $query->fetch(PDO::FETCH_ASSOC);
+		if ($db_session != null){
+			return $db_session['session'];
+		}else{
+			return null;
+		}
+	}
+	
+	function updateSession($usr_session){
+		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$session_key = null;
+		
+		//prepare session key
+		for ($i = 0; $i < 20; $i++){
+            $session_key = $session_key.$characters[rand(0,strlen($characters)-1)];
+        }
+		//=====update session key=====
+        $new_login_time = time();        
+        $query = $this->dbh->prepare("UPDATE $this->sessionTable SET login_time=?, session=? WHERE session=?");
+        $query->execute(array(date('Y-m-d H:i:s',$new_login_time), $session_key, $usr_session));
+		
 		return $session_key;
 	}
 	
@@ -109,6 +123,17 @@ class SimpleDB{
 		}else{
 			return null;
 		}
+	}
+	
+	function getPersistentBySession($usr_session){
+		$query = $this->dbh->prepare('SELECT persistent FROM '.$this->sessionTable.' WHERE session=?');
+		$query->execute(array($usr_session));
+		$persistent = $query->fetch(PDO::FETCH_ASSOC);
+		if ($persistent != null){
+			return $persistent['persistent'];
+		}else{
+			return 0;
+		}		
 	}
         
 	function createAccount($id, $pwd){
