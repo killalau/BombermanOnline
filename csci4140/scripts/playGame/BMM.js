@@ -51,11 +51,18 @@ BMO.BMM.prototype.setMap = function(data,onProgress,onComplete){
 						self.gridList[i].push(_grid);
 						_grid.view.addChild(PIXI.Sprite.fromFrame("tile"));
 						//Wall.............
-						if ( i == 0 || i == self.height-1) _grid.view.addChild(PIXI.Sprite.fromFrame("wall"));				
-						else{
-							if ( j == 0 || j == self.width-1)	_grid.view.addChild(PIXI.Sprite.fromFrame("wall"));	
-							else{
-								if ( (i%2) == 0 && (j%2) == 0) _grid.view.addChild(PIXI.Sprite.fromFrame("wall"));	
+						var _sprite = PIXI.Sprite.fromFrame("wall");
+						if ( i == 0 || i == self.height-1){
+								_grid.view.addChild(_sprite);
+								//_grid.addElement
+						}else{
+							if ( j == 0 || j == self.width-1){
+								_grid.view.addChild(_sprite);
+							}else{
+								if ( (i%2) == 0 && (j%2) == 0){
+									_grid.view.addChild(_sprite);
+
+								}
 							}
 						}
 						//End of wall......
@@ -218,11 +225,11 @@ BMO.BMM.prototype.broadcastPlayerStopMove = function(data, wsClient){
 **/
 BMO.BMM.prototype.broadcastPlantBomb = function(data,wsClient){
 	try{
-	if(data.classname == "BM" && data.id != BMO.webPageBMM.wsClient.username){
+	if(data.classname == "BM"){
 		var element = BMO.webPageBMM.getElementById(data.id);
 		var e ={
 			type: "plantBomb",
-			payload: data.payload,
+			payload: data.payload
 		}
 		element.eventProcesser(e);
 	}

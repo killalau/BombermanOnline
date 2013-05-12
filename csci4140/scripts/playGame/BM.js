@@ -4,7 +4,9 @@ var BMO = window.BMO ? window.BMO : {};
 @class: BM
 @extends: Element
 @construtor
-@param _grid (BMO.Grid)
+@param _grid: BMO.Grid
+@param _BMM: BMO.BMM
+@param _wsClient: BMO.BMM.wsClient
 **/
 BMO.BM =function(_grid,_BMM,wsClient){
 	try{
@@ -15,13 +17,19 @@ BMO.BM =function(_grid,_BMM,wsClient){
 		this.direction = "D";		
 		this.animationIndex = 0;
 		this.wsClient = wsClient;
-		//this.handlers = {};
+		
+		this.bombMax = 8;
+		this.powerMax = 8;
+		this.currentBombMa = 2;
+		this.bombNum = 1;
+		this.powerOfFire = 2;
+
 	}catch(e){throw(e);};
 }
 
 //constructor
 BMO.BM.construtor = BMO.BM;
-BMO.BM.prototype = Object.create( BMO.Element );
+BMO.BM.prototype = Object.create( BMO.Element.prototype );
 
 /*
 @private method startMove
@@ -194,12 +202,13 @@ BMO.BM.prototype.setDirection = function(_direction){
 /*
 @public method setView
 @param _id: frame_id in player.json
+PS. Inherit from BMO.Element
 **/
+/*
 BMO.BM.prototype.setView = function(_id){
-	//console.log("setAF:"+_id);
-	if (!this.view) this.view = PIXI.Sprite.fromFrame(_id);
-	else this.view.setTexture(PIXI.Texture.fromFrame(_id));
+	//Inherit from BMO.Element
 }
+*/
 
 /*
 @public method eventProcesser
@@ -242,5 +251,25 @@ BMO.BM.prototype.eventProcesser = function(e){
 		}
 **/
 BMO.BM.prototype.plantBomb = function(payload){
-	console.log("plantBomb");
+	//console.log("plantBomb");
+	if(!payload){//payload is null
+		console.log("plantBomb:null payload");
+		if ( this.bombNum > 0){
+				var req = {
+						x: this.grid.X,
+						y: this.grid.Y,
+						bombNum: this.bombNum
+				};
+				this.bombNum--;
+				//this.wsClient.sendData("",req);
+		}	
+	}else{//payload is not null
+		console.log("plantBomb: payload.y="+payload.y+",payload.x="+payload.x);
+		if ( payload.x < 0 || payload.y < 0){//invalid plantBomb
+				console.log("plantBomb: invalid");				
+		}else{//valid plantBomb
+				console.log("plantBomb");
+		}
+		this.bombNum = payload.bombNum;
+	}	
 }
