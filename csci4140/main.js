@@ -63,7 +63,7 @@ wsHandlers.utf8["seat_update"] = wsRequestHandlers.seat_update;
 wsHandlers.utf8["game_mapInit"] = wsRequestHandlers.game_mapInit;
 wsHandlers.utf8["game_playerMove"] = wsRequestHandlers.game_playerMove;
 wsHandlers.utf8["game_playerStopMove"] = wsRequestHandlers.game_playerStopMove;
-
+wsHandlers.utf8["game_playerPlantBomb"] = wsRequestHandlers.game_playerPlantBomb;
 // Create and start websocket server
 var wsServerObj = wsServer.start(serverObj, wsRouter.route, wsHandlers);
 

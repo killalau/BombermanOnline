@@ -96,9 +96,10 @@ BMO.BMM.prototype.setMap = function(data,onProgress,onComplete){
 						}
 					};
 					//BMO.webPageBMM.setPlayer({"name":"scripts/playGame/json/hamster_1.json","p1":{"row":1,"col":1}},false,false);
-					self.setPlayer(msg,false,false);
-				}
-				self.setController();
+					if(msg.id == self.wsClient.username) self.setPlayer(msg,false,function(){
+															self.setController();});
+					else self.setPlayer(msg,false,false);
+				}				
 				//End of players.........
 				
 				onComplete();
@@ -130,10 +131,10 @@ BMO.BMM.prototype.getElementById = function(id){
 @param onComplete: callback for loading end
 **/
 BMO.BMM.prototype.setPlayer = function(msg,onProgress,onComplete){
-	console.log("setPlayer");
+	//console.log("setPlayer");
 	var playerSkin = [msg.name];//demo.json eg
 	var self = this;
-	console.log("self="+msg.id+" "+"playerSkin="+playerSkin);
+	//console.log("self="+msg.id+" "+"playerSkin="+playerSkin);
 	//if (typeof(onComplete) !== "function" ) throw "I need a call-back for onLoadend";
 	try{
 		var loader = new PIXI.AssetLoader(playerSkin);
@@ -226,17 +227,18 @@ BMO.BMM.prototype.broadcastPlayerStopMove = function(data, wsClient){
 @param data: {
 		classname : "",
 		id: "username" / {x:x ,y:y},
-		payload: {x: target.grid.X,y:target.grid.Y}
+		payload: {x: target.grid.X,y:target.grid.Y,bombNum:BMO.BM.bombNum}
 	}
 @param wsClient: wsClient
 **/
 BMO.BMM.prototype.broadcastPlantBomb = function(data,wsClient){
 	try{
-	if(data.classname == "BM"){
-		var element = BMO.webPageBMM.getElementById(data.id);
+	var _in = JSON.parse(data);
+	if(_in.classname == "BM"){
+		var element = BMO.webPageBMM.getElementById(_in.id);
 		var e ={
 			type: "plantBomb",
-			payload: data.payload
+			payload: _in.payload
 		}
 		element.eventProcesser(e);
 	}

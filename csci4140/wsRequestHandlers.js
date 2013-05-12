@@ -583,6 +583,38 @@ function game_playerStopMove(data, gServer, gClient){
 	gClient.broadcastData("game_broadcastPlayerStopMove", json);
 }
 
+function game_playerPlantBomb(data, gServer, gClient){
+	//"game_broadcastPlantBomb"
+	/*
+	Input message
+	@param data: {
+		x: this.grid.X,
+		y: this.grid.Y,
+		bombNum: gClient.??.bombNum
+	};
+	Output message
+	@param out: {
+		classname : "BM",
+		id: "username",
+		payload: {x: target.grid.X,y:target.grid.Y,bombNum:BMO.BM.bombNum}
+	}
+	**/	
+	try{
+	var _in = JSON.parse(data);
+	var out = {
+		classname : "BM",
+		id: gClient.username,
+		payload: {'x':-1,'y':-1,'bombNum':_in.bombNum}
+	};
+	//plantBomb validation....
+	var pass = true;
+	//End of validation.......
+	console.log("plantBomb:in=",_in,"out="+out);
+	if ( pass )	out.payload = {'x': _in.x ,'y': _in.y,'bombNum':(_in.bombNum--)};
+	gClient.broadcastData("game_broadcastPlantBomb", JSON.stringify(out));
+	}catch(e){throw e;};
+}
+
 // Public function
 exports.setName = setName;
 exports.ping = ping;
@@ -606,3 +638,5 @@ exports.seat_update = seat_update;
 exports.game_mapInit = game_mapInit;
 exports.game_playerMove = game_playerMove;
 exports.game_playerStopMove = game_playerStopMove;
+
+exports.game_playerPlantBomb = game_playerPlantBomb;
