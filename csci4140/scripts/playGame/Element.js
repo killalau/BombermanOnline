@@ -19,5 +19,15 @@ BMO.Element =function(_grid,_BMM){
 //constructor
 BMO.Element.construtor = BMO.Element;
 
+/*
+@public method setView
+@param _id: frame_id in player.json
+**/
+BMO.Element.prototype.setView = function(_id){
+	//console.log("setAF:"+_id);
+	if (!this.view) this.view = PIXI.Sprite.fromFrame(_id);
+	else this.view.setTexture(PIXI.Texture.fromFrame(_id));
+}
+
 
 
