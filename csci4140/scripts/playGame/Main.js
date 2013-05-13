@@ -35,7 +35,7 @@ BMO.webPageInit_phase2 = function(handlers,wsClient){
 		if(data){
 			BMO.webPageBMM = new BMO.BMM(wsClient, handlers);
 			BMO.webPageStage = new PIXI.autoDetectRenderer(960, 560);
-			document.body.appendChild(BMO.webPageStage.view);
+			document.body.children[0].appendChild(BMO.webPageStage.view);
 			//somehow get the map's skin name and player's skin
 			BMO.webPageBMM.setMap(data,false,function(){
 				requestAnimFrame(BMO.screenRefresh);
