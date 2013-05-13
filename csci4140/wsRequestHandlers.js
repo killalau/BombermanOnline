@@ -336,10 +336,20 @@ function joinRoom(data,gServer,gClient){
 				host_seat: host.seat
 				};
 				gServer.roomList[bufRm].broadcastData('host_update_ACK', JSON.stringify(_data));
+				
+				gServer.roomList[bufRm].removeClient(gServer,gClient);
+				
+				console.log("hihi");
+				seat_maintain(gServer, gClient, bufRm);
+				console.log("hihi2");
+				
 			}
 			//Anthony's Code End
 			
-			gServer.roomList[bufRm].removeClient(gServer,gClient);
+			if(gServer.roomList[bufRm].isLobby)
+			{
+				gServer.roomList[bufRm].removeClient(gServer,gClient);
+			}
 
 			var tmproom = gServer.roomList[bufRm];
 		        var tmpjson = [];
@@ -506,16 +516,74 @@ function seat_update(data, gServer, gClient){
 	var clientRm = gClient.room;
 	//console.log(gServer.roomList[clientRm].clientList[0]);
 	var reply = [];
-	
-	
+
 	for(var i=0;i<gServer.roomList[clientRm].clientList.length;i++){
+		var username = gServer.roomList[clientRm].clientList[i].username;
+		//var filepath = "icon/" + username;
+		var havepic = true;
+		
 		reply[i] = [];
-		reply[i].push(gServer.roomList[clientRm].clientList[i].username);
+		reply[i].push(username);
 		reply[i].push(gServer.roomList[clientRm].clientList[i].seat);
+		
+		//
+		reply[i].push("false");
+		
+		
 	}
 	//console.log(reply);
-	gServer.roomList[clientRm].broadcastData('seat_update_ACK', JSON.stringify(reply));
+	var room = gServer.roomList[clientRm];
+	for(var i=0;i<room.clientList.length;i++){
 	
+	if(room.clientList[i].isHost)
+		room.sendData('H_seat_update_ACK', JSON.stringify(reply), room.clientList[i]);
+	else
+		room.sendData('seat_update_ACK', JSON.stringify(reply), room.clientList[i]);
+	
+	
+	}
+}
+
+function seat_maintain(gServer, gClient, rmnum){
+	var reply = [];
+	for(var i=0;i<gServer.roomList[rmnum].clientList.length;i++){
+		var username = gServer.roomList[rmnum].clientList[i].username;
+		//var filepath = "icon/" + username;
+		var havepic = true;
+		
+		reply[i] = [];
+		reply[i].push(username);
+		reply[i].push(gServer.roomList[rmnum].clientList[i].seat);
+		
+		//
+		reply[i].push("false");
+		
+		
+	}
+	//console.log(reply);
+	gServer.roomList[rmnum].broadcastData('seat_update_ACK', JSON.stringify(reply));
+
+}
+
+function kick_your_ass(data, gServer, gClient){
+	var message = JSON.parse(data);
+	console.log( "hihi");
+	var bufRm = gClient.room;
+	var k_client;
+
+
+	for(var i =0;i<gServer.roomList[bufRm].clientList.length;i++) {
+		if(gServer.roomList[bufRm].clientList[i].username == message.username)
+		{
+			k_client = gServer.roomList[bufRm].clientList[i];
+		}
+	}
+	console.log(k_client);
+	var _result = gServer.roomList[0].addClient(gServer,k_client);		//add client to lobby	
+	
+	gServer.roomList[bufRm].removeClient(gServer,k_client);
+
+	k_client.sendData("kick_ACK", true);
 }
 
 function game_mapInit(data, gServer, gClient){
@@ -615,10 +683,10 @@ function game_playerPlantBomb(data, gServer, gClient){
 	//plantBomb validation....
 	var pass = true;
 	//End of validation.......
-	console.log("plantBomb:in=",_in,"out="+out);
 	if ( pass )	out.payload = {'x': _in.x ,'y': _in.y,'bombNum':(--_in.bombNum)};
+	//console.log("plantBomb:in=",_in,"out=",out);
 	gClient.broadcastData("game_broadcastPlantBomb", JSON.stringify(out));
-	}catch(e){throw e;};
+	}catch(e){console.log("planBombErr,e=",e);};
 }
 
 /* Handler for 'game_setBomb' message
@@ -629,10 +697,9 @@ function game_playerPlantBomb(data, gServer, gClient){
  */
 function game_setBomb(data, gServer, gClient){
 	var out = {
-			src: "scripts/playGame/json/bomb2.json"
+		src: "scripts/playGame/json/bomb2.json"
 	};
 	gClient.sendData("game_setBombACK",JSON.stringify(out));
-
 }
 
 /* Handler for 'game_setBuff' message
@@ -643,8 +710,8 @@ function game_setBomb(data, gServer, gClient){
  */
 function game_setBuff(data, gServer, gClient){
 	gClient.sendData("game_setBuffACK",null);
-
 }
+
 
 // Public function
 exports.setName = setName;
@@ -661,10 +728,11 @@ exports.playerStat = playerStat;
 exports.joinRoom = joinRoom;
 exports.lobbyIcon = lobbyIcon;
 
+//Anthony function
 exports.host_update = host_update;
 exports.seat_update = seat_update;
-//Anthony function
-//exports.host_Notify = host_Notify;
+exports.kick_your_ass = kick_your_ass;
+//end
 
 exports.game_mapInit = game_mapInit;
 exports.game_playerMove = game_playerMove;
@@ -673,3 +741,4 @@ exports.game_playerStopMove = game_playerStopMove;
 exports.game_playerPlantBomb = game_playerPlantBomb;
 exports.game_setBomb = game_setBomb;
 exports.game_setBuff = game_setBuff;
+
