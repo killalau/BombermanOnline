@@ -150,6 +150,7 @@ BMO.BMM.prototype.setPlayer = function(msg,onProgress,onComplete){
 			_BM.viewPrefix = msg.viewPrefix;
 			_BM.setView(msg.viewPrefix + "D0");
 			_grid.view.addChild(_BM.view);
+			_grid.addElement(_BM);
 			if (onComplete) onComplete();
 		};
 		loader.load();

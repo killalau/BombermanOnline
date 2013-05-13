@@ -273,9 +273,11 @@ BMO.BM.prototype.plantBomb = function(payload){
 			var _grid = this.BMM.gridList[payload.y][payload.x];
 			var _bomb = new BMO.Bomb(_grid,this,this.wsClient);
 			_bomb.setView("bomb_0");
-			_grid.view.addChild(_bomb.view);
-			_grid.view.swapChildren(_bomb.view,this.view);
 			_grid.addElement(_bomb);
+			_grid.view.addChild(_bomb.view);
+			var index = _grid.view.children.indexOf( this.view );
+			if (index != -1 ) //Cannot use directly due to our view.XY != this.grid.xy
+				_grid.view.swapChildren(_bomb.view,this.view); 		
 			}catch(e){console.log(e);alert(e);throw e;};
 		}
 		this.bombNum = payload.bombNum;

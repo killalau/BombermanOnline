@@ -9,8 +9,10 @@ BMO.Element =function(_grid,_BMM){
 	try{
 		this.BMM = _BMM;
 		this.grid = _grid;
-		this.X = 0;
-		this.Y = 0;
+		this.X = 0;		//Model current X pos
+		this.Y = 0;		//Model current Y pos
+		this._X = 0;	//View current X pos
+		this._Y = 0;	//View current Y pos
 		this.view = null;
 		this.moveFunction = null;
 	}catch(e){throw(e);};
@@ -21,7 +23,7 @@ BMO.Element.construtor = BMO.Element;
 
 /*
 @public method setView
-@param _id: frame_id in player.json
+@param _id: frame_id in .json 
 **/
 BMO.Element.prototype.setView = function(_id){
 	//console.log("setAF:"+_id);

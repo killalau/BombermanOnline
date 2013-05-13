@@ -683,6 +683,9 @@ function game_playerPlantBomb(data, gServer, gClient){
 	//plantBomb validation....
 	var pass = true;
 	//End of validation.......
+
+	//console.log("plantBomb:in=",_in,"out="+out);
+
 	if ( pass )	out.payload = {'x': _in.x ,'y': _in.y,'bombNum':(--_in.bombNum)};
 	//console.log("plantBomb:in=",_in,"out=",out);
 	gClient.broadcastData("game_broadcastPlantBomb", JSON.stringify(out));
