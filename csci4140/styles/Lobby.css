@@ -121,26 +121,25 @@ div.lobby div.lobbyLeft div.rmList div.button{
 	width:96px;
 	height:21px;
 	cursor: default;
-	border:solid black;
-}
-
-div.button:hover{
 	color: 15ABCE;
 	border:solid 15ABCE;
 }
 
-div.button:active{
-	color: 127289;
-	border:solid 127289;
+#join_button:hover{
+	color: #00E6E6;
+	border:solid #00E6E6;
 }
 
 div.lobby div.lobbyLeft div.rmList div.full{
 	float:right;
 	text-align:center;
-	font-size:17pt;
+	font-size:12pt;
 	width:96px;
 	height:21px;
-	border:2px solid red;
+	border:solid red;
+	color: red;
+	opacity: 0.7;
+	cursor: default;
 }
 
 div.lobby div.lobbyLeft div.rmList div.space{

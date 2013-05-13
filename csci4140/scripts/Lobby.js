@@ -147,7 +147,7 @@ Lobby.rmListRefresh = function(){
 			rn.className = "rm";
 			np.className = "np";
 			ping.className = "ping";
-			button.className = "button";
+			button.className = "button";			
 			button.addEventListener("click",function(e){
 				var buf = room_id;
 				return function(){//wtf clousure
@@ -166,9 +166,11 @@ Lobby.rmListRefresh = function(){
 					if ( rmObj.children[1].innerHTML === "4" ){//num of player
 						tmp.innerHTML = "Full";
 						tmp.className = "full";
+						tmp.id = "";
 					}else{
 						tmp.innerHTML = "Join";
 						tmp.className = "button";
+						tmp.id = "join_button";
 					}
 				}
 			}

@@ -50,7 +50,7 @@ if ($myCookie->cookieExist()){
 					<input type="text" name="id" autofocus=""><br><br>				
 					Password<br>				
 					<input type="password" name="pwd"><br>
-					<input class="rememberme" type="checkbox" name="persistent" value="true"><span class="rememberme">Remember Me</span>				
+					<input class="rememberme" type="checkbox" name="persistent" value="true"><span class="rememberme">Keep me logged in</span>				
 				</form>
 				<input class="login-button-adjust login-rightbutton" type="image" src="./Login_go_button.png" form="login_form">
 				<a class="login-button-adjust login-leftbutton" href="../register/register.html" ><img src="./Login_register_button.png"></a>
