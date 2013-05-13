@@ -1,13 +1,14 @@
 function goBack(handlers, wsClient){
 	var value = window.confirm("Are you sure to go back to Lobby?");
-
+	var oldroom = wsClient.rm;
 	if (value){
 		rid = -1;	
 		var json = {
 				rid : rid
 		};
 		wsClient.sendData("joinRoom", JSON.stringify(json));
-				
+		
+
 		handlers["joinRoomACK"] = function(data,wsClient){
 		var message = JSON.parse(data);	
 				if ( message.result === false){
@@ -15,7 +16,7 @@ function goBack(handlers, wsClient){
 					return null;
 				}
 				else{
-				document.location.pathname = "/Lobby.html";
+					document.location.pathname = "/Lobby.html";
 				}
 		}				
 	}
