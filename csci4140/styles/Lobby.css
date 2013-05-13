@@ -1,6 +1,7 @@
 div.centerLobby{
 	width:960px;
 	margin: 0px auto;
+	border: 2px solid;
 	font-family: Century Gothic;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
@@ -17,6 +18,7 @@ div.title{
 	height:20px;
 	background-color:C1272D;
 	text-align:center;
+	position: relative;
 }
 
 div.title-decorator{
