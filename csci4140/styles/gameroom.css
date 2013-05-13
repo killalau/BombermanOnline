@@ -76,6 +76,18 @@
     margin-right:80px;
 }
 
+.player_img{
+	height:164px;
+	width:150px;
+}
+
+.cross{
+	height:20px;
+	width:20px;
+	position:absolute;
+	right: 0px;
+}
+
 .kick{
 	height:20px;
 	width:40px;
