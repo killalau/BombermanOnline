@@ -1,0 +1,145 @@
+{"frames": {
+"bomb_0":
+{
+	"frame": {"x":0,"y":0,"w":48,"h":48},
+	"trimmed": false
+},
+"bomb_1":
+{
+	"frame": {"x":48,"y":0,"w":48,"h":48},
+	"trimmed": false
+},
+"bomb_2":
+{
+	"frame": {"x":0,"y":48,"w":48,"h":48},
+	"trimmed": false
+},
+"bomb_3":
+{
+	"frame": {"x":48,"y":48,"w":48,"h":48},
+	"trimmed": false
+},
+"bomb_4":
+{
+	"frame": {"x":0,"y":96,"w":48,"h":48},
+	"trimmed": false
+},
+"bomb_5":
+{
+	"frame": {"x":48,"y":96,"w":48,"h":48},
+	"trimmed": false
+},
+"bomb_6":
+{
+	"frame": {"x":0,"y":144,"w":48,"h":48},
+	"trimmed": false
+},
+"bomb_7":
+{
+	"frame": {"x":48,"y":144,"w":48,"h":48},
+	"trimmed": false
+},
+"bomb_8":
+{
+	"frame": {"x":0,"y":192,"w":48,"h":48},
+	"trimmed": false
+},
+"bomb_9":
+{
+	"frame": {"x":48,"y":192,"w":48,"h":48},
+	"trimmed": false
+},
+"bomb_10":
+{
+	"frame": {"x":0,"y":240,"w":48,"h":48},
+	"trimmed": false
+},
+"bomb_11":
+{
+	"frame": {"x":48,"y":240,"w":48,"h":48},
+	"trimmed": false
+},
+"bomb_12":
+{
+	"frame": {"x":0,"y":288,"w":48,"h":48},
+	"trimmed": false
+},
+"bomb_13":
+{
+	"frame": {"x":48,"y":288,"w":48,"h":48},
+	"trimmed": false
+},
+"bomb_14":
+{
+	"frame": {"x":0,"y":336,"w":48,"h":48},
+	"trimmed": false
+},
+"bomb_15":
+{
+	"frame": {"x":48,"y":336,"w":48,"h":48},
+	"trimmed": false
+},
+"bomb_16":
+{
+	"frame": {"x":0,"y":384,"w":48,"h":48},
+	"trimmed": false
+},
+"bomb_17":
+{
+	"frame": {"x":48,"y":384,"w":48,"h":48},
+	"trimmed": false
+},
+"bomb_18":
+{
+	"frame": {"x":0,"y":432,"w":48,"h":48},
+	"trimmed": false
+},
+"bomb_19":
+{
+	"frame": {"x":48,"y":432,"w":48,"h":48},
+	"trimmed": false
+},
+"bomb_20":
+{
+	"frame": {"x":0,"y":480,"w":48,"h":48},
+	"trimmed": false
+},
+"bomb_21":
+{
+	"frame": {"x":48,"y":480,"w":48,"h":48},
+	"trimmed": false
+},
+"bomb_22":
+{
+	"frame": {"x":0,"y":528,"w":48,"h":48},
+	"trimmed": false
+},
+"bomb_23":
+{
+	"frame": {"x":48,"y":528,"w":48,"h":48},
+	"trimmed": false
+},
+"bomb_24":
+{
+	"frame": {"x":0,"y":576,"w":48,"h":48},
+	"trimmed": false
+},
+"bomb_25":
+{
+	"frame": {"x":48,"y":576,"w":48,"h":48},
+	"trimmed": false
+},
+"bomb_26":
+{
+	"frame": {"x":0,"y":624,"w":48,"h":48},
+	"trimmed": false
+},
+"bomb_27":
+{
+	"frame": {"x":48,"y":624,"w":48,"h":48},
+	"trimmed": false
+}},
+"meta": {
+	"image": "../../../images/bomb_48x48.png"
+}
+}

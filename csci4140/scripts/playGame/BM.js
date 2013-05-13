@@ -271,7 +271,7 @@ BMO.BM.prototype.plantBomb = function(payload){
 			console.log("plantBomb: valid");
 			var _grid = this.BMM.gridList[payload.y][payload.x];
 			var _bomb = new BMO.Bomb(_grid,this,this.wsClient);
-			_bomb.setView("Normal_0");
+			_bomb.setView("bomb_0");
 			_grid.view.addChild(_bomb.view);
 		}
 		this.bombNum = payload.bombNum;

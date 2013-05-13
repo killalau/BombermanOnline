@@ -629,7 +629,7 @@ function game_playerPlantBomb(data, gServer, gClient){
  */
 function game_setBomb(data, gServer, gClient){
 	var out = {
-			src: "scripts/playGame/json/bomb.json"
+			src: "scripts/playGame/json/bomb2.json"
 	};
 	gClient.sendData("game_setBombACK",JSON.stringify(out));
 

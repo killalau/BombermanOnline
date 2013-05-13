@@ -1,0 +1,47 @@
+<html>
+<head></head>
+<body>
+image name (in folder 'csci4140/images/'):<input type="text" id="image" value="defalut.png"><br>
+<br>
+prefix:<input type="text" id="prefix" value="defalut"><br>
+row:<input type="number" id="row" value="2"><br>
+col:<input type="number" id="col" value="2"><br>
+width:<input type="number" id="w" value="48"><br>
+height:<input type="number" id="h" value="48"><br>
+<br>
+<input type="button" value="Generate" onclick="gen()"><br>
+<textarea id="result" style="width:800px; height:400px;"></textarea>
+
+<script>
+function gen(){
+	var result = [];
+	var row = document.getElementById('row').value;
+	var col = document.getElementById('col').value;
+	var w = document.getElementById('w').value;
+	var h = document.getElementById('h').value;
+	var prefix = document.getElementById('prefix').value;
+	for(var i = 0; i < row; i++)
+		for(var j = 0; j < col; j++)
+		{
+			var str = "";
+			str += '"'+prefix+'_' + (i*col+j) + '":\n';
+			str += '{\n';
+			str += '\t"frame": {"x":'+(j*w)+',"y":'+(i*h)+',"w":'+w+',"h":'+h+'},\n';
+			str += '\t"trimmed": false\n';
+			str += '}';
+			result.push(str);
+		}
+	result = result.join(',\n');
+	result = '{"frames": {\n' + result;
+	result += '},\n';
+	result += '"meta": {\n';
+	result += '\t"image": "../../../images/' + document.getElementById('image').value + '"\n';
+	result += '}\n';
+	result += '}\n';
+	
+	console.log(result);
+	document.getElementById('result').innerHTML = result;
+}
+</script>
+</body>
+</html>
