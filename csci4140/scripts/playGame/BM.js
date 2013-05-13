@@ -269,10 +269,14 @@ BMO.BM.prototype.plantBomb = function(payload){
 			console.log("plantBomb: invalid");				
 		}else{//valid plantBomb
 			console.log("plantBomb: valid");
+			try{
 			var _grid = this.BMM.gridList[payload.y][payload.x];
 			var _bomb = new BMO.Bomb(_grid,this,this.wsClient);
 			_bomb.setView("bomb_0");
 			_grid.view.addChild(_bomb.view);
+			_grid.view.swapChildren(_bomb.view,this.view);
+			_grid.addElement(_bomb);
+			}catch(e){console.log(e);alert(e);throw e;};
 		}
 		this.bombNum = payload.bombNum;
 	}	
