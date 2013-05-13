@@ -1,0 +1,75 @@
+{"frames": {
+"fire_c":
+{
+	"frame": {"x":0,"y":0,"w":48,"h":48},
+	"trimmed": false
+},
+"fire_h":
+{
+	"frame": {"x":48,"y":0,"w":48,"h":48},
+	"trimmed": false
+},
+"fire_v":
+{
+	"frame": {"x":96,"y":0,"w":48,"h":48},
+	"trimmed": false
+},
+"fire_r":
+{
+	"frame": {"x":144,"y":0,"w":48,"h":48},
+	"trimmed": false
+},
+"fire_l":
+{
+	"frame": {"x":192,"y":0,"w":48,"h":48},
+	"trimmed": false
+},
+"fire_d":
+{
+	"frame": {"x":240,"y":0,"w":48,"h":48},
+	"trimmed": false
+},
+"fire_u":
+{
+	"frame": {"x":288,"y":0,"w":48,"h":48},
+	"trimmed": false
+},
+"fire_c1":
+{
+	"frame": {"x":0,"y":48,"w":48,"h":48},
+	"trimmed": false
+},
+"fire_h1":
+{
+	"frame": {"x":48,"y":48,"w":48,"h":48},
+	"trimmed": false
+},
+"fire_v1":
+{
+	"frame": {"x":96,"y":48,"w":48,"h":48},
+	"trimmed": false
+},
+"fire_r1":
+{
+	"frame": {"x":144,"y":48,"w":48,"h":48},
+	"trimmed": false
+},
+"fire_l1":
+{
+	"frame": {"x":192,"y":48,"w":48,"h":48},
+	"trimmed": false
+},
+"fire_d1":
+{
+	"frame": {"x":240,"y":48,"w":48,"h":48},
+	"trimmed": false
+},
+"fire_u1":
+{
+	"frame": {"x":288,"y":48,"w":48,"h":48},
+	"trimmed": false
+}},
+"meta": {
+	"image": "../../../images/pixi-explosion.png"
+}
+}
