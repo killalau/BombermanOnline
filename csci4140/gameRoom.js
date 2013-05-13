@@ -71,11 +71,25 @@ function create(isLobby, name){
 				console.log("[gameRoom.broadcastData] src="+srcName+" target="+c.username);
 				console.log("[gameRoom.broadcastData] data="+data);
 			}
-		}
+		},
+		sendData : function(eventType, data, client, srcName){
+			var stime = new Date();
+			var msg = {
+				username: srcName,
+				serverTimestamp : stime,
+				type: eventType,
+				data: data
+			};
+				if(client.connection)
+					client.connection.sendUTF(JSON.stringify(msg));
+				console.log("[gameRoom.sendData] src="+srcName+" target="+client.username);
+				console.log("[gameRoom.sendData] data="+data);
+			}
+	};
 
 		
 
-	};
+	
 
 	return room;
 }
