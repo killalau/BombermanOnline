@@ -145,7 +145,7 @@ BMO.BMM.prototype.setPlayer = function(msg,onProgress,onComplete){
 			console.log("setPlayer:onComplete");
 			var _grid = self.gridList[msg.p1.row][msg.p1.col];
 			var _BM = new BMO.BM(_grid,self,self.wsClient);
-			self.elementList.push(_BM);
+			self.addElement(_BM);
 			_BM.id = msg.id;
 			_BM.viewPrefix = msg.viewPrefix;
 			_BM.setView(msg.viewPrefix + "D0");
@@ -197,16 +197,17 @@ gServer <-- wsClient --> handlers[tag]->eventProcesser->private methods
 BMO.BMM.prototype.setController = function(){
 	console.log("BMM:setController");
 	var self = this;
-	
-	document.body.addEventListener("keydown",function(e){
+	this.myKeyDown = function(e){
 		//self.elementList[0].eventProcesser(e);
 		e.payload = null;
 		self.getElementById( self.wsClient.username).eventProcesser(e);
-	},false);
-	document.body.addEventListener("keyup",function(e){
+	};
+	this.myKeyUp = function(e){
 		//self.elementList[0].eventProcesser(e);
 		self.getElementById( self.wsClient.username).eventProcesser(e);
-	},false);
+	};
+	document.body.addEventListener("keydown",this.myKeyDown,false);
+	document.body.addEventListener("keyup",this.myKeyUp,false);
 	
 	self.handlers["game_playerMoveACK"] = function(){};
 	self.handlers["game_playerStopMoveACK"] = function(){};
@@ -288,3 +289,25 @@ BMO.BMM.prototype.broadcastExplodeBomb =function(data,wsClient){
 	try{
 	}catch(e){throw "explodeBombErr="+e};
 };
+
+/*
+@public method addElement
+@param element: BMO.Element
+**/
+BMO.BMM.prototype.addElement = function(element){
+	this.removeElement(element);
+	this.elementList.push(element);
+}
+
+/*
+@public method removeElement
+@param element: BMO.Element
+**/
+BMO.BMM.prototype.removeElement = function(element){
+	for(var i = 0; i < this.elementList.length; i++){
+		if(this.elementList[i] === element){
+			this.elementList.splice(i, 1);
+			break;
+		}
+	}
+}

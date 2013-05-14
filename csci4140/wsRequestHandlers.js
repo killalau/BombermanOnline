@@ -715,6 +715,15 @@ function game_setBuff(data, gServer, gClient){
 	gClient.sendData("game_setBuffACK",null);
 }
 
+/* Handler for 'game_explodeBomb' message
+ *
+ * data : data of message
+ * gServer : game server object
+ * gClient : game client object
+ */
+function game_explodeBomb(data, gServer, gClient){
+}
+
 
 // Public function
 exports.setName = setName;

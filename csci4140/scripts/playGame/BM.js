@@ -23,6 +23,7 @@ BMO.BM =function(_grid,_BMM,wsClient){
 		this.currentBombMa = 2;
 		this.bombNum = 1;
 		this.powerOfFire = 2;
+		this.alive = true;
 
 	}catch(e){throw(e);};
 }
@@ -211,13 +212,25 @@ BMO.BM.prototype.setView = function(_id){
 */
 
 /*
+@protected override method vanish()
+**/
+BMO.BM.prototype.vanish = function(){
+	if (this.id == this.wsClient.username){
+		document.body.removeEventListener("keydown",this.BMM.myKeyDown,false);
+		document.body.removeEventListener("keyup",this.BMM.myKeyUp,false);
+	}
+	this.alive = false;
+	BMO.Element.prototype.vanish.call(this);
+}
+
+/*
 @public method eventProcesser
 @param event: event object
 **/
 BMO.BM.prototype.eventProcesser = function(e){
 	var self = this;
 	if ( e.type === "keydown" ){
-		console.log("BM:keydown,keyIdentifier="+e.keyIdentifier);
+		//console.log("BM:keydown,keyIdentifier="+e.keyIdentifier);
 		//canMove?
 		try{	
 			if (e.keyCode == 40 ) self.setDirection("D");
