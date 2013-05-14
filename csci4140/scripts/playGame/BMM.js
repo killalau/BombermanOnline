@@ -231,8 +231,10 @@ BMO.BMM.prototype.setController = function(){
 	self.handlers["game_playerStopMoveACK"] = function(){};
 	self.handlers["game_broadcastPlayerMove"] = self.broadcastPlayerMove;
 	self.handlers["game_broadcastPlayerStopMove"] = self.broadcastPlayerStopMove;
-	self.handlers["game_broadcastPlantBomb"] = self.broadcastPlantBomb;
-	self.handlers["game_broadcastExplodeBomb"] = function(data,wsClient){self.broadcastExplodeBomb(data,wsClient);};
+	self.handlers["game_broadcastPlantBomb"] = function(data,wsClient){
+												self.broadcastPlantBomb(data,wsClient);};
+	self.handlers["game_broadcastExplodeBomb"] = function(data,wsClient){
+												self.broadcastExplodeBomb(data,wsClient);};
 	
 }
 
@@ -284,7 +286,7 @@ BMO.BMM.prototype.broadcastPlantBomb = function(data,wsClient){
 	try{
 	var _in = JSON.parse(data);
 	if(_in.classname == "BM"){
-		var element = BMO.webPageBMM.getElementById(_in.id);
+		var element = this.getElementById(_in.id);
 		var e ={
 			type: "plantBomb",
 			payload: _in.payload
@@ -295,7 +297,7 @@ BMO.BMM.prototype.broadcastPlantBomb = function(data,wsClient){
 };
 
 /*
-@private method broadcastPlantBomb
+@private method broadcastExplodeBomb
 @param data: {
 		classname : "",
 		id: "username" / {x:x ,y:y},
