@@ -8,17 +8,19 @@ var BMO = window.BMO ? window.BMO : {};
 @param _BMM: BMO.BMM
 @param _wsClient: BMO.BMM.wsClient
 @param _BM: BMO.BM
+@param _pow: powerOfFire
 PS. this.view is special from other element
-		this.view.anchor = {x:0.5,y:0.5}
-	IE. this.view.position = {x:48/2,y:48/2}
-	while this.X = 0 && this.Y = 0 && this._X = 48/2 && this._Y = 48/2
+                this.view.anchor = {x:0.5,y:0.5}
+        IE. this.view.position = {x:48/2,y:48/2}
+        while this.X = 0 && this.Y = 0 && this._X = 48/2 && this._Y = 48/2
 **/
-BMO.Bomb =function(_grid,_BMM,wsClient,_BM){
+BMO.Bomb =function(_grid,_BMM,wsClient,_BM,_pow){
 	try{
 	BMO.Element.call(this,_grid,_BMM);
 	this.wsClient = wsClient;
 	this.waitIndex = 0;
 	this.owner = _BM;
+	this.powerOfFire = _pow;
 	}catch(e){throw e;};
 }
 
@@ -32,7 +34,7 @@ BMO.Bomb.prototype = Object.create( BMO.Element.prototype );
 BMO.Bomb.prototype.waitEffect = function(){
 	var table = [0.8,0.9,1,0.9];
 	this.view.scale.x = this.view.scale.y = table[this.waitIndex++];
-	this.waitIndex = this.waitIndex < 4 ? this.waitIndex : 0;
+	this.waitIndex = this.waitIndex % 4;
 }
 
 
@@ -64,6 +66,26 @@ BMO.Bomb.prototype.setView = function(_id){
         }
 **/
 BMO.Bomb.prototype.explode = function(payload){
+	try{
+	if (this.owner.alive) this.owner.bombNum++;
+	this.vanish();
+	}catch(e){console.log(e);throw e;};
+}
+
+
+/*
+@protected override method vanish()
+**/
+BMO.Bomb.prototype.vanish = function(){
+	try{
+	BMO.Element.prototype.vanish.call(this);
+	this.BM = null;
+	this.wsClient= null;
+	if(this.waitFunc != null){
+		clearInterval(this.waitFunc);
+		this.waitFunc = null;
+	}
+	}catch(e){console.log(e);throw e;};
 }
 
 /*

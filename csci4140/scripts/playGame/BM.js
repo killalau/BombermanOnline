@@ -20,7 +20,7 @@ BMO.BM =function(_grid,_BMM,wsClient){
 		
 		this.bombMax = 8;
 		this.powerMax = 8;
-		this.currentBombMa = 2;
+		this.currentBombMax = 2;
 		this.bombNum = 1;
 		this.powerOfFire = 2;
 		this.alive = true;
@@ -220,6 +220,7 @@ BMO.BM.prototype.vanish = function(){
 		document.body.removeEventListener("keyup",this.BMM.myKeyUp,false);
 	}
 	this.alive = false;
+	this.wsClient = null;
 	BMO.Element.prototype.vanish.call(this);
 }
 
@@ -284,7 +285,7 @@ BMO.BM.prototype.plantBomb = function(payload){
 			console.log("plantBomb: valid");
 			try{
 			var _grid = this.BMM.gridList[payload.y][payload.x];
-			var _bomb = new BMO.Bomb(_grid,this,this.wsClient);
+			var _bomb = new BMO.Bomb(_grid,this.BMM,this.wsClient,this);
 			_bomb.setView("bomb_0");
 			_grid.addElement(_bomb);
 			_grid.view.addChild(_bomb.view);
