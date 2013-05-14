@@ -75,8 +75,9 @@ BMO.Bomb.prototype.explode = function(payload){
 	_grid.addElement(_fire);
 	_grid.view.addChild(_fire.view);
 	for(var _direction in payload){
-		console.log("Bomb.explode()._dir=",_direction);
+		//console.log("Bomb.explode()._dir=",_direction);
 		for(var i =0;i<payload[_direction].length;i++){
+			if(payload[_direction][i] == null){
 			if ( _direction === "U" ){
 					_grid = this.BMM.gridList[this.grid.Y-1-i][this.grid.X];
 					_fire = new BMO.Fire(_grid,this.BMM,this.wsClient);
@@ -100,6 +101,7 @@ BMO.Bomb.prototype.explode = function(payload){
 			}
 			_grid.addElement(_fire);
 			_grid.view.addChild(_fire.view);
+			}
 		}
 
 	}
