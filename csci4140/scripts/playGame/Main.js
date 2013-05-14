@@ -42,6 +42,7 @@ BMO.webPageInit_phase2 = function(handlers,wsClient){
 			});
 			BMO.webPageBMM.setBomb(BMO.webPageBMM);
 			BMO.webPageBMM.setBuff(BMO.webPageBMM);
+			BMO.webPageBMM.setFire(BMO.webPageBMM);
 		}else{
 			alert("You should not in this page");
 		}
@@ -52,7 +53,6 @@ BMO.webPageInit_phase2 = function(handlers,wsClient){
 
 /*
 @private method screenRefresh
-@param _view: BMM view
 **/
 BMO.screenRefresh = function(){
 	requestAnimFrame(BMO.screenRefresh);

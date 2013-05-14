@@ -715,6 +715,19 @@ function game_setBuff(data, gServer, gClient){
 	gClient.sendData("game_setBuffACK",null);
 }
 
+/* Handler for 'game_setFire' message
+ *
+ * data : data of message
+ * gServer : game server object
+ * gClient : game client object
+ */
+function game_setFire(data, gServer, gClient){
+	var out = {
+			src: "scripts/playGame/json/fire.json"
+	};
+	gClient.sendData("game_setFireACK",JSON.stringify(out));
+}
+
 /* Handler for 'game_explodeBomb' message
  *
  * data : data of message
@@ -753,4 +766,5 @@ exports.game_playerStopMove = game_playerStopMove;
 exports.game_playerPlantBomb = game_playerPlantBomb;
 exports.game_setBomb = game_setBomb;
 exports.game_setBuff = game_setBuff;
+exports.game_setFire = game_setFire;
 

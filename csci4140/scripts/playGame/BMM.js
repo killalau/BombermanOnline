@@ -175,6 +175,24 @@ BMO.BMM.prototype.setBomb = function(self){
 }
 
 /*
+@public method setFire
+@param self BMO.BMM
+**/
+BMO.BMM.prototype.setFire = function(self){
+        this.handlers["game_setFireACK"] = function(data,wsClient){
+			var _in = JSON.parse(data);
+			var fireSkin = [_in.src];
+			try{
+					var loader = new PIXI.AssetLoader(fireSkin);
+					loader.onComplete = function(){self.gameState++;};
+					loader.load();
+			}catch(e){throw e;};		
+        };
+        this.wsClient.sendData("game_setFire",null);
+}
+
+
+/*
 @public method setBuff
 @param self BMO.BMM
 **/
