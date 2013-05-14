@@ -12,6 +12,7 @@ BMO.Wall =function(_grid,_BMM,wsClient){
 	try{
 	BMO.Element.call(this,_grid,_BMM);
 	this.wsClient = wsClient;
+	this.classname = "Wall";
 	}catch(e){throw e;};
 }
 

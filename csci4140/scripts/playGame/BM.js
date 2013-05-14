@@ -11,6 +11,7 @@ var BMO = window.BMO ? window.BMO : {};
 BMO.BM =function(_grid,_BMM,wsClient){
 	try{
 		BMO.Element.call(this,_grid,_BMM);
+		this.classname = "BM";
 		this.id = false;
 		this.viewPrefix = null;
 		this.speed = 4;

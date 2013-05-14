@@ -686,7 +686,11 @@ function game_playerPlantBomb(data, gServer, gClient){
 
 	//console.log("plantBomb:in=",_in,"out="+out);
 
-	if ( pass )	out.payload = {'x': _in.x ,'y': _in.y,'bombNum':(--_in.bombNum)};
+	if ( pass ){
+		out.payload = {'x': _in.x ,'y': _in.y,'bombNum':(--_in.bombNum)};
+		var _data = { id:{x:_in.x ,y:_in.y}};
+		setTimeout(function(){game_explodeBomb(_data, gServer, gClient)},3000);
+	}
 	//console.log("plantBomb:in=",_in,"out=",out);
 	gClient.broadcastData("game_broadcastPlantBomb", JSON.stringify(out));
 	}catch(e){console.log("planBombErr,e=",e);};
@@ -730,11 +734,46 @@ function game_setFire(data, gServer, gClient){
 
 /* Handler for 'game_explodeBomb' message
  *
- * data : data of message
+ * data : {id:{x:x,y:y}
  * gServer : game server object
  * gClient : game client object
  */
 function game_explodeBomb(data, gServer, gClient){
+/*
+        var out = {
+                classname: 'Bomb'
+                id:data.id
+                payload:{
+                        U:[],
+                        D:[],
+                        L:[],
+                        R:[]
+                }
+        }
+**/
+	try{
+	var out = {
+			classname: 'Bomb',
+			id:data.id,
+			payload:{
+					U:[],
+					D:[],
+					L:[],
+					R:[]
+			}
+	}
+	//game Rule calculation....
+	out.payload.U.push(null);
+	out.payload.U.push(null);
+	out.payload.D.push(null);
+	out.payload.D.push(null);
+	out.payload.L.push(null);
+	out.payload.L.push(null);
+	out.payload.R.push(null);
+	out.payload.R.push(null);
+	//End of game RUle calculation
+	gClient.sendData('game_broadcastExplodeBomb',JSON.stringify(out));
+	}catch(e){console.log(e);throw e;};
 }
 
 

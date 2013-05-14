@@ -232,7 +232,7 @@ BMO.BMM.prototype.setController = function(){
 	self.handlers["game_broadcastPlayerMove"] = self.broadcastPlayerMove;
 	self.handlers["game_broadcastPlayerStopMove"] = self.broadcastPlayerStopMove;
 	self.handlers["game_broadcastPlantBomb"] = self.broadcastPlantBomb;
-	self.handlers["game_broadcastExplodeBomb"] = self.broadcastExplodeBomb;
+	self.handlers["game_broadcastExplodeBomb"] = function(data,wsClient){self.broadcastExplodeBomb(data,wsClient);};
 	
 }
 
@@ -305,7 +305,25 @@ BMO.BMM.prototype.broadcastPlantBomb = function(data,wsClient){
 **/
 BMO.BMM.prototype.broadcastExplodeBomb =function(data,wsClient){
 	try{
-	}catch(e){throw "explodeBombErr="+e};
+		var _in = JSON.parse(data);
+
+		if(_in.classname == "Bomb" ){
+				var _grid = this.gridList[_in.id.y][_in.id.x];
+				var element;
+				for(var i =0;i<_grid.elementList.length;i++){
+						if (_grid.elementList[i].classname === "Bomb"){
+							element = _grid.elementList[i];
+							break;
+						}
+				}
+				var e ={
+						type: "explode",
+						payload: _in.payload
+				}
+				element.eventProcesser(e);
+		}
+		//console.log("explode: ",_in);
+	}catch(e){console.log(e);throw "explodeBombErr="+e};
 };
 
 /*

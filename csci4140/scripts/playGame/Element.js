@@ -13,6 +13,7 @@ BMO.Element =function(_grid,_BMM){
 		this.Y = 0;		//Model current Y pos
 		this._X = 0;	//View current X pos
 		this._Y = 0;	//View current Y pos
+		this.classname = "Element";
 		this.view = null;
 		this.moveFunction = null;
 	}catch(e){throw(e);};

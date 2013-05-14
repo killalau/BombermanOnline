@@ -17,6 +17,7 @@ PS. this.view is special from other element
 BMO.Bomb =function(_grid,_BMM,wsClient,_BM,_pow){
 	try{
 	BMO.Element.call(this,_grid,_BMM);
+	this.classname = "Bomb";
 	this.wsClient = wsClient;
 	this.waitIndex = 0;
 	this.owner = _BM;
@@ -67,6 +68,7 @@ BMO.Bomb.prototype.setView = function(_id){
 **/
 BMO.Bomb.prototype.explode = function(payload){
 	try{
+	console.log("Bomb.explode():payload=",payload);
 	if (this.owner.alive) this.owner.bombNum++;
 	this.vanish();
 	}catch(e){console.log(e);throw e;};
@@ -97,4 +99,8 @@ BMO.Bomb.prototype.vanish = function(){
 		}
 **/
 BMO.Bomb.prototype.eventProcesser = function(event){
+	if (event.type === "explode"){
+		//console.log("Bomb.explode:",event);
+		this.explode(event.payload);
+	}
 }
