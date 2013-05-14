@@ -45,11 +45,17 @@ Grid.prototype.getElementById = function(classname){
 }
 
 Grid.prototype.isBlockable = function(){
-	for(var i = 0, e; e = this.ElementList[i]; i++){
+	for(var i = 0, e; e = this.elementList[i]; i++){
 		if(e.isBlockable)
 			return true;
 	}
 	return false;
+}
+
+Grid.prototype.vanish = function(){
+	for(var i = 0, e; e = this.elementList[i]; i++){
+		e.vanish();
+	}
 }
 
 exports.Grid = Grid;

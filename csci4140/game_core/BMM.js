@@ -1,10 +1,11 @@
 var Grid = require("./Grid");
 
-function BMM(room, w, h, mapConfig){
+function BMM(server, room, w, h, mapConfig){
 	w = w ? w : 17;
 	h = h ? h : 11;
 	
 	this.classname = "BMM";
+	this.server = server;
 	this.room = room;
 	this.width = w;
 	this.height = h;

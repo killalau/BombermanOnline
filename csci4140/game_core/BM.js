@@ -2,12 +2,11 @@ var Element = require('./Element');
 
 BM.prototype = new Element.Element();
 BM.prototype.constructor = BM;
-BM.prototype.parent = Element.Element.prototype;
 function BM(gClient, grid){
-	this.parent.constructor.call(this, grid);
+	Element.Element.call(this, grid);
 	this.classname = "BM";
 	this.gClient = gClient;
-	this.id = gClient.username;
+	this.id = gClient ? gClient.username : "NPC";
 	this.bombNum = 1;
 	this.bombCurrentMax = 1;
 	this.bombMax = 8;
@@ -15,15 +14,15 @@ function BM(gClient, grid){
 	this.powerMax = 8;
 	
 	//"override" attributes
-	this.speed = 4;
-	this.speedMax = 20;
+	this.speed = 0.05;			//grid per 30ms
+	this.speedMax = 0.5;
 }
 
 BM.prototype.initialize = function(){
-	this.parent.initialize.call(this);
+	Element.Element.initialize.call(this);
 }
 
-BM.prototype.canPlace(){
+BM.prototype.canPlace = function(){
 	return true;
 }
 
