@@ -345,6 +345,16 @@ function joinRoom(data,gServer,gClient){
 				console.log("hihi2");
 				
 			}
+			
+			if(message.rid == -1 && !gClient.isHost){
+				gServer.roomList[bufRm].seatList[gClient.seat] = false;
+				gClient.seat = -1;
+				
+				seat_maintain(gServer,gClient,bufRm);
+			}
+			
+			
+			
 			//Anthony's Code End
 			
 			if(gServer.roomList[bufRm].isLobby)
@@ -578,7 +588,7 @@ function kick_your_ass(data, gServer, gClient){
 			k_client = gServer.roomList[bufRm].clientList[i];
 		}
 	}
-	gSever.roomList[bufRm].seatList[k_client.seat] = false;
+	gServer.roomList[bufRm].seatList[k_client.seat] = false;
 	
 	//add client to lobby and remove from gameroom
 	var _result = gServer.roomList[0].addClient(gServer,k_client);		
@@ -593,7 +603,8 @@ function kick_your_ass(data, gServer, gClient){
 }
 
 function state_change(data, gServer, gClient) {
-	gClient.isReady = gClient.isReady ? false ? true;	//change state of Ready
+try{
+	gClient.isReady = gClient.isReady ? false : true;	//change state of Ready
 	gClient.sendData("state_change_ACK" , gClient.isReady);
 	
 	var room = gServer.roomList[gClient.room];
@@ -618,6 +629,10 @@ function state_change(data, gServer, gClient) {
 	}
 	else
 		host.sendData("All_ready", false);
+		}
+catch(e){
+console.log(e);
+}
 	
 
 }
