@@ -62,7 +62,17 @@
 	"hamster1_D3":{
 		"frame": {"x":144,"y":96,"w":48,"h":48},
 		"trimmed": false
-	}	
+	},
+	"hamster1_die1":
+	{
+		"frame": {"x":0,"y":192,"w":48,"h":48},
+		"trimmed": false
+	},
+	"hamster1_die2":
+	{
+		"frame": {"x":48,"y":192,"w":48,"h":48},
+		"trimmed": false
+	}
 },
 "meta": {
 	"image": "../../../images/hamster_48x48_1.png"

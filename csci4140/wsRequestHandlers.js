@@ -313,9 +313,9 @@ function joinRoom(data,gServer,gClient){
 			//console.log(target_room.seatList);
 			
 			if(!target_room.isLobby && target_room.clientList.length == 1){		//the target room is not lobby and the user is the first one enter the room
-				gClient.isHost = true;
-				target_room.host = gClient;
-				gClient.isReady = true;
+				target_room.host = target_room.clientList[0];
+				target_room.clientList[0].isHost = true;
+				target_room.clientList[0].isReady = true;
 			}
 			//host client want to go back Lobby
 			if(message.rid == -1 && gClient.isHost){		
@@ -347,7 +347,7 @@ function joinRoom(data,gServer,gClient){
 				console.log("hihi2");
 				
 			}
-			
+			//normal client want to go back Lobby
 			if(message.rid == -1 && !gClient.isHost){
 				gServer.roomList[bufRm].seatList[gClient.seat] = false;
 				gClient.seat = -1;
@@ -518,6 +518,8 @@ function host_update(data, gServer, gClient){
 	var clientRm = gClient.room;
 	var host = gServer.roomList[clientRm].host;
 	
+	
+	
 	var _data = {
 				//seat : gClient.seat,
 				//isHost : gClient.isHost,
@@ -614,6 +616,10 @@ try{
 	var room = gServer.roomList[gClient.room];
 	var host = room.host;
 	
+	//var seatnum = host.seat;
+	//console.log(room);
+	
+	
 	if(room.clientList.length == 4) {
 		var flag = true;
 		for(var i = 0; i<4;i++)
@@ -626,18 +632,42 @@ try{
 		}
 		
 		if(flag){
-			host.sendData("All_ready", true);
+			host.sendData("All_ready_ACK", true);
 		}
 		else
-			host.sendData("All_ready", false);
+			host.sendData("All_ready_ACK", false);
 	}
 	else
-		host.sendData("All_ready", false);
+		//room.sendData("All_ready", false, host);
+		host.sendData("All_ready_ACK", false);
 		}
+		
+		
 catch(e){
-console.log(e);
+	console.log(e);
 }
-	
+}
+
+function GameClickStart(data, gServer, gClient) {
+	try{
+		var room = gServer.roomList[gClient.room];
+		var flag = true;
+		
+		for(var i = 0;i<clientList.length;i++){
+			if(!room.clientList[i].isReady){
+				flag = false;
+				break;
+			}
+		}
+		
+		if(!flag){
+			gClient.sendData("GameClickStart_ACK", flag);
+		}
+
+	}
+	catch(e){
+		console.log(e);
+	}
 
 }
 
@@ -699,6 +729,45 @@ function game_mapInit(data, gServer, gClient){
 	}
 	
 	gClient.sendData("game_mapInitACK", json);
+}
+
+function game_init(data, gServer, gClient){
+	//Some game room / status validation
+	try{
+	var valid = true;
+	if(gServer.roomList[gClient.room].isLobby){
+		valid = false;
+	}
+	
+	if(!valid){
+		gClient.sendData("game_initACK", false);
+		return;
+	}
+	
+	var json = {
+			width : 17,
+			height : 11,
+			players : []
+	};
+	
+	for(var i = 0, c; c = gServer.roomList[gClient.room].clientList[i]; i++){
+		var px = py = 1;
+		if(c.seat == 1 || c.seat == 2){
+			px = json.mapsize.width - 2;
+		}
+		if(c.seat == 1 || c.seat == 3){
+			py = json.mapsize.height - 2;
+		}
+		json.players.push({
+			username : c.username,
+			seat : c.seat,
+			viewPrefix : "hamster" + (c.seat+1) + "_",
+			pos : { x : px, y : py}
+		});
+	}
+	
+	gClient.sendData("game_initACK", JSON.stringify(json));
+	}catch(e){console.log("game_init err=",e);
 }
 
 function game_playerMove(data, gServer, gClient){
@@ -770,46 +839,7 @@ function game_playerPlantBomb(data, gServer, gClient){
 	}catch(e){console.log("planBombErr,e=",e);};
 }
 
-/* Handler for 'game_setBomb' message
- *
- * data : data of message
- * gServer : game server object
- * gClient : game client object
- */
-function game_setBomb(data, gServer, gClient){
-	var out = {
-		src: "scripts/playGame/json/bomb2.json"
-	};
-	gClient.sendData("game_setBombACK",JSON.stringify(out));
-}
-
-/* Handler for 'game_setBuff' message
- *
- * data : data of message
- * gServer : game server object
- * gClient : game client object
- */
-function game_setBuff(data, gServer, gClient){
-	var out = {
-		src: 'scripts/playGame/json/item.json'
-	};
-	gClient.sendData("game_setBuffACK",null);
-}
-
-/* Handler for 'game_setFire' message
- *
- * data : data of message
- * gServer : game server object
- * gClient : game client object
- */
-function game_setFire(data, gServer, gClient){
-	var out = {
-			src: "scripts/playGame/json/fire.json"
-	};
-	gClient.sendData("game_setFireACK",JSON.stringify(out));
-}
-
-/* Handler for 'game_explodeBomb' message
+/* Handler for 'game_explodeBomb' 
  *
  * data : {id:{x:x,y:y}
  * gServer : game server object
@@ -899,15 +929,20 @@ exports.host_update = host_update;
 exports.seat_update = seat_update;
 exports.kick_your_ass = kick_your_ass;
 exports.state_change = state_change;
+exports.GameClickStart = GameClickStart;
 //end
 
 exports.game_jsonList = game_jsonList;
-exports.game_mapInit = game_mapInit;
+exports.game_init = game_init;
 exports.game_playerMove = game_playerMove;
 exports.game_playerStopMove = game_playerStopMove;
 
 exports.game_playerPlantBomb = game_playerPlantBomb;
+<<<<<<< HEAD
 exports.game_setBomb = game_setBomb;
 exports.game_setBuff = game_setBuff;
 exports.game_setFire = game_setFire;
 exports.ggame_vanishBuff = game_vanishBuff;//AndyQ - is this needed?
+=======
+
+>>>>>>> 6db32b2978df6af71dc4259c3496db666ea72fad

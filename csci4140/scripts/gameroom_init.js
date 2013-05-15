@@ -152,23 +152,39 @@ function AddEventListenter(handlers, wsClient) {
 			document.location.pathname = "/Lobby.html";
 		}
 		
-		handlers["All_ready"] = function(data, wsClient) {
+		handlers["All_ready_ACK"] = function(data, wsClient) {
+		try{
 			var message = JSON.parse(data);
+			//console.log("All_ready: " + message);
 			var state_button = document.getElementById("State");
 			if(message){
 				state_button.style.backgroundColor = "rgb(0,243,0)";
-				//state_button.addEventListener("click", function(e) {
-				//wsClient.sendData
-				//}
+				state_button.addEventListener("click", function(e) {
+				wsClient.sendData("GameClickStart", true);
+				},false);
 			}
-			else {
+			else{
 				state_button.style.backgroundColor = "rgb(243,0,0)";
 			}
-				
+			}
+		catch(e){
+			console.log("All_ready_ACK:" + e);
+		}
 		}
 		
+		handlers["GameClickStart_ACK"] = function(data,wsClient){
+			try{
+				var message = JSON.parse(data);
+				if(!message){
+					alert("Someone left or unknow problem");	
+				}
+			}
+			catch(e){
+				console.log("GameClickStart_ACK: " + e);
+			}
 		
-		
+		}
+	
 		//create chatroom
 		var div = document.getElementById('left');
         div.innerHTML = "";
@@ -186,7 +202,7 @@ function AddEventListenter(handlers, wsClient) {
 	var button = document.getElementById("goback");
 	button.addEventListener("click",function(e){
 	goBack(handlers, wsClient);
-	}	,false);
+	}, false);
 	
 	//The Logout Button
 	button = document.getElementById("logout");

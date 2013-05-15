@@ -38,6 +38,9 @@ webSocket.createConnection = function(url, handlers, username, session){
 		try{
 			var obj = JSON.parse(message.data);
 			var ACK = obj.type.substr(obj.type.length - 3);
+			
+			//console.log(obj.type);
+			
 
 			// Confirm of connection
 			if(obj.type == 'setNameACK'){

@@ -19,97 +19,27 @@ BMO.BMM = function(wsClient, handlers){
 BMO.BMM.consturctor = BMO.BMM;
 
 /*
-@public method setMap
-@param data: map data given by server
-@param onProgress: callback for loading in progress
-@param onComplete: callback for loading end
+@public method init
+@param data: {
+			width:
+			height:
+			players:[
+				{username : 
+				seat : 
+				viewPrefix : "hamster" + (this.seat+1) + "_",
+				pos : { x : px, y : py}				
+				},
+				...
+			]
+		}
 **/
-BMO.BMM.prototype.setMap = function(data,onProgress,onComplete){
-	console.log("setMap");
-	var name = data.mapname;
-	var mapSkin = [name];//pixi5-MAP1.json eg
-	var self = this;
-	self.width = data.mapsize.width;
-	self.height = data.mapsize.height;
-	
-	//console.log("self="+self+" "+"mapSkin="+mapSkin+"onComplete="+onComplete);
-	if (typeof(onComplete) !== "function" ) throw "I need a call-back for onLoadend";
-	try{
-		var loader = new PIXI.AssetLoader(mapSkin);
-		if (typeof(onProgress) === "function") loader.onProgress = onProgress;
-		loader.onComplete = function(){
-			/*
-			Game_Area.txt
-			Screen Resolution: 960px x 560px
-			Game Resolution: 816px x 528px
-			A Grid Resolution: 48px x 48px ? (Our skin most likely 48x48)
-			Game_Area_Max Resolution: 11 rows x 17 cols ( including the border )
-			**/
-			try{
-				for(var i = 0; i < self.height; i++){
-					self.gridList[i] = [];
-					for(var j =0; j < self.width; j++){						
-						var _grid = new BMO.Grid(j,i,self);
-						self.gridList[i].push(_grid);
-						_grid.view.addChild(PIXI.Sprite.fromFrame("tile"));
-						//Wall.............						
-						if ( i == 0 || i == self.height-1){
-							var _wall = new BMO.Wall(_grid,self,self.wsClient);							
-							_wall.setView("wall");
-							_grid.addElement(_wall);
-							_grid.view.addChild(_wall.view);
-							//_grid.addElement
-						}else{
-							if ( j == 0 || j == self.width-1){
-								var _wall = new BMO.Wall(_grid,self,self.wsClient);							
-								_wall.setView("wall");							
-								_grid.addElement(_wall);
-								_grid.view.addChild(_wall.view);
-							}else{
-								if ( (i%2) == 0 && (j%2) == 0){
-									var _wall = new BMO.Wall(_grid,self,self.wsClient);							
-									_wall.setView("wall");
-									_grid.addElement(_wall);
-									_grid.view.addChild(_wall.view);
-								}
-							}
-						}
-						//End of wall......
-						//Box..............
-						
-						if ( i > 2 && j > 2 && i < self.height-3 && j < self.width-3 && ((i%2) != 0 || (j%2) !=0)){
-							_grid.view.addChild(PIXI.Sprite.fromFrame("box"));
-						}
-						//End of Box.......
-						self.view.addChild(_grid.view);
-					}
-				}
-				
-				//Players.........
-				for(var i = 0, p; p = data.players[i]; i++){
-					var msg = {
-						name : p.view,
-						viewPrefix : p.viewPrefix,
-						id : p.username,
-						seat : p.seat,
-						p1 : {
-							row : p.pos.y,
-							col : p.pos.x
-						}
-					};
-					//BMO.webPageBMM.setPlayer({"name":"scripts/playGame/json/hamster_1.json","p1":{"row":1,"col":1}},false,false);
-					if(msg.id == self.wsClient.username) self.setPlayer(msg,false,function(){
-															self.gameState++;
-															self.setController();});
-					else self.setPlayer(msg,false,function(){self.gameState++;});
-				}				
-				//End of players.........
-				
-				onComplete();
-			}catch(e){throw e;};		
-		};
-		loader.load();
-	}catch(e){throw e;};
+BMO.BMM.prototype.init = function(data){
+	this.setMap(data);
+	this.setWall({'default':true,payload:null});
+	this.setBox({'default':true,payload:null});
+	this.setPlayer(data);
+	this.setController();
+	console.log("BMM.init() end");
 }
 
 BMO.BMM.prototype.getElementById = function(id){
@@ -123,95 +53,138 @@ BMO.BMM.prototype.getElementById = function(id){
 }
 
 /*
-@public method setPlayer
-@param msg: 
-		msg.name = name of the view file ;
-		msg.id = player username
-		msg.seat = player game room seat number [0 - 3]
-		msg.p1.row = p1 init row pos
-		msg.p1.col = p1 init col pos		
-@param onProgress: callback for loading in progress
-@param onComplete: callback for loading end
+@private method setPlayer
+@param data: {
+			players:[
+				{username : 
+				seat : 
+				viewPrefix : "hamster" + (this.seat+1) + "_",
+				pos : { x : px, y : py}				
+				},
+				...
+			]
+		}
 **/
-BMO.BMM.prototype.setPlayer = function(msg,onProgress,onComplete){
-	//console.log("setPlayer");
-	var playerSkin = [msg.name];//demo.json eg
-	var self = this;
-	//console.log("self="+msg.id+" "+"playerSkin="+playerSkin);
-	//if (typeof(onComplete) !== "function" ) throw "I need a call-back for onLoadend";
+BMO.BMM.prototype.setPlayer = function(data){
 	try{
-		var loader = new PIXI.AssetLoader(playerSkin);
-		if (typeof(onProgress) === "function") loader.onProgress = onProgress;		
-		loader.onComplete = function(){
-			console.log("setPlayer:onComplete");
-			var _grid = self.gridList[msg.p1.row][msg.p1.col];
-			var _BM = new BMO.BM(_grid,self,self.wsClient);
-			self.addElement(_BM);
-			_BM.id = msg.id;
-			_BM.viewPrefix = msg.viewPrefix;
-			_BM.setView(msg.viewPrefix + "D0");
-			_grid.view.addChild(_BM.view);
-			_grid.addElement(_BM);
-			if (onComplete) onComplete();
-		};
-		loader.load();
-	}catch(e){throw e;};
+	//console.log("setPlayer");
+	for(var i=0;i<data.players.length;i++){
+		var _player = data.players[i];
+		var _grid = this.gridList[_player.pos.y][_player.pos.x];
+		var _BM = new BMO.BM(_grid,this,this.wsClient);
+		this.addElement(_BM);
+		_BM.id = _player.username;
+		_BM.viewPrefix = _player.viewPrefix;
+		_BM.setView(_player.viewPrefix + "D0");
+		_grid.view.addChild(_BM.view);
+		_grid.addElement(_BM);		
+	}
+	}catch(e){console.log(e);alert(e);throw e};	
 }
 
 /*
-@public method setBomb
-@param self BMO.BMM
+@private method setMap
+@param data: {
+			width:
+			height:
+		}
 **/
-BMO.BMM.prototype.setBomb = function(self){
-	this.handlers["game_setBombACK"] = function(data,wsClient){
-		var _in = JSON.parse(data);
-		var bombSkin = [_in.src];
-		try{
-			var loader = new PIXI.AssetLoader(bombSkin);
-			loader.onComplete = function(){self.gameState++;};
-			loader.load();
-		}catch(e){throw e;};	
-	};
-	this.wsClient.sendData("game_setBomb",null);
+BMO.BMM.prototype.setMap = function(data){
+	try{
+	//console.log("setMap");
+	var self = this;
+	self.width = data.width;
+	self.height = data.height;	
+	for(var i = 0; i < self.height; i++){
+		self.gridList[i] = [];
+		for(var j =0; j < self.width; j++){						
+			var _grid = new BMO.Grid(j,i,self);
+			self.gridList[i].push(_grid);
+			_grid.view.addChild(PIXI.Sprite.fromFrame("tile"));
+
+			self.view.addChild(_grid.view);
+		}
+	}	
+	}catch(e){console.log(e);alert(e);throw e;};
 }
 
 /*
-@public method setFire
-@param self BMO.BMM
+@private method setWall
+@param data: {
+			default: Boolean
+			payload: {}
+		}
 **/
-BMO.BMM.prototype.setFire = function(self){
-        this.handlers["game_setFireACK"] = function(data,wsClient){
-			var _in = JSON.parse(data);
-			var fireSkin = [_in.src];
-			try{
-					var loader = new PIXI.AssetLoader(fireSkin);
-					loader.onComplete = function(){self.gameState++;};
-					loader.load();
-			}catch(e){throw e;};		
-        };
-        this.wsClient.sendData("game_setFire",null);
+BMO.BMM.prototype.setWall = function(data){
+	try{
+	//console.log("setWall");
+	if(data.default){
+		for(var i = 0; i < this.height; i++){
+			for(var j =0; j < this.width; j++){
+				//Wall.............	
+				var _grid = this.gridList[i][j];
+				if ( i == 0 || i == this.height-1){
+					var _wall = new BMO.Wall(_grid,this,this.wsClient);							
+					_wall.setView("wall");
+					_grid.addElement(_wall);
+					_grid.view.addChild(_wall.view);
+					//_grid.addElement
+				}else{
+					if ( j == 0 || j == this.width-1){
+						var _wall = new BMO.Wall(_grid,this,this.wsClient);							
+						_wall.setView("wall");							
+						_grid.addElement(_wall);
+						_grid.view.addChild(_wall.view);
+					}else{
+						if ( (i%2) == 0 && (j%2) == 0){
+							var _wall = new BMO.Wall(_grid,this,this.wsClient);							
+							_wall.setView("wall");
+							_grid.addElement(_wall);
+							_grid.view.addChild(_wall.view);
+						}
+					}
+				}
+				//End of wall......	
+			}
+		}
+	}else{//special handle
+		
+	}
+	}catch(e){console.log(e);alert(e);throw e;};
 }
 
-
 /*
-@public method setBuff
-@param self BMO.BMM
+@private method setBox
+@param data: {
+			default: Boolean
+			payload: {}
+		}
 **/
-BMO.BMM.prototype.setBuff = function(self){
-	this.handlers["game_setBuffACK"] = function(data,wsClient){
-		var _in = JSON.parse(data);
-		var buffSkin = [_in.src];
-		try{
-			var loader = new PIXI.AssetLoader(buffSKin);
-			loader.onComplete = function(){self.gameState++;};
-			loader.load();
-		}catch(e){throw e;}
-	};
-	this.wsClient.sendData("game_setBuff",null);
+BMO.BMM.prototype.setBox = function(data){
+	try{
+	//console.log("setBox");
+	if(data.default){
+		for(var i = 0; i < this.height; i++){
+			for(var j =0; j < this.width; j++){				
+				var _grid = this.gridList[i][j];
+				//Box..............				
+				if ( i > 2 && j > 2 && i < this.height-3 && j < this.width-3 && ((i%2) != 0 || (j%2) !=0)){
+					var _box = new BMO.Box(_grid,this,this.wsClient);
+					_box.setView("box");							
+					_grid.addElement(_box);
+					_grid.view.addChild(_box.view);
+					//_grid.view.addChild(PIXI.Sprite.fromFrame("box"));
+				}
+				//End of Box.......		
+			}
+		}
+	}else{//Special handle
+	}
+	}catch(e){console.log(e);alert(e);throw e;};
 }
 
 /*
-@public method setController
+@private method setController
 @usage: register Handlers[tag]
 PS. Data flow
 	^>>>wsRequesHandler[tag]
@@ -221,7 +194,8 @@ gServer <-- wsClient --> handlers[tag]->eventProcesser->private methods
 			sendata(tag)
 **/
 BMO.BMM.prototype.setController = function(){
-	console.log("BMM:setController");
+	try{
+	//console.log("setController");
 	var self = this;
 	this.myKeyDown = function(e){
 		//self.elementList[0].eventProcesser(e);
@@ -243,7 +217,7 @@ BMO.BMM.prototype.setController = function(){
 												self.broadcastPlantBomb(data,wsClient);};
 	self.handlers["game_broadcastExplodeBomb"] = function(data,wsClient){
 												self.broadcastExplodeBomb(data,wsClient);};
-	
+	}catch(e){console.log(e);alert(e);throw e;};
 }
 
 BMO.BMM.prototype.broadcastPlayerMove = function(data, wsClient){
@@ -319,13 +293,14 @@ BMO.BMM.prototype.broadcastExplodeBomb =function(data,wsClient){
 
 		if(_in.classname == "Bomb" ){
 				var _grid = this.gridList[_in.id.y][_in.id.x];
-				var element;
+				var element = null;
 				for(var i =0;i<_grid.elementList.length;i++){
 						if (_grid.elementList[i].classname === "Bomb"){
 							element = _grid.elementList[i];
 							break;
 						}
 				}
+				if (element == null) return;
 				var e ={
 						type: "explode",
 						payload: _in.payload

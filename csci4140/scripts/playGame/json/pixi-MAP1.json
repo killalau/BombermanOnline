@@ -1,17 +1,31 @@
 {"frames": {
 "box":
 {
-	"frame": {"x":52,"y":2,"w":48,"h":48},
+	"frame": {"x":96,"y":0,"w":48,"h":48},
 	"trimmed": false
 },
 "tile":
 {
-	"frame": {"x":2,"y":52,"w":48,"h":48},
+	"frame": {"x":48,"y":0,"w":48,"h":48},
 	"trimmed": false
 },
 "wall":
 {
-	"frame": {"x":2,"y":2,"w":48,"h":48},
+	"frame": {"x":0,"y":0,"w":48,"h":48},
+	"trimmed": false
+},
+"box_fire1":
+{
+	"frame": {"x":0,"y":48,"w":48,"h":48},
+	"trimmed": false
+},
+"box_fire2":
+{
+	"frame": {"x":48,"y":48,"w":48,"h":48},
+	"trimmed": false
+},
+"dark":{
+	"frame": {"x":96,"y":48,"w":48,"h":48},
 	"trimmed": false
 }},
 "meta": {
