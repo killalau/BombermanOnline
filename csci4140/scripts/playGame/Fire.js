@@ -28,7 +28,7 @@ BMO.Fire.prototype.setView = function(_id){
 	BMO.Element.prototype.setView.call(this,_id);//super.setView()....
 	var self = this;
 	setTimeout(function(){
-		console.log(_id+"1");
+		//console.log(_id+"1");
 		BMO.Element.prototype.setView.call(self,_id+"1");
 		setTimeout(function(){self.vanish();},200);
 	},200);

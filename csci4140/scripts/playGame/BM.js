@@ -222,7 +222,17 @@ BMO.BM.prototype.vanish = function(){
 	}
 	this.alive = false;
 	this.wsClient = null;
-	BMO.Element.prototype.vanish.call(this);
+	var _id = this.viewPrefix + "die";
+	var self = this;
+	//setTimeout(function(){self.vanish();},200);
+	self.setView(_id+1);
+	setTimeout(function(){
+		self.setView(_id+2);
+		setTimeout(function(){
+			BMO.Element.prototype.vanish.call(self);
+		},500);
+	},800);
+
 }
 
 /*
