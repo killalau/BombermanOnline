@@ -69,10 +69,7 @@ wsHandlers.utf8["game_playerStopMove"] = wsRequestHandlers.game_playerStopMove;
 wsHandlers.utf8["game_playerPlantBomb"] = wsRequestHandlers.game_playerPlantBomb;
 wsHandlers.utf8["game_setBomb"] = wsRequestHandlers.game_setBomb;
 wsHandlers.utf8["game_setBuff"] = wsRequestHandlers.game_setBuff;
-<<<<<<< HEAD
 wsHandlers.utf8["game_setFire"] = wsRequestHandlers.game_setFire;
-=======
->>>>>>> Code Modification
 
 // Create and start websocket server
 var wsServerObj = wsServer.start(serverObj, wsRouter.route, wsHandlers);
