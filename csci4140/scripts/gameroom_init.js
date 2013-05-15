@@ -78,8 +78,8 @@ function AddEventListenter(handlers, wsClient) {
 		//Only Host receive this message
 		handlers["H_seat_update_ACK"] = function(data, wsClient) {
 			try{
-				var message = JSON.parse(data);	
-				//console.log(message);
+				var message = JSON.parse(data);
+				console.log(message);
 				for(var i=1;i<=4;i++){
 					var player_div = document.getElementById("player" +i);
 					player_div.innerHTML = "";
@@ -134,12 +134,12 @@ function AddEventListenter(handlers, wsClient) {
 				//modify state button event
 				var state_button = document.getElementById("State");
 				state_button.removeEventListener("click", function(e){state_change(handlers, wsClient);
-				}, fasle);
+				}, false);
 				state_button.innerHTML = "Start";
 				
 			}
 			catch(e){
-					alert("unkown error");
+					alert("error: " + e);
 			};
 	
 		}
