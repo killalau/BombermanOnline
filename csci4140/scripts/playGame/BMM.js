@@ -169,7 +169,11 @@ BMO.BMM.prototype.setBox = function(data){
 				var _grid = this.gridList[i][j];
 				//Box..............				
 				if ( i > 2 && j > 2 && i < this.height-3 && j < this.width-3 && ((i%2) != 0 || (j%2) !=0)){
-					_grid.view.addChild(PIXI.Sprite.fromFrame("box"));
+					var _box = new BMO.Box(_grid,this,this.wsClient);
+					_box.setView("box");							
+					_grid.addElement(_box);
+					_grid.view.addChild(_box.view);
+					//_grid.view.addChild(PIXI.Sprite.fromFrame("box"));
 				}
 				//End of Box.......		
 			}
@@ -289,13 +293,14 @@ BMO.BMM.prototype.broadcastExplodeBomb =function(data,wsClient){
 
 		if(_in.classname == "Bomb" ){
 				var _grid = this.gridList[_in.id.y][_in.id.x];
-				var element;
+				var element = null;
 				for(var i =0;i<_grid.elementList.length;i++){
 						if (_grid.elementList[i].classname === "Bomb"){
 							element = _grid.elementList[i];
 							break;
 						}
 				}
+				if (element == null) return;
 				var e ={
 						type: "explode",
 						payload: _in.payload

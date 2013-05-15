@@ -839,7 +839,7 @@ function game_playerPlantBomb(data, gServer, gClient){
 	}catch(e){console.log("planBombErr,e=",e);};
 }
 
-/* Handler for 'game_explodeBomb' message
+/* Handler for 'game_explodeBomb' 
  *
  * data : {id:{x:x,y:y}
  * gServer : game server object
