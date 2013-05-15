@@ -313,9 +313,9 @@ function joinRoom(data,gServer,gClient){
 			//console.log(target_room.seatList);
 			
 			if(!target_room.isLobby && target_room.clientList.length == 1){		//the target room is not lobby and the user is the first one enter the room
-				gClient.isHost = true;
-				target_room.host = gClient;
-				gClient.isReady = true;
+				target_room.host = target_room.clientList[0];
+				target_room.clientList[0].isHost = true;
+				target_room.clientList[0].isReady = true;
 			}
 			//host client want to go back Lobby
 			if(message.rid == -1 && gClient.isHost){		
@@ -347,7 +347,7 @@ function joinRoom(data,gServer,gClient){
 				console.log("hihi2");
 				
 			}
-			
+			//normal client want to go back Lobby
 			if(message.rid == -1 && !gClient.isHost){
 				gServer.roomList[bufRm].seatList[gClient.seat] = false;
 				gClient.seat = -1;
@@ -518,6 +518,8 @@ function host_update(data, gServer, gClient){
 	var clientRm = gClient.room;
 	var host = gServer.roomList[clientRm].host;
 	
+	
+	
 	var _data = {
 				//seat : gClient.seat,
 				//isHost : gClient.isHost,
@@ -614,6 +616,10 @@ try{
 	var room = gServer.roomList[gClient.room];
 	var host = room.host;
 	
+	//var seatnum = host.seat;
+	//console.log(room);
+	
+	
 	if(room.clientList.length == 4) {
 		var flag = true;
 		for(var i = 0; i<4;i++)
@@ -626,18 +632,42 @@ try{
 		}
 		
 		if(flag){
-			host.sendData("All_ready", true);
+			host.sendData("All_ready_ACK", true);
 		}
 		else
-			host.sendData("All_ready", false);
+			host.sendData("All_ready_ACK", false);
 	}
 	else
-		host.sendData("All_ready", false);
+		//room.sendData("All_ready", false, host);
+		host.sendData("All_ready_ACK", false);
 		}
+		
+		
 catch(e){
-console.log(e);
+	console.log(e);
 }
-	
+}
+
+function GameClickStart(data, gServer, gClient) {
+	try{
+		var room = gServer.roomList[gClient.room];
+		var flag = true;
+		
+		for(var i = 0;i<clientList.length;i++){
+			if(!room.clientList[i].isReady){
+				flag = false;
+				break;
+			}
+		}
+		
+		if(!flag){
+			gClient.sendData("GameClickStart_ACK", flag);
+		}
+
+	}
+	catch(e){
+		console.log(e);
+	}
 
 }
 
@@ -871,6 +901,7 @@ exports.host_update = host_update;
 exports.seat_update = seat_update;
 exports.kick_your_ass = kick_your_ass;
 exports.state_change = state_change;
+exports.GameClickStart = GameClickStart;
 //end
 
 exports.game_jsonList = game_jsonList;

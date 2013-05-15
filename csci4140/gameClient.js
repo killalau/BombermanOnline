@@ -53,6 +53,11 @@ function create(connection, server, room){
 			client.ping = oldClient.ping;
 			client.seat = oldClient.seat;
 			client.isHost = oldClient.isHost;
+			client.isReady = oldClient.isReady;
+			
+			if(client.isHost){
+				server.roomList[client.room].host.connection = client.connection;
+			}
 		}
 	}
 
