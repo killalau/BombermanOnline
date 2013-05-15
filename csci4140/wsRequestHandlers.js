@@ -731,6 +731,45 @@ function game_mapInit(data, gServer, gClient){
 	gClient.sendData("game_mapInitACK", json);
 }
 
+function game_init(data, gServer, gClient){
+	//Some game room / status validation
+	try{
+	var valid = true;
+	if(gServer.roomList[gClient.room].isLobby){
+		valid = false;
+	}
+	
+	if(!valid){
+		gClient.sendData("game_initACK", false);
+		return;
+	}
+	
+	var json = {
+			width : 17,
+			height : 11,
+			players : []
+	};
+	
+	for(var i = 0, c; c = gServer.roomList[gClient.room].clientList[i]; i++){
+		var px = py = 1;
+		if(c.seat == 1 || c.seat == 2){
+			px = json.mapsize.width - 2;
+		}
+		if(c.seat == 1 || c.seat == 3){
+			py = json.mapsize.height - 2;
+		}
+		json.players.push({
+			username : c.username,
+			seat : c.seat,
+			viewPrefix : "hamster" + (c.seat+1) + "_",
+			pos : { x : px, y : py}
+		});
+	}
+	
+	gClient.sendData("game_initACK", JSON.stringify(json));
+	}catch(e){console.log("game_init err=",e);
+}
+
 function game_playerMove(data, gServer, gClient){
 	if(data != 'U' && data != 'D' && data != 'L' && data != 'R'){
 		gClient.sendData("game_playerMoveACK", false);
@@ -798,45 +837,6 @@ function game_playerPlantBomb(data, gServer, gClient){
 	//console.log("plantBomb:in=",_in,"out=",out);
 	gClient.broadcastData("game_broadcastPlantBomb", JSON.stringify(out));
 	}catch(e){console.log("planBombErr,e=",e);};
-}
-
-/* Handler for 'game_setBomb' message
- *
- * data : data of message
- * gServer : game server object
- * gClient : game client object
- */
-function game_setBomb(data, gServer, gClient){
-	var out = {
-		src: "scripts/playGame/json/bomb2.json"
-	};
-	gClient.sendData("game_setBombACK",JSON.stringify(out));
-}
-
-/* Handler for 'game_setBuff' message
- *
- * data : data of message
- * gServer : game server object
- * gClient : game client object
- */
-function game_setBuff(data, gServer, gClient){
-	var out = {
-		src: 'scripts/playGame/json/item.json'
-	};
-	gClient.sendData("game_setBuffACK",null);
-}
-
-/* Handler for 'game_setFire' message
- *
- * data : data of message
- * gServer : game server object
- * gClient : game client object
- */
-function game_setFire(data, gServer, gClient){
-	var out = {
-			src: "scripts/playGame/json/fire.json"
-	};
-	gClient.sendData("game_setFireACK",JSON.stringify(out));
 }
 
 /* Handler for 'game_explodeBomb' message
@@ -908,12 +908,9 @@ exports.GameClickStart = GameClickStart;
 //end
 
 exports.game_jsonList = game_jsonList;
-exports.game_mapInit = game_mapInit;
+exports.game_init = game_init;
 exports.game_playerMove = game_playerMove;
 exports.game_playerStopMove = game_playerStopMove;
 
 exports.game_playerPlantBomb = game_playerPlantBomb;
-exports.game_setBomb = game_setBomb;
-exports.game_setBuff = game_setBuff;
-exports.game_setFire = game_setFire;
 

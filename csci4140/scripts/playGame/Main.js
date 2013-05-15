@@ -31,31 +31,37 @@ BMO.webPageInit = function (){
 }
 
 BMO.webPageInit_phase2 = function(handlers,wsClient){
-	handlers["game_mapInitACK"] = function(data, wsClient){
-		if(data){
-			BMO.webPageBMM = new BMO.BMM(wsClient, handlers);
-			BMO.webPageStage = new PIXI.autoDetectRenderer(960, 560);
-			document.body.children[0].appendChild(BMO.webPageStage.view);
-			//somehow get the map's skin name and player's skin
-			BMO.webPageBMM.setMap(data,false,function(){
-				requestAnimFrame(BMO.screenRefresh);
-			});
-			BMO.webPageBMM.setBomb(BMO.webPageBMM);
-			BMO.webPageBMM.setBuff(BMO.webPageBMM);
-			BMO.webPageBMM.setFire(BMO.webPageBMM);
-		}else{
-			alert("You should not in this page");
-		}
-	};
 	handlers["game_jsonListACK"] =function(data,wsClient){
 		try{
 		var _in = JSON.parse(data);
-		for(var i=0;i<_in.length;i++)
-			console.log(_in[i]);
-		}catch(e){console.log(e);throw e;};
-	}
 
-	wsClient.sendData("game_mapInit", true);
+		var loader = new PIXI.AssetLoader(_in);
+		loader.onComplete = function(){console.log(this);wsClient.sendData("game_init",null);};
+		loader.load();
+		}catch(e){throw e;};
+	};
+	handlers["game_initACK"] = function(data,wsClient){
+		try{
+		var _in = JSON.parse(data);
+		console.log(_in);
+		if( _in){
+			var _BMM = new BMO.BMM(wsClient, handlers);
+			var _stage = new PIXI.autoDetectRenderer(960, 560);
+			BMO.webPageBMM = _BMM;
+			BMO.webPageStage = _stage;
+			document.body.children[0].appendChild(BMO.webPageStage.view);
+			_BMM.init(_in);
+			requestAnimFrame(BMO.screenRefresh);
+		}else{
+				alert("You should not in this page");
+				document.location.pathname = "/Lobby.html";
+		}
+		}catch(e){console.log(e);throw e;};
+
+	};
+
+
+	wsClient.sendData("game_jsonList", null);
 }
 
 /*

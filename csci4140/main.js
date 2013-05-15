@@ -64,7 +64,7 @@ wsHandlers.utf8["state_change"] = wsRequestHandlers.state_change;
 wsHandlers.utf8["GameClickStart"] = wsRequestHandlers.GameClickStart;
 //playGame handler--------------------------------------------
 wsHandlers.utf8["game_jsonList"] = wsRequestHandlers.game_jsonList;
-wsHandlers.utf8["game_mapInit"] = wsRequestHandlers.game_mapInit;
+wsHandlers.utf8["game_init"] = wsRequestHandlers.game_init;
 wsHandlers.utf8["game_playerMove"] = wsRequestHandlers.game_playerMove;
 wsHandlers.utf8["game_playerStopMove"] = wsRequestHandlers.game_playerStopMove;
 wsHandlers.utf8["game_playerPlantBomb"] = wsRequestHandlers.game_playerPlantBomb;
