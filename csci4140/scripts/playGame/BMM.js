@@ -36,6 +36,7 @@ BMO.BMM.consturctor = BMO.BMM;
 BMO.BMM.prototype.init = function(data){
 	this.setMap(data);
 	this.setWall({'default':true,payload:null});
+	this.setBuff({'default':true,payload:null});//Andy
 	this.setBox({'default':true,payload:null});
 	this.setPlayer(data);
 	this.setController();
@@ -154,6 +155,37 @@ BMO.BMM.prototype.setWall = function(data){
 }
 
 /*
+@private method setBuff
+@param data: {
+			default: Boolean
+			payload: {}
+		}
+**/
+BMO.BMM.prototype.setBuff = function(data){//Andy
+	try{
+		//console.log("setBuff");
+		if(data.default){
+		//default position for planting buff
+			for(var i = 0; i < this.height; i++){
+				for(var j =0; j < this.width; j++){
+					var _grid = this.gridList[i][j];
+					
+					if ( i == 1 && j == 3){
+						var _buff = new BMO.Buff(_grid,this,this.wsClient);
+						_buff.setView("fireplusplus");							
+						_grid.addElement(_buff);
+						_grid.view.addChild(_buff.view);
+						//_grid.view.addChild(PIXI.Sprite.fromFrame("box"));
+					}					
+				}
+			}
+		}else{
+		//map posiiton for planting buff
+		}
+	}catch(e){console.log(e);alert(e);throw e;};
+}
+
+/*
 @private method setBox
 @param data: {
 			default: Boolean
@@ -217,6 +249,8 @@ BMO.BMM.prototype.setController = function(){
 												self.broadcastPlantBomb(data,wsClient);};
 	self.handlers["game_broadcastExplodeBomb"] = function(data,wsClient){
 												self.broadcastExplodeBomb(data,wsClient);};
+	self.handlers["game_broadcastVanishBuff"] = function(data,wsClient){//Andy
+												self.broadcastVanishBuff(data,wsClient);};											
 	}catch(e){console.log(e);alert(e);throw e;};
 }
 
@@ -314,9 +348,9 @@ BMO.BMM.prototype.broadcastExplodeBomb =function(data,wsClient){
 /*
 @private method broadcastExplodeBomb
 @param data: {
-		classname : "",
+		classname : 'firepluss' or 'speedplusplus' or 'bombplusplus',
 		id: "username" / {x:x ,y:y},
-		payload: Not yet define
+		payload: '<targer BM>'
 	}
 @param wsClient: wsClient
 **/
@@ -324,11 +358,11 @@ BMO.BMM.prototype.broadcastVanishBuff = function(data,wsClient){//Andy
 	try{
 		var _in = JSON.parse(data);
 		
-		if(_in.classname == "Buff" ){
+		if(_in.classname == "fireplusplus" || _in.classname == "speedplusplus" || _in.classname == "bombplusplus"){
 				var _grid = this.gridList[_in.id.y][_in.id.x];
 				var element;
 				for(var i =0;i<_grid.elementList.length;i++){
-						if (_grid.elementList[i].classname === "Buff"){
+						if (_grid.elementList[i].classname === _in.classname){
 							element = _grid.elementList[i];
 							break;
 						}

@@ -885,24 +885,26 @@ function game_explodeBomb(data, gServer, gClient){
 
 /* Handler for 'game_vanishBuff' message
  *
- * data : {id:{x:x,y:y}
+ * data : {id:{x:x,y:y}, classname:<buffClassName>}
  * gServer : game server object
  * gClient : game client object
  */
 function game_vanishBuff(data, gServer, gClient){//Andy
+	var _in = JSON.parse(data);
+	var targetBM = gClient.username;
+	
+	/*waiting for server side gameModel
+	var targerBM = gameModel.applyBuff(targetBM);
+	*/
+	
+	//if (targetBM !=
 	try{
 	var out = {
-			classname: 'Buff',
-			//AndyQ
-			id:data.id,
-			//AndyQ
-			//payload shud be useless...just leave it here
-			payload:{
-					U:[],
-					D:[],
-					L:[],
-					R:[]
-			}
+			classname: 'fireplusplus', //classname: _in.classname,				
+			//identify the buff by posiiton (x,y)
+			id: data.id,
+			payload: gClient.username
+			
 	}
 	gClient.sendData('game_broadcastvanishBuff',JSON.stringify(out));
 	}catch(e){console.log(e);throw e;};
@@ -938,9 +940,9 @@ exports.game_playerMove = game_playerMove;
 exports.game_playerStopMove = game_playerStopMove;
 
 exports.game_playerPlantBomb = game_playerPlantBomb;
+exports.game_vanishBuff = game_vanishBuff;//Andy
 
 exports.game_setBomb = game_setBomb;
 exports.game_setBuff = game_setBuff;
 exports.game_setFire = game_setFire;
-exports.game_vanishBuff = game_vanishBuff;//AndyQ - is this needed?
 

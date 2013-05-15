@@ -68,6 +68,7 @@ wsHandlers.utf8["game_init"] = wsRequestHandlers.game_init;
 wsHandlers.utf8["game_playerMove"] = wsRequestHandlers.game_playerMove;
 wsHandlers.utf8["game_playerStopMove"] = wsRequestHandlers.game_playerStopMove;
 wsHandlers.utf8["game_playerPlantBomb"] = wsRequestHandlers.game_playerPlantBomb;
+wsHandlers.utf8["game_vanishBuff"] = wsRequestHandlers.game_vanishBuff;//Andy
 wsHandlers.utf8["game_setBomb"] = wsRequestHandlers.game_setBomb;
 wsHandlers.utf8["game_setBuff"] = wsRequestHandlers.game_setBuff;
 
