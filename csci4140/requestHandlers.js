@@ -21,7 +21,7 @@ function auth(username, session, callback){
 		}else{
 			var query = 'DELETE FROM bbm_session WHERE session=' + mysqlConnection.escape(session);			
 			mysqlConnection.query(query, function(err, rows){
-				console.log('[wsHandler] Delete session ');
+				console.log('[wsHandler] Delete session');
 				if (err){
 					console.log('[wsHandler] MySQL mysqlConnection error code:' + err.code);
 				}
@@ -30,7 +30,6 @@ function auth(username, session, callback){
 		}
 	}
 		
-	//var query = 'SELECT id, expiry_time  FROM bbm_session WHERE session=' + mysqlConnection.escape(session);
 	var query = 'SELECT id FROM bbm_session WHERE session=' + mysqlConnection.escape(session);
 	mysqlConnection.query(query, function(err, rows){
 		var s = session;
@@ -40,19 +39,8 @@ function auth(username, session, callback){
 			console.log(rows);
 			if (rows[0].id.length > 0){
 				//case: id field not empty
-				console.log(rows[0].id);
-				//var currentTime = new Date();
-				//console.log('[wsHandler] Session expiry time:' + rows[0].expiry_time);	
-				
-				//if (rows[0].expiry_time.getTime() > currentTime.getTime()){
-					//case session not expired
-					//console.log('[wsHandler] Session valid');
-					result(true, s, callback);
-					
-				//}else{				
-					//console.log('[wsHandler] Session expired');
-					//result(false, s, callback);
-				//}			
+				console.log('[wsHandler] user:'+rows[0].id+' logged in');
+				result(true, s, callback);
 			}else{
 				console.log('[wsHandler] Empty MySQL query result');
 				result(false, s, callback);

@@ -199,6 +199,13 @@ BMO.BMM.prototype.setFire = function(self){
 **/
 BMO.BMM.prototype.setBuff = function(self){
 	this.handlers["game_setBuffACK"] = function(data,wsClient){
+		var _in = JSON.parse(data);
+		var buffSkin = [_in.src];
+		try{
+			var loader = new PIXI.AssetLoader(buffSKin);
+			loader.onComplete = function(){self.gameState++;};
+			loader.load();
+		}catch(e){throw e;}
 	};
 	this.wsClient.sendData("game_setBuff",null);
 }
