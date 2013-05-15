@@ -61,6 +61,7 @@ wsHandlers.utf8["host_update"] = wsRequestHandlers.host_update;
 wsHandlers.utf8["seat_update"] = wsRequestHandlers.seat_update;
 wsHandlers.utf8["kick_your_ass"] = wsRequestHandlers.kick_your_ass;
 wsHandlers.utf8["state_change"] = wsRequestHandlers.state_change;
+wsHandlers.utf8["GameClickStart"] = wsRequestHandlers.GameClickStart;
 //playGame handler--------------------------------------------
 wsHandlers.utf8["game_jsonList"] = wsRequestHandlers.game_jsonList;
 wsHandlers.utf8["game_mapInit"] = wsRequestHandlers.game_mapInit;
@@ -69,10 +70,9 @@ wsHandlers.utf8["game_playerStopMove"] = wsRequestHandlers.game_playerStopMove;
 wsHandlers.utf8["game_playerPlantBomb"] = wsRequestHandlers.game_playerPlantBomb;
 wsHandlers.utf8["game_setBomb"] = wsRequestHandlers.game_setBomb;
 wsHandlers.utf8["game_setBuff"] = wsRequestHandlers.game_setBuff;
-<<<<<<< HEAD
+
 wsHandlers.utf8["game_setFire"] = wsRequestHandlers.game_setFire;
-=======
->>>>>>> Code Modification
+
 
 // Create and start websocket server
 var wsServerObj = wsServer.start(serverObj, wsRouter.route, wsHandlers);
