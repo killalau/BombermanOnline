@@ -790,6 +790,9 @@ function game_setBomb(data, gServer, gClient){
  * gClient : game client object
  */
 function game_setBuff(data, gServer, gClient){
+	var out = {
+		src: 'scripts/playGame/json/item.json'
+	};
 	gClient.sendData("game_setBuffACK",null);
 }
 
