@@ -350,6 +350,8 @@ function joinRoom(data,gServer,gClient){
 				gServer.roomList[bufRm].seatList[gClient.seat] = false;
 				gClient.seat = -1;
 				
+				//remove client from gameroom and maintain seat
+				gServer.roomList[bufRm].removeClient(gServer,gClient);
 				seat_maintain(gServer,gClient,bufRm);
 			}
 			
