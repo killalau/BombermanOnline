@@ -938,11 +938,9 @@ exports.game_playerMove = game_playerMove;
 exports.game_playerStopMove = game_playerStopMove;
 
 exports.game_playerPlantBomb = game_playerPlantBomb;
-<<<<<<< HEAD
+
 exports.game_setBomb = game_setBomb;
 exports.game_setBuff = game_setBuff;
 exports.game_setFire = game_setFire;
-exports.ggame_vanishBuff = game_vanishBuff;//AndyQ - is this needed?
-=======
+exports.game_vanishBuff = game_vanishBuff;//AndyQ - is this needed?
 
->>>>>>> 6db32b2978df6af71dc4259c3496db666ea72fad
