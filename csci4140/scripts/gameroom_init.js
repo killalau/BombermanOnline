@@ -132,10 +132,14 @@ function AddEventListenter(handlers, wsClient) {
 					}			
 				}
 				//modify state button event
+				var inner_div = document.getElementById("second_div");
 				var state_button = document.getElementById("State");
-				state_button.removeEventListener("click", function(e){state_change(handlers, wsClient);
-				}, false);
-				state_button.innerHTML = "Start";
+				inner_div.removeChild(state_button);
+				var new_state_button = document.createElement('div');
+				new_state_button.setAttribute("id", "State");
+				new_state_button.setAttribute("class", "State");
+				new_state_button.innerHTML = "Start";
+				inner_div.appendChild(new_state_button);
 				
 			}
 			catch(e){
@@ -152,13 +156,13 @@ function AddEventListenter(handlers, wsClient) {
 			var message = JSON.parse(data);
 			var state_button = document.getElementById("State");
 			if(message){
-				state_button.style.background-color = "rgb(0,243,0)";
+				state_button.style.backgroundColor = "rgb(0,243,0)";
 				//state_button.addEventListener("click", function(e) {
 				//wsClient.sendData
 				//}
 			}
 			else {
-				state_button.style.background-color = "rgb(243,0,0)";		
+				state_button.style.backgroundColor = "rgb(243,0,0)";
 			}
 				
 		}
@@ -194,8 +198,10 @@ function AddEventListenter(handlers, wsClient) {
 	
 	//The State button
 	document.getElementById("State").addEventListener("click", function(e){
+	e.stopPropagation();
+	e.preventDefault();
 	state_change(handlers, wsClient);
-	}, fasle);
+	}, false);
 
 }
 

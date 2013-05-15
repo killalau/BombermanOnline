@@ -315,9 +315,10 @@ function joinRoom(data,gServer,gClient){
 			if(!target_room.isLobby && target_room.clientList.length == 1){		//the target room is not lobby and the user is the first one enter the room
 				gClient.isHost = true;
 				target_room.host = gClient;
+				gClient.isReady = true;
 			}
-			//console.log(gClient.username + gServer.roomList[1].host.username);
-			if(message.rid == -1 && gClient.isHost){		//host client want to go back Lobby
+			//host client want to go back Lobby
+			if(message.rid == -1 && gClient.isHost){		
 				
 				gServer.roomList[bufRm].host = false;
 				gServer.roomList[bufRm].seatList[gClient.seat] = false;
@@ -328,6 +329,7 @@ function joinRoom(data,gServer,gClient){
 				if(gServer.roomList[bufRm].clientList.length > 1){
 					gServer.roomList[bufRm].host = gServer.roomList[bufRm].clientList[1];
 					gServer.roomList[bufRm].clientList[1].isHost = true;
+					gServer.roomList[bufRm].clientList[1].isReady = true;
 				}
 				//console.log(gServer.roomList[bufRm].clientList);
 				var host = gServer.roomList[bufRm].host;
