@@ -869,6 +869,7 @@ exports.kick_your_ass = kick_your_ass;
 exports.state_change = state_change;
 //end
 
+exports.game_jsonList = game_jsonList;
 exports.game_mapInit = game_mapInit;
 exports.game_playerMove = game_playerMove;
 exports.game_playerStopMove = game_playerStopMove;
