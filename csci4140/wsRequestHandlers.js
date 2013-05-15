@@ -586,6 +586,25 @@ function kick_your_ass(data, gServer, gClient){
 	k_client.sendData("kick_ACK", true);
 }
 
+/* Handler for 'game_jsonList' message
+ *
+ * data : null
+ * gServer : game server object
+ * gClient : game client object
+ */
+function game_jsonList(data, gServer, gClient){
+        try{
+        var jsonList = [];
+		var fileList = ["pixi-MAP1","fire","item","bomb2"];
+		for(var i=0;i<fileList.length;i++)
+			jsonList.push("scripts/playGame/json/"+fileList[i]+".json");
+        for(var i =1;i<5;i++)
+            jsonList.push("scripts/playGame/json/hamster_"+i+".json");
+        gClient.sendData("game_jsonListACK",JSON.stringify(jsonList));
+        }catch(e){console.log("game_jsonList:err=",e)};
+}
+
+
 function game_mapInit(data, gServer, gClient){
 	//Some game room / status validation
 	var valid = true;

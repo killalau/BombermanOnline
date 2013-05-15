@@ -41,6 +41,7 @@ BMO.BMM.prototype.setMap = function(data,onProgress,onComplete){
 			/*
 			Game_Area.txt
 			Screen Resolution: 960px x 560px
+			Game Resolution: 816px x 528px
 			A Grid Resolution: 48px x 48px ? (Our skin most likely 48x48)
 			Game_Area_Max Resolution: 11 rows x 17 cols ( including the border )
 			**/

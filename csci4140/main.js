@@ -60,6 +60,7 @@ wsHandlers.utf8["joinRoom"] = wsRequestHandlers.joinRoom;
 wsHandlers.utf8["host_update"] = wsRequestHandlers.host_update;
 wsHandlers.utf8["seat_update"] = wsRequestHandlers.seat_update;
 //playGame handler--------------------------------------------
+wsHandlers.utf8["game_jsonList"] = wsRequestHandlers.game_jsonList;
 wsHandlers.utf8["game_mapInit"] = wsRequestHandlers.game_mapInit;
 wsHandlers.utf8["game_playerMove"] = wsRequestHandlers.game_playerMove;
 wsHandlers.utf8["game_playerStopMove"] = wsRequestHandlers.game_playerStopMove;

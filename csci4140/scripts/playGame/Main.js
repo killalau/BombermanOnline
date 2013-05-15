@@ -47,6 +47,13 @@ BMO.webPageInit_phase2 = function(handlers,wsClient){
 			alert("You should not in this page");
 		}
 	};
+	handlers["game_jsonListACK"] =function(data,wsClient){
+		try{
+		var _in = JSON.parse(data);
+		for(var i=0;i<_in.length;i++)
+			console.log(_in[i]);
+		}catch(e){console.log(e);throw e;};
+	}
 
 	wsClient.sendData("game_mapInit", true);
 }
