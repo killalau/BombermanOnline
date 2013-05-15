@@ -335,8 +335,9 @@ function joinRoom(data,gServer,gClient){
 				var _data = {
 				host_seat: host.seat
 				};
-				gServer.roomList[bufRm].broadcastData('host_update_ACK', JSON.stringify(_data));
 				
+				//broadcast new host and remove client from gameroom
+				gServer.roomList[bufRm].broadcastData('host_update_ACK', JSON.stringify(_data));
 				gServer.roomList[bufRm].removeClient(gServer,gClient);
 				
 				console.log("hihi");
@@ -533,14 +534,11 @@ function seat_update(data, gServer, gClient){
 	}
 	//console.log(reply);
 	var room = gServer.roomList[clientRm];
-	for(var i=0;i<room.clientList.length;i++){
-	
+	for(var i=0;i<room.clientList.length;i++){	
 	if(room.clientList[i].isHost)
 		room.sendData('H_seat_update_ACK', JSON.stringify(reply), room.clientList[i]);
 	else
-		room.sendData('seat_update_ACK', JSON.stringify(reply), room.clientList[i]);
-	
-	
+		room.sendData('seat_update_ACK', JSON.stringify(reply), room.clientList[i]);		
 	}
 }
 
@@ -555,19 +553,21 @@ function seat_maintain(gServer, gClient, rmnum){
 		reply[i].push(username);
 		reply[i].push(gServer.roomList[rmnum].clientList[i].seat);
 		
-		//
-		reply[i].push("false");
-		
-		
+		reply[i].push("false");		//this is to tell client the user have profile or not
 	}
 	//console.log(reply);
-	gServer.roomList[rmnum].broadcastData('seat_update_ACK', JSON.stringify(reply));
+	var room = gServer.roomList[rmnum];
+	for(var i=0;i<room.clientList.length;i++){	
+	if(room.clientList[i].isHost)
+		room.sendData('H_seat_update_ACK', JSON.stringify(reply), room.clientList[i]);
+	else
+		room.sendData('seat_update_ACK', JSON.stringify(reply), room.clientList[i]);		
+	}
 
 }
 
 function kick_your_ass(data, gServer, gClient){
 	var message = JSON.parse(data);
-	console.log( "hihi");
 	var bufRm = gClient.room;
 	var k_client;
 
@@ -578,12 +578,48 @@ function kick_your_ass(data, gServer, gClient){
 			k_client = gServer.roomList[bufRm].clientList[i];
 		}
 	}
-	console.log(k_client);
-	var _result = gServer.roomList[0].addClient(gServer,k_client);		//add client to lobby	
+	gSever.roomList[bufRm].seatList[k_client.seat] = false;
 	
+	//add client to lobby and remove from gameroom
+	var _result = gServer.roomList[0].addClient(gServer,k_client);		
 	gServer.roomList[bufRm].removeClient(gServer,k_client);
 
+	//first kick then maintain
 	k_client.sendData("kick_ACK", true);
+	seat_maintain(gServer,gClient,bufRm);
+	
+	
+	//console.log(gServer.roomList[bufRm]);
+}
+
+function state_change(data, gServer, gClient) {
+	gClient.isReady = gClient.isReady ? false ? true;	//change state of Ready
+	gClient.sendData("state_change_ACK" , gClient.isReady);
+	
+	var room = gServer.roomList[gClient.room];
+	var host = room.host;
+	
+	if(room.clientList.length == 4) {
+		var flag = true;
+		for(var i = 0; i<4;i++)
+		{
+			if(!room.clientList[i].isReady)
+			{
+				flag = false;
+				break;
+			}	
+		}
+		
+		if(flag){
+			host.sendData("All_ready", true);
+		}
+		else
+			host.sendData("All_ready", false);
+	}
+	else
+		host.sendData("All_ready", false);
+	
+
 }
 
 /* Handler for 'game_jsonList' message
@@ -815,6 +851,7 @@ exports.lobbyIcon = lobbyIcon;
 exports.host_update = host_update;
 exports.seat_update = seat_update;
 exports.kick_your_ass = kick_your_ass;
+exports.state_change = state_change;
 //end
 
 exports.game_mapInit = game_mapInit;

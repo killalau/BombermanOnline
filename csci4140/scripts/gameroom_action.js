@@ -51,6 +51,26 @@ function map_change(e){
 	}
 }
 
+function state_change(handlers, wsClient){
+	e.stopPropagation();
+	e.preventDefault();
+	
+	wsClient.sendData("state_change", null);
+	
+	handlers["state_change_ACK"] = function(data,wsClient){
+		var message = JSON.parse(data);
+		
+		var state_button = document.getElementById("state");
+		
+		if(message)
+			state_button.style.background-color = "rgb(0,243,0)";
+		else
+			state_button.style.background-color = "rgb(243,0,0)";
+	
+	}
+	
+}
+
 
 
 

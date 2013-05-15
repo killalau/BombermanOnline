@@ -129,8 +129,14 @@ function AddEventListenter(handlers, wsClient) {
 	
 							wsClient.sendData("kick_your_ass", JSON.stringify(json));
 						} ,false);
-					}	
-				}				
+					}			
+				}
+				//modify state button event
+				var state_button = document.getElementById("State");
+				state_button.removeEventListener("click", function(e){state_change(handlers, wsClient);
+				}, fasle);
+				state_button.innerHTML = "Start";
+				
 			}
 			catch(e){
 					alert("unkown error");
@@ -141,6 +147,22 @@ function AddEventListenter(handlers, wsClient) {
 		handlers["kick_ACK"] = function(data, wsClient) {
 			document.location.pathname = "/Lobby.html";
 		}
+		
+		handlers["All_ready"] = function(data, wsClient) {
+			var message = JSON.parse(data);
+			var state_button = document.getElementById("State");
+			if(message){
+				state_button.style.background-color = "rgb(0,243,0)";
+				//state_button.addEventListener("click", function(e) {
+				//wsClient.sendData
+				//}
+			}
+			else {
+				state_button.style.background-color = "rgb(243,0,0)";		
+			}
+				
+		}
+		
 		
 		
 		//create chatroom
@@ -169,6 +191,11 @@ function AddEventListenter(handlers, wsClient) {
 	//The Map Back and Next Button
 	document.getElementById("map_back").addEventListener("click", map_change, false);
 	document.getElementById("map_next").addEventListener("click", map_change, false);
+	
+	//The State button
+	document.getElementById("State").addEventListener("click", function(e){
+	state_change(handlers, wsClient);
+	}, fasle);
 
 }
 
