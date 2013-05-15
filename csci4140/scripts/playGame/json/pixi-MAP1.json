@@ -23,6 +23,10 @@
 {
 	"frame": {"x":48,"y":48,"w":48,"h":48},
 	"trimmed": false
+},
+"dark":{
+	"frame": {"x":96,"y":48,"w":48,"h":48},
+	"trimmed": false
 }},
 "meta": {
 	"image": "../../../images/pixi-MAP1.png"
