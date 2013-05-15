@@ -853,6 +853,31 @@ function game_explodeBomb(data, gServer, gClient){
 	}catch(e){console.log(e);throw e;};
 }
 
+/* Handler for 'game_vanishBuff' message
+ *
+ * data : {id:{x:x,y:y}
+ * gServer : game server object
+ * gClient : game client object
+ */
+function game_vanishBuff(data, gServer, gClient){//Andy
+	try{
+	var out = {
+			classname: 'Buff',
+			//AndyQ
+			id:data.id,
+			//AndyQ
+			//payload shud be useless...just leave it here
+			payload:{
+					U:[],
+					D:[],
+					L:[],
+					R:[]
+			}
+	}
+	gClient.sendData('game_broadcastvanishBuff',JSON.stringify(out));
+	}catch(e){console.log(e);throw e;};
+}
+
 
 // Public function
 exports.setName = setName;
@@ -885,4 +910,4 @@ exports.game_playerPlantBomb = game_playerPlantBomb;
 exports.game_setBomb = game_setBomb;
 exports.game_setBuff = game_setBuff;
 exports.game_setFire = game_setFire;
-
+exports.ggame_vanishBuff = game_vanishBuff;//AndyQ - is this needed?

@@ -337,6 +337,39 @@ BMO.BMM.prototype.broadcastExplodeBomb =function(data,wsClient){
 };
 
 /*
+@private method broadcastExplodeBomb
+@param data: {
+		classname : "",
+		id: "username" / {x:x ,y:y},
+		payload: Not yet define
+	}
+@param wsClient: wsClient
+**/
+BMO.BMM.prototype.broadcastVanishBuff = function(data,wsClient){//Andy
+	try{
+		var _in = JSON.parse(data);
+		
+		if(_in.classname == "Buff" ){
+				var _grid = this.gridList[_in.id.y][_in.id.x];
+				var element;
+				for(var i =0;i<_grid.elementList.length;i++){
+						if (_grid.elementList[i].classname === "Buff"){
+							element = _grid.elementList[i];
+							break;
+						}
+				}				
+				//event message for vanish
+				var e = {
+						//AndyQ
+						type: "vanish",
+						payload: _in.payload
+				}
+				element.eventProcesser(e);
+		}
+	}catch(e){console.log(e);throw 'vanishBuffErr='+e};
+};
+
+/*
 @public method addElement
 @param element: BMO.Element
 **/
