@@ -689,48 +689,12 @@ function game_jsonList(data, gServer, gClient){
         }catch(e){console.log("game_jsonList:err=",e)};
 }
 
-
-function game_mapInit(data, gServer, gClient){
-	//Some game room / status validation
-	var valid = true;
-	if(gServer.roomList[gClient.room].isLobby){
-		valid = false;
-	}
-	
-	if(!valid){
-		gClient.sendData("game_mapInitACK", false);
-		return;
-	}
-	
-	var json = {
-		mapname : "scripts/playGame/json/pixi-MAP1.json",
-		mapsize : {
-			width : 17,
-			height : 11
-		},
-		players : []
-	};
-	
-	for(var i = 0, c; c = gServer.roomList[gClient.room].clientList[i]; i++){
-		var px = py = 1;
-		if(c.seat == 1 || c.seat == 2){
-			px = json.mapsize.width - 2;
-		}
-		if(c.seat == 1 || c.seat == 3){
-			py = json.mapsize.height - 2;
-		}
-		json.players.push({
-			username : c.username,
-			seat : c.seat,
-			view : "scripts/playGame/json/hamster_" + (c.seat + 1) + ".json",
-			viewPrefix : "hamster" + (c.seat+1) + "_",
-			pos : { x : px, y : py}
-		});
-	}
-	
-	gClient.sendData("game_mapInitACK", json);
-}
-
+/* Handler for 'game_init' message
+ *
+ * data : null
+ * gServer : game server object
+ * gClient : game client object
+ */
 function game_init(data, gServer, gClient){
 	//Some game room / status validation
 	try{
@@ -767,7 +731,7 @@ function game_init(data, gServer, gClient){
 	}
 	
 	gClient.sendData("game_initACK", JSON.stringify(json));
-	}catch(e){console.log("game_init err=",e);
+	}catch(e){console.log("game_init err=",e)};
 }
 
 function game_playerMove(data, gServer, gClient){
@@ -941,8 +905,3 @@ exports.game_playerStopMove = game_playerStopMove;
 
 exports.game_playerPlantBomb = game_playerPlantBomb;
 exports.game_vanishBuff = game_vanishBuff;//Andy
-
-exports.game_setBomb = game_setBomb;
-exports.game_setBuff = game_setBuff;
-exports.game_setFire = game_setFire;
-
