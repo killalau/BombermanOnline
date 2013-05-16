@@ -381,7 +381,7 @@ function joinRoom(data,gServer,gClient){
 				np : gServer.roomList[message.rid+1].np(),
 				ping : gServer.roomList[message.rid+1].ping()
 			};
-
+			
 			rmList(JSON.stringify(_data),gServer,gClient);
 			//console.log(gServer.roomList[bufRm].clientList);
 		}
@@ -538,13 +538,11 @@ function seat_update(data, gServer, gClient){
 		var username = gServer.roomList[clientRm].clientList[i].username;
 		var filepath = "icon/" + username;
 		var havepic = true;
-		console.log(filepath);
 		try{fs.statSync(filepath).isFile();}
 		catch(e){
 			havepic = false;
 		}
 		
-		console.log(havepic);
 		reply[i] = [];
 		reply[i].push(username);
 		reply[i].push(gServer.roomList[clientRm].clientList[i].seat);
@@ -564,14 +562,17 @@ function seat_maintain(gServer, gClient, rmnum){
 	var reply = [];
 	for(var i=0;i<gServer.roomList[rmnum].clientList.length;i++){
 		var username = gServer.roomList[rmnum].clientList[i].username;
-		//var filepath = "icon/" + username;
+		var filepath = "icon/" + username;
 		var havepic = true;
+		try{fs.statSync(filepath).isFile();}
+		catch(e){
+			havepic = false;
+		}
 		
 		reply[i] = [];
 		reply[i].push(username);
-		reply[i].push(gServer.roomList[rmnum].clientList[i].seat);
-		
-		reply[i].push("false");		//this is to tell client the user have profile or not
+		reply[i].push(gServer.roomList[rmnum].clientList[i].seat);	
+		reply[i].push(havepic);		//this is to tell client the user have profile or not
 	}
 	//console.log(reply);
 	var room = gServer.roomList[rmnum];

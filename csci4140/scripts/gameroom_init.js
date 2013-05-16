@@ -79,7 +79,7 @@ function AddEventListenter(handlers, wsClient) {
 		handlers["H_seat_update_ACK"] = function(data, wsClient) {
 			try{
 				var message = JSON.parse(data);
-				console.log(message);
+				//console.log(message);
 				for(var i=1;i<=4;i++){
 					var player_div = document.getElementById("player" +i);
 					player_div.innerHTML = "";
