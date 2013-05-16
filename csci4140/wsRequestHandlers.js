@@ -342,9 +342,9 @@ function joinRoom(data,gServer,gClient){
 				gServer.roomList[bufRm].broadcastData('host_update_ACK', JSON.stringify(_data));
 				gServer.roomList[bufRm].removeClient(gServer,gClient);
 				
-				console.log("hihi");
+				//console.log("hihi");
 				seat_maintain(gServer, gClient, bufRm);
-				console.log("hihi2");
+				//console.log("hihi2");
 				
 			}
 			//normal client want to go back Lobby
@@ -536,17 +536,19 @@ function seat_update(data, gServer, gClient){
 
 	for(var i=0;i<gServer.roomList[clientRm].clientList.length;i++){
 		var username = gServer.roomList[clientRm].clientList[i].username;
-		//var filepath = "icon/" + username;
+		var filepath = "icon/" + username;
 		var havepic = true;
+		console.log(filepath);
+		try{fs.statSync(filepath).isFile();}
+		catch(e){
+			havepic = false;
+		}
 		
+		console.log(havepic);
 		reply[i] = [];
 		reply[i].push(username);
 		reply[i].push(gServer.roomList[clientRm].clientList[i].seat);
-		
-		//
-		reply[i].push("false");
-		
-		
+		reply[i].push(havepic);
 	}
 	//console.log(reply);
 	var room = gServer.roomList[clientRm];
@@ -652,16 +654,18 @@ function GameClickStart(data, gServer, gClient) {
 	try{
 		var room = gServer.roomList[gClient.room];
 		var flag = true;
+		console.log("here");
 		
-		for(var i = 0;i<clientList.length;i++){
+		for(var i = 0;i<room.clientList.length;i++){
 			if(!room.clientList[i].isReady){
 				flag = false;
 				break;
 			}
 		}
 		
-		if(!flag){
-			gClient.sendData("GameClickStart_ACK", flag);
+		if(flag){
+		console.log(room);
+			room.broadcastData("GameClickStart_ACK", flag);
 		}
 
 	}

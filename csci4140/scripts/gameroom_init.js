@@ -62,7 +62,7 @@ function AddEventListenter(handlers, wsClient) {
 				inner_img.setAttribute("title", message[i][0]);
 				
 				
-				if(message[i][2] == "true") {
+				if(message[i][2]) {
 					var img_path = "../icon/" + message[i][0];
 				}
 				else{
@@ -95,7 +95,7 @@ function AddEventListenter(handlers, wsClient) {
 					inner_img.setAttribute("class", "player_img");
 					inner_img.setAttribute("title", message[i][0]);
 					
-					if(message[i][2] == "true") {
+					if(message[i][2]) {
 						var img_path = "../icon/" + message[i][0];
 					}
 					else{
@@ -177,6 +177,9 @@ function AddEventListenter(handlers, wsClient) {
 				var message = JSON.parse(data);
 				if(!message){
 					alert("Someone left or unknow problem");	
+				}
+				else{
+					document.location.pathname = "/playGame.html";
 				}
 			}
 			catch(e){
