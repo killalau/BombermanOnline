@@ -256,7 +256,12 @@ BMO.BM.prototype.eventProcesser = function(e){
 			
 		}catch(err){throw err;};			
 	}else if( e.type === "keyup"){
-		self.stopMove(self);
+		if (e.keyCode == 40 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 37){
+			if (e.keyIdentifier.substr(0,1) !== self.direction){ 
+				e.type = "keydown";
+				self.eventProcesser(e);
+			}else self.stopMove(self);
+		}
 	}else if( e.type === "otherPlayerMove"){
 		self.setDirection(e.payload);
 		self.startMove(self);
