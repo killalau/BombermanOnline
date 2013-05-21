@@ -848,7 +848,8 @@ function game_explodeBomb(data, gServer, gClient){
 	out.payload.R.push(null);
 	out.payload.R.push(null);
 	//End of game RUle calculation
-	gClient.sendData('game_broadcastExplodeBomb',JSON.stringify(out));
+	gServer.roomList[gClient.room].broadcastData('game_broadcastExplodeBomb',JSON.stringify(out));
+	//gClient.sendData('game_broadcastExplodeBomb',JSON.stringify(out));
 	}catch(e){console.log(e);throw e;};
 }
 
