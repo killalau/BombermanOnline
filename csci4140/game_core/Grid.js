@@ -4,7 +4,7 @@ function Grid(BMM, position){
 	this.position = position;
 	this.elementList = [];
 	
-	BMM.setGrid(this, position);
+	//BMM.setGrid(this, position);
 }
 
 Grid.prototype.initialize = function(){
@@ -13,7 +13,7 @@ Grid.prototype.initialize = function(){
 
 Grid.prototype.addElement = function(element){
 	this.elementList.push(element);
-	this.BMM.elementList.push(element);
+	//this.BMM.elementList.push(element);
 }
 
 Grid.prototype.removeElement = function(element){
@@ -23,12 +23,13 @@ Grid.prototype.removeElement = function(element){
 			break;
 		}
 	}
+	/*
 	for(var i = 0, e; e = this.BMM.elementList[i]; i++){
 		if(e === element){
 			this.BMM.elementList.splice(i, 1);
 			break;
 		}
-	}
+	}*/
 }
 
 Grid.prototype.getGridList = function(){
