@@ -722,10 +722,10 @@ function game_init(data, gServer, gClient){
 	for(var i = 0, c; c = gServer.roomList[gClient.room].clientList[i]; i++){
 		var px = py = 1;
 		if(c.seat == 1 || c.seat == 2){
-			px = json.mapsize.width - 2;
+			px = json.width - 2;
 		}
 		if(c.seat == 1 || c.seat == 3){
-			py = json.mapsize.height - 2;
+			py = json.height - 2;
 		}
 		json.players.push({
 			username : c.username,
