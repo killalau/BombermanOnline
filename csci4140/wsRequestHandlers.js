@@ -253,9 +253,9 @@ function rmList(data,gServer,gClient){
 					var obj = JSON.parse(data);
 					//for (var i in obj) if( !((i === "ping") || (i==="np")) ) gServer.roomList[obj.rid][i] = obj[i]; 
 					//console.log(gServer.roomList[obj.rid].np());
-					//var _broadcastData = [];
-					//_broadcastData.push(reply[obj.rid+1]);//reply[*] follow franky definition
-					gServer.roomList[0].broadcastData("rmListACK",JSON.stringify(reply[obj.rid+1]),gClient.username);
+					var _broadcastData = [];
+					_broadcastData.push(reply[obj.rid+1]);//reply[*] follow franky definition
+					gServer.roomList[0].broadcastData("rmListACK",JSON.stringify(_broadcastData),gClient.username);
 			}catch(e){
 					console.log("[rmList]e=",e);
 					console.log("[rmList]data=",data);
