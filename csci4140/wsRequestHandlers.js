@@ -855,15 +855,17 @@ function game_playerPlantBomb(data, gServer, gClient){
 		payload: {'x':-1,'y':-1,'bombNum':_in.bombNum}
 	};
 	//plantBomb validation....
-	var pass = true;
+	var pass = gServer.roomList[gClient.room].bmm.plantBombValidation(_in.x,_in.y,gClient.username);
 	//End of validation.......
 
 	//console.log("plantBomb:in=",_in,"out="+out);
 
-	if ( pass ){
-		out.payload = {'x': _in.x ,'y': _in.y,'bombNum':(--_in.bombNum)};
-		var _data = { id:{x:_in.x ,y:_in.y}};
-		setTimeout(function(){game_explodeBomb(_data, gServer, gClient)},3000);
+	if ( pass !== null){
+		if (pass.result){
+			out.payload = {'x': _in.x ,'y': _in.y,'bombNum':(pass.bombnum)};
+			var _data = { id:{x:_in.x ,y:_in.y}};
+			setTimeout(function(){game_explodeBomb(_data, gServer, gClient)},3000);
+		}else out.payload.bombNum = pass.bombnum;
 	}
 	//console.log("plantBomb:in=",_in,"out=",out);
 	gClient.broadcastData("game_broadcastPlantBomb", JSON.stringify(out));

@@ -146,4 +146,37 @@ BMM.prototype.getElementById = function(id){
 	return null;
 }
 
+/*
+@public method plantBombValidation
+@param x: grid.x
+@param y: grid.y
+@param id: BM.id
+@return null or object{
+					result: Boolean
+					bombnum: integer
+				}
+**/
+BMM.prototype.plantBombValidation = function(x,y,id){
+	try{		
+		var _grid = this.gridList[y][x];
+		var _BM = this.getElementById(id);
+		var _out = {result:null,bombnum:_BM.bombNum};
+		if (_grid === null || _BM === null ) throw "_grid or _BM is null";
+		//Any trick things on that grid atm
+		if ( !(_grid.getElementById("Bomb") === null && 
+				_grid.getElementById("Wall") === null &&
+				_grid.getElementById("Box") === null 
+				)) _out.result = false;
+		//Are there any bombs available for that BM ?
+		if (_BM.bombNum <= 0 ) _out.result = false;
+		else{
+			_out.bombNum = --_BM.bombNum;
+			_out.result = true;
+			//create bomb
+		}
+		return _out;
+	}catch(e){console.error("[plantBombValidtation]err=",e);};
+}
+
+
 exports.BMM = BMM;

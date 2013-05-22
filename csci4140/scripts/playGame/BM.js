@@ -296,7 +296,8 @@ BMO.BM.prototype.plantBomb = function(payload){
 	}else{//payload is not null
 		console.log("plantBomb: payload.y="+payload.y+",payload.x="+payload.x);
 		if ( payload.x < 0 || payload.y < 0){//invalid plantBomb
-			console.log("plantBomb: invalid");				
+			console.log("plantBomb: invalid");	
+			this.bombNum = payload.bombNum;
 		}else{//valid plantBomb
 			console.log("plantBomb: valid");
 			try{
