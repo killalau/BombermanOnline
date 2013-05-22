@@ -21,7 +21,7 @@
 		"None" : 0.4
 	},
 	"box" : {
-		"NormalBox" : 0.8
+		"NormalBox" : 0.9
 	},
 	"BM" : {
 		"bombCurrentMax" : 1,

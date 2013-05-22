@@ -863,18 +863,18 @@ function game_playerPlantBomb(data, gServer, gClient){
 	if ( pass !== null){
 		if (pass.result){
 			out.payload = {'x': _in.x ,'y': _in.y,'bombNum':(pass.bombnum)};
-			var _data = { id:{x:_in.x ,y:_in.y}};
+			var _data = { id:{x:_in.x ,y:_in.y},bm:gClient.username};
 			setTimeout(function(){game_explodeBomb(_data, gServer, gClient)},3000);
 		}else out.payload.bombNum = pass.bombnum;
 	}
-	//console.log("plantBomb:in=",_in,"out=",out);
+	//console.log("plantBomb:in=",_in,"out=",out,"pass=",pass);
 	gClient.broadcastData("game_broadcastPlantBomb", JSON.stringify(out));
 	}catch(e){console.log("planBombErr,e=",e);};
 }
 
 /* Handler for 'game_explodeBomb' 
  *
- * data : {id:{x:x,y:y}
+ * data : {id:{x:x,y:y},bm:username}
  * gServer : game server object
  * gClient : game client object
  */
@@ -903,6 +903,7 @@ function game_explodeBomb(data, gServer, gClient){
 			}
 	}
 	//game Rule calculation....
+	gServer.roomList[gClient.room].bmm.explodeBomb(data.id.x,data.id.y,data.bm);
 	out.payload.U.push(null);
 	out.payload.U.push(null);
 	out.payload.D.push(null);
