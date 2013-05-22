@@ -770,7 +770,8 @@ function game_init(data, gServer, gClient){
 			gameState : bmm.gameState,
 			width : bmm.width,
 			height : bmm.height,
-			players : []
+			players : [],
+			elements : []
 		};
 		for(var i = 0, c; c = gServer.roomList[gClient.room].clientList[i]; i++){
 			json.players.push({
@@ -779,6 +780,20 @@ function game_init(data, gServer, gClient){
 				viewPrefix : bmm.mapConfig.PIXI.avatar[c.seat].replace(/.json$/, "") + "_",
 				pos : bmm.getElementById(c.username).grid.position
 			});
+		}
+		for(var i = 0, row; row = bmm.gridList[i]; i++){
+			for(var j = 0, gird; grid = row[j]; j++){
+				for(var k = 0, e; e = grid.elementList[k]; k++){
+					if(e.classname == 'BM'){
+						continue;
+					}
+					var obj = {
+						classname : e.classname,
+						pos : grid.position
+					};
+					json.elements.push(obj);
+				}
+			}
 		}
 	}
 	

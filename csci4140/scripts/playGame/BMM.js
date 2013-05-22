@@ -27,17 +27,24 @@ BMO.BMM.consturctor = BMO.BMM;
 				{username : 
 				seat : 
 				viewPrefix : "hamster" + (this.seat+1) + "_",
-				pos : { x : px, y : py}				
+				pos : { x : px, y : py}			//which grid
 				},
 				...
+			],
+			elements:[
+				{classname:
+				pos: {x : x, y : y}			//which grid
+				}
 			]
 		}
 **/
 BMO.BMM.prototype.init = function(data){
 	this.setMap(data);
-	this.setWall({'default':true,payload:null});
-	this.setBuff({'default':true,payload:null});//Andy
-	this.setBox({'default':true,payload:null});
+	if(!data.gameState){
+		this.setWall({'default':true,payload:null});
+		this.setBuff({'default':true,payload:null});//Andy
+		this.setBox({'default':true,payload:null});
+	}
 	this.setPlayer(data);
 	this.setController();
 	console.log("BMM.init() end");
@@ -88,6 +95,11 @@ BMO.BMM.prototype.setPlayer = function(data){
 @param data: {
 			width:
 			height:
+			elements:[
+				{classname:
+				pos: {x : x, y : y}			//which grid
+				}
+			]
 		}
 **/
 BMO.BMM.prototype.setMap = function(data){
@@ -105,7 +117,41 @@ BMO.BMM.prototype.setMap = function(data){
 
 			self.view.addChild(_grid.view);
 		}
-	}	
+	}
+	
+	//initialize wall, box
+	if(data.gameState && data.gameState[0] >= 3){
+		for(var i = 0, e; e = data.elements[i]; i++){
+			var _grid = this.gridList[e.pos.y][e.pos.x];
+			switch(e.classname){
+			case "Wall":
+				var _wall = new BMO.Wall(_grid,this,this.wsClient);
+				_wall.setView("wall");
+				_grid.addElement(_wall);
+				_grid.view.addChild(_wall.view);			
+			break;
+			case "Box":
+				var _box = new BMO.Box(_grid,this,this.wsClient);
+				_box.setView("box");							
+				_grid.addElement(_box);
+				_grid.view.addChild(_box.view);
+			break;
+			case "Bomb":
+			//TO-DO
+			break;
+			case "BombPlusPlus":
+			//TO-DO
+			break;
+			case "FirePlusPlus":
+			//TO-DO
+			break;
+			case "SpeedPlusPlus":
+			//TO-DO
+			break;
+			}
+		}
+	}
+	
 	}catch(e){console.log(e);alert(e);throw e;};
 }
 
