@@ -12,17 +12,21 @@ Grid.prototype.initialize = function(){
 }
 
 Grid.prototype.addElement = function(element){
+	if(element == null) return;
 	this.elementList.push(element);
+	element.grid = this;
 	//this.BMM.elementList.push(element);
 }
 
 Grid.prototype.removeElement = function(element){
+	if(element == null) return;
 	for(var i = 0, e; e = this.elementList[i]; i++){
 		if(e === element){
 			this.elementList.splice(i, 1);
 			break;
 		}
 	}
+	element.grid = null;
 	/*
 	for(var i = 0, e; e = this.BMM.elementList[i]; i++){
 		if(e === element){

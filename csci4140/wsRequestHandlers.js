@@ -774,11 +774,19 @@ function game_init(data, gServer, gClient){
 			elements : []
 		};
 		for(var i = 0, c; c = gServer.roomList[gClient.room].clientList[i]; i++){
+			var bm = bmm.getElementById(c.username);
 			json.players.push({
 				username : c.username,
 				seat : c.seat,
 				viewPrefix : bmm.mapConfig.PIXI.avatar[c.seat].replace(/.json$/, "") + "_",
-				pos : bmm.getElementById(c.username).grid.position
+				pos : bm.grid.position,
+				bombNum : bm.bombNum,
+				bombCurrentMax : bm.bombCurrentMax,
+				bombMax : bm.bombMax,
+				power : bm.power,
+				powerMax : bm.powerMax,
+				speed : bm.speed,
+				speedMax : bm.speedMax
 			});
 		}
 		for(var i = 0, row; row = bmm.gridList[i]; i++){
@@ -806,10 +814,20 @@ function game_playerMove(data, gServer, gClient){
 		gClient.sendData("game_playerMoveACK", false);
 	}else{
 		gClient.sendData("game_playerMoveACK", true);
+		
+		var bmm = gServer.roomList[gClient.room].bmm;
+		var bm = bmm.getElementById(gClient.username);
+		bm.direction = data;
+		bm.moveStart();
+		
 		var json = {
 			classname : "BM",
 			id: gClient.username,
-			payload: data
+			payload: {
+				dir : data,
+				grid : bm.grid.position,
+				pos : bm.position
+			}
 		};
 		gClient.broadcastData("game_broadcastPlayerMove", json);
 	}
@@ -817,10 +835,18 @@ function game_playerMove(data, gServer, gClient){
 
 function game_playerStopMove(data, gServer, gClient){
 	gClient.sendData("game_playerStopMoveACK", true);
+	
+	var bmm = gServer.roomList[gClient.room].bmm;
+	var bm = bmm.getElementById(gClient.username);
+	bm.moveStop();
+	
 	var json = {
 		classname : "BM",
 		id: gClient.username,
-		payload: data
+		payload: {
+			grid : bm.grid.position,
+			pos : bm.position
+		}
 	};
 	gClient.broadcastData("game_broadcastPlayerStopMove", json);
 }

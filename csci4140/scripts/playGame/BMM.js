@@ -69,6 +69,8 @@ BMO.BMM.prototype.getElementById = function(id){
 				viewPrefix : "hamster" + (this.seat+1) + "_",
 				pos : { x : px, y : py}				
 				},
+				bombNum :
+				bombCurrentMax:
 				...
 			]
 		}
@@ -84,6 +86,13 @@ BMO.BMM.prototype.setPlayer = function(data){
 		_BM.id = _player.username;
 		_BM.viewPrefix = _player.viewPrefix;
 		_BM.setView(_player.viewPrefix + "D0");
+		_BM.bombNum = _player.bombNum;
+		_BM.currentBombMax = _player.bombCurrentMax;
+		_BM.bombMax = _player.bombMax;
+		_BM.powerOfFire = _player.power;
+		_BM.powerMax = _player.powerMax;
+		_BM.speed = _player.speed * 48;
+		_BM.speedMax = _player.speedMax * 48;
 		_grid.view.addChild(_BM.view);
 		_grid.addElement(_BM);		
 	}
@@ -300,14 +309,17 @@ BMO.BMM.prototype.setController = function(){
 	}catch(e){console.log(e);alert(e);throw e;};
 }
 
+/* boardcast message about a player move
+ *
+ * data = {
+ * 		classname : "BM",
+ * 		id : username,
+ * 		payload : {
+ *			dir : "U" / "D" / "L" / "R"
+ * 			grid : {x:x, y:y}		//gridList[y][x]
+ *			pos : {x:x, y:y}}}		//position inside a grid (0 to 1) need to scale
+ */
 BMO.BMM.prototype.broadcastPlayerMove = function(data, wsClient){
-	/*
-	data = {
-		classname : "",
-		id: "username" / {x:x ,y:y},
-		payload: payload you want
-	}
-	*/
 	try{
 	//console.log("broadcastPlayerMove,this="+this);
 	if(data.classname == "BM" && data.id != BMO.webPageBMM.wsClient.username){
@@ -321,14 +333,26 @@ BMO.BMM.prototype.broadcastPlayerMove = function(data, wsClient){
 	}catch(e){throw "broadcastPlayerMove fail";}
 };
 
+/* boardcast message about a player stop moving
+ *
+ * data = {
+ * 		classname : "BM",
+ * 		id : username,
+ * 		payload : {
+ * 			grid : {x:x, y:y}		//gridList[y][x]
+ *			pos : {x:x, y:y}}}		//position inside a grid (0 to 1) need to scale
+ */
 BMO.BMM.prototype.broadcastPlayerStopMove = function(data, wsClient){
 	try{
 	//console.log("broadcastPlayerStopMove,this="+this);
-	if(data.classname == "BM" && data.id != BMO.webPageBMM.wsClient.username){
+	if(data.classname == "BM"){
 		var element = BMO.webPageBMM.getElementById(data.id);
 		var e ={
 			type: "otherPlayerStopMove",
-			payload: null,
+			payload: data.payload
+		}
+		if(data.id == BMO.webPageBMM.wsClient.username){
+			e.type = "thisPlayerStopMove";
 		}
 		element.eventProcesser(e);
 	}

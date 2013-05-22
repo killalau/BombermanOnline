@@ -176,20 +176,24 @@ BMO.BM.prototype.move = function(dest_row,dest_col){
 		this.view.position.x = this.X;
 		this.view.position.y = this.Y;
 		*/
-		this._X = this.X;
-		if(this._X > 0) this._X -= 48;
-		this._Y = this.Y;
-		if(this._Y > 0) this._Y -= 48;
-		if(changeGrid == true){
-			var gx = this.grid.X;
-			var gy = this.grid.Y;
-			if(this.X > 0) gx++;
-			if(this.Y > 0) gy++;
-			this.BMM.gridList[gy][gx].view.addChild(this.view);
-		}
-		this.view.position.x = this._X;
-		this.view.position.y = this._Y;
+		this.updateGridView();
 	}catch(e){throw e;};
+}
+
+BMO.BM.prototype.updateGridView = function(){
+	this._X = this.X;
+	if(this._X > 0) this._X -= 48;
+	this._Y = this.Y;
+	if(this._Y > 0) this._Y -= 48;
+	//if(changeGrid == true){
+		var gx = this.grid.X;
+		var gy = this.grid.Y;
+		if(this.X > 0) gx++;
+		if(this.Y > 0) gy++;
+		this.BMM.gridList[gy][gx].view.addChild(this.view);
+	//}
+	this.view.position.x = this._X;
+	this.view.position.y = this._Y;
 }
 
 /*
@@ -263,11 +267,19 @@ BMO.BM.prototype.eventProcesser = function(e){
 			}else self.stopMove(self);
 		}
 	}else if( e.type === "otherPlayerMove"){
-		self.setDirection(e.payload);
+		self.setDirection(e.payload.dir);
 		self.startMove(self);
-		
 	}else if( e.type === "otherPlayerStopMove"){
+		self.BMM.gridList[e.payload.grid.y][e.payload.grid.x].addElement(self);
+		self.X = Math.round(e.payload.pos.x * 48);
+		self.Y = Math.round(e.payload.pos.y * 48);
+		self.updateGridView();
 		self.stopMove(self);
+	}else if( e.type === "thisPlayerStopMove"){
+		self.BMM.gridList[e.payload.grid.y][e.payload.grid.x].addElement(self);
+		self.X = Math.round(e.payload.pos.x * 48);
+		self.Y = Math.round(e.payload.pos.y * 48);
+		self.updateGridView();
 	}else if( e.type === "plantBomb"){
 		self.plantBomb(e.payload);
 	}
@@ -292,7 +304,7 @@ BMO.BM.prototype.plantBomb = function(payload){
 				};
 				this.bombNum--;
 				this.wsClient.sendData("game_playerPlantBomb",JSON.stringify(req));
-		}	
+		}
 	}else{//payload is not null
 		console.log("plantBomb: payload.y="+payload.y+",payload.x="+payload.x);
 		if ( payload.x < 0 || payload.y < 0){//invalid plantBomb

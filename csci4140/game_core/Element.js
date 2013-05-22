@@ -16,12 +16,48 @@ Element.prototype.initialize = function (){
 	
 }
 
-Element.prototype.canMove = function(){
-	return true;
+Element.prototype.canMove = function(grid){
+	return !grid.isBlockable();
 }
 
-Element.prototype.move = function(){
+Element.prototype.move = function(dest_row,dest_col){
+	var dest_grid = this.grid.BMM.gridList[dest_row][dest_col];
+	switch (this.direction){
+	case "U":
+		this.position.y -= this.speed;
+		if(this.position.y <= -0.5){
+			changeGrid(this, dest_grid, "y", 1);
+		}
+		break;
+	case "D":
+		this.position.y += this.speed;
+		if(this.position.y >= 0.5){
+			changeGrid(this, dest_grid, "y", -1);
+		}
+		break;
+	case "L":
+		this.position.x -= this.speed;
+		if(this.position.x <= -0.5){
+			changeGrid(this, dest_grid, "x", 1);
+		}
+		break;
+	case "R":
+		this.position.x += this.speed;
+		if(this.position.x >= 0.5){
+			changeGrid(this, dest_grid, "x", -1);
+		}
+		break;		
+	}
 	
+	function changeGrid(self, dest_grid, dir, v){
+		if(self.canMove(dest_grid)){
+			self.position[dir] += v;
+			self.grid.removeElement(self);
+			dest_grid.addElement(self);
+		}else{
+			self.position[dir] += self.speed * v;
+		}
+	}
 }
 
 Element.prototype.setDirection = function(dir){
@@ -29,11 +65,40 @@ Element.prototype.setDirection = function(dir){
 }
 
 Element.prototype.moveStart = function(){
-
+	if(this.moveFunction != null){
+		return;
+	}
+	var self = this;
+	this.moveFunction = setInterval(function(){
+		return function(){
+			var gy, gx;
+			switch(self.direction){
+			case "U":
+				gy = self.grid.position.y-1;
+				gx = self.grid.position.x;
+				break;
+			case "D":
+				gy = self.grid.position.y+1;
+				gx = self.grid.position.x;
+				break;
+			case "L":
+				gy = self.grid.position.y;
+				gx = self.grid.position.x-1;
+				break;
+			case "R":
+				gy = self.grid.position.y;
+				gx = self.grid.position.x+1;
+				break;
+			}
+			self.move(gy,gx);
+		};
+	}(), 30);
+	this.gClient.sendData();
 }
 
 Element.prototype.moveStop = function(){
-
+	clearInterval(this.moveFunction);
+	this.moveFunction = null;
 }
 
 Element.prototype.increaseSpeed = function(num){

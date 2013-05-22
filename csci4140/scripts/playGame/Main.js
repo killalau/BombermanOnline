@@ -53,7 +53,7 @@ BMO.webPageInit_phase2 = function(handlers,wsClient){
 			_BMM.init(_in);
 			requestAnimFrame(BMO.screenRefresh);
 		}else{
-				alert("You should not in this page");
+				//alert("You should not in this page");
 				document.location.pathname = "/Lobby.html";
 		}
 		}catch(e){console.log(e);throw e;};

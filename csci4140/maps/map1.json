@@ -28,8 +28,8 @@
 		"bombMax" : 8,
 		"power" : 2,
 		"powerMax": 8,
-		"speed" : 0.05,
-		"speedMax" : 0.5
+		"speed" : 0.1,
+		"speedMax" : 0.8
 	},
 	"PIXI" : {
 		"map" : "pixi-MAP1.json",
