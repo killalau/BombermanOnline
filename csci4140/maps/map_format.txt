@@ -32,6 +32,11 @@
 		"None" : 0.4
 	},
 	
+	//probability of box
+	"box" : {
+		"NormalBox" : 0.8
+	},
+	
 	//BM initial setting
 	"BM" : {
 		"bombCurrentMax" : 1,
@@ -40,5 +45,19 @@
 		"powerMax": 8,
 		"speed" : 0.05,
 		"speedMax" : 0.5
+	},
+	
+	//PIXI required file
+	"PIXI" : {
+		"map" : "pixi-MAP1.json",
+		"fire" : "fire.json",
+		"item" : "item.json",
+		"bomb" : "bomb2.json",
+		"avatar"	: [
+			"hamster_1.json",
+			"hamster_2.json",
+			"hamster_3.json",
+			"hamster_4.json"
+		]
 	}
 }

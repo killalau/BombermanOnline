@@ -684,15 +684,42 @@ function GameClickStart(data, gServer, gClient) {
  * gClient : game client object
  */
 function game_jsonList(data, gServer, gClient){
-        try{
-        var jsonList = [];
-		var fileList = ["pixi-MAP1","fire","item","bomb2"];
-		for(var i=0;i<fileList.length;i++)
-			jsonList.push("scripts/playGame/json/"+fileList[i]+".json");
-        for(var i =1;i<5;i++)
-            jsonList.push("scripts/playGame/json/hamster_"+i+".json");
-        gClient.sendData("game_jsonListACK",JSON.stringify(jsonList));
-        }catch(e){console.log("game_jsonList:err=",e)};
+	try{
+		var jsonList = [];
+		var basePath = "scripts/playGame/json/";
+		var bmm = gServer.roomList[gClient.room].bmm;
+		
+		if(bmm == null){
+			//need checking here when lobby is finished
+			/*
+			gClient.sendData("game_jsonListACK", false);
+			return;
+			*/
+			//now is for testing
+			var fileList = ["pixi-MAP1","fire","item","bomb2"];
+			for(var i=0;i<fileList.length;i++)
+				jsonList.push("scripts/playGame/json/"+fileList[i]+".json");
+			for(var i =1;i<5;i++)
+				jsonList.push("scripts/playGame/json/hamster_"+i+".json");
+			gClient.sendData("game_jsonListACK",JSON.stringify(jsonList));
+			return;
+		}
+		
+		
+		//get all PIXI json path from map config file
+		var pixi = bmm.mapConfig.PIXI;
+		for(var key in pixi){
+			if(typeof pixi[key] === 'string'){
+				jsonList.push(basePath + pixi[key]);
+			}else if(typeof pixi[key] === 'object'){
+				for(var inkey in pixi[key]){
+					jsonList.push(basePath + pixi[key][inkey]);
+				}
+			}
+		}
+		
+		gClient.sendData("game_jsonListACK", JSON.stringify(jsonList));
+	}catch(e){console.log("game_jsonList:err="+e);};
 }
 
 /* Handler for 'game_init' message
@@ -714,26 +741,45 @@ function game_init(data, gServer, gClient){
 		return;
 	}
 	
-	var json = {
-			width : 17,
-			height : 11,
+	var bmm = gServer.roomList[gClient.room].bmm;
+	//when lobby is finish, this part would remove, and treat as invalid
+	if(bmm == null){
+		var json = {
+				width : 17,
+				height : 11,
+				players : []
+		};
+		
+		for(var i = 0, c; c = gServer.roomList[gClient.room].clientList[i]; i++){
+			var px = py = 1;
+			if(c.seat == 1 || c.seat == 2){
+				px = json.width - 2;
+			}
+			if(c.seat == 1 || c.seat == 3){
+				py = json.height - 2;
+			}
+			json.players.push({
+				username : c.username,
+				seat : c.seat,
+				viewPrefix : "hamster_" + (c.seat+1) + "_",
+				pos : { x : px, y : py}
+			});
+		}
+	}else{
+		var json = {
+			gameState : bmm.gameState,
+			width : bmm.width,
+			height : bmm.height,
 			players : []
-	};
-	
-	for(var i = 0, c; c = gServer.roomList[gClient.room].clientList[i]; i++){
-		var px = py = 1;
-		if(c.seat == 1 || c.seat == 2){
-			px = json.width - 2;
+		};
+		for(var i = 0, c; c = gServer.roomList[gClient.room].clientList[i]; i++){
+			json.players.push({
+				username : c.username,
+				seat : c.seat,
+				viewPrefix : bmm.mapConfig.PIXI.avatar[c.seat].replace(/.json$/, "") + "_",
+				pos : bmm.getElementById(c.username).grid.position
+			});
 		}
-		if(c.seat == 1 || c.seat == 3){
-			py = json.height - 2;
-		}
-		json.players.push({
-			username : c.username,
-			seat : c.seat,
-			viewPrefix : "hamster" + (c.seat+1) + "_",
-			pos : { x : px, y : py}
-		});
 	}
 	
 	gClient.sendData("game_initACK", JSON.stringify(json));
@@ -910,7 +956,7 @@ function room_newGame(data, gServer, gClient){
 			var room = gServer.roomList[gClient.room];
 			var bmm = new BMM.BMM(gServer, room, mapObj);
 			bmm.initialize();
-			room.BMM = bmm;
+			room.bmm = bmm;
 			
 			//tell all room client, the game is ready, redirect to playGame.html
 			gClient.broadcastData('room_newGame', '/playGame.html');

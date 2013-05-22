@@ -1,74 +1,74 @@
 {"frames": {
-	"hamster3_U0":{
+	"hamster_3_U0":{
 		"frame": {"x":0,"y":0,"w":48,"h":48},
 		"trimmed": false
 	},
-	"hamster3_U1":{
+	"hamster_3_U1":{
 		"frame": {"x":48,"y":0,"w":48,"h":48},
 		"trimmed": false
 	},
-	"hamster3_U2":{
+	"hamster_3_U2":{
 		"frame": {"x":96,"y":0,"w":48,"h":48},
 		"trimmed": false
 	},
-	"hamster3_U3":{
+	"hamster_3_U3":{
 		"frame": {"x":144,"y":0,"w":48,"h":48},
 		"trimmed": false
 	},
-	"hamster3_L0":{
+	"hamster_3_L0":{
 		"frame": {"x":0,"y":144,"w":48,"h":48},
 		"trimmed": false
 	},
-	"hamster3_L1":{
+	"hamster_3_L1":{
 		"frame": {"x":48,"y":144,"w":48,"h":48},
 		"trimmed": false
 	},
-	"hamster3_L2":{
+	"hamster_3_L2":{
 		"frame": {"x":96,"y":144,"w":48,"h":48},
 		"trimmed": false
 	},
-	"hamster3_L3":{
+	"hamster_3_L3":{
 		"frame": {"x":144,"y":144,"w":48,"h":48},
 		"trimmed": false
 	},
-	"hamster3_R0":{
+	"hamster_3_R0":{
 		"frame": {"x":0,"y":48,"w":48,"h":48},
 		"trimmed": false
 	},
-	"hamster3_R1":{
+	"hamster_3_R1":{
 		"frame": {"x":48,"y":48,"w":48,"h":48},
 		"trimmed": false
 	},
-	"hamster3_R2":{
+	"hamster_3_R2":{
 		"frame": {"x":96,"y":48,"w":48,"h":48},
 		"trimmed": false
 	},
-	"hamster3_R3":{
+	"hamster_3_R3":{
 		"frame": {"x":144,"y":48,"w":48,"h":48},
 		"trimmed": false
 	},	
-	"hamster3_D0":{
+	"hamster_3_D0":{
 		"frame": {"x":0,"y":96,"w":48,"h":48},
 		"trimmed": false
 	},
-	"hamster3_D1":{
+	"hamster_3_D1":{
 		"frame": {"x":48,"y":96,"w":48,"h":48},
 		"trimmed": false
 	},
-	"hamster3_D2":{
+	"hamster_3_D2":{
 		"frame": {"x":96,"y":96,"w":48,"h":48},
 		"trimmed": false
 	},
-	"hamster3_D3":{
+	"hamster_3_D3":{
 		"frame": {"x":144,"y":96,"w":48,"h":48},
 		"trimmed": false
 	},
-	"hamster3_die1":
+	"hamster_3_die1":
 	{
 		"frame": {"x":0,"y":192,"w":48,"h":48},
 		"trimmed": false
 	},
-	"hamster3_die2":
+	"hamster_3_die2":
 	{
 		"frame": {"x":48,"y":192,"w":48,"h":48},
 		"trimmed": false

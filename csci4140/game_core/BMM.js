@@ -86,21 +86,31 @@ BMM.prototype.setMap = function(){
 				break;
 			case "P"://Player
 				var _BM = new BM.BM(null,_grid);
+				_BM.bombNum = this.mapConfig.BM.bombCurrentMax;
+				_BM.bombCurrentMax = this.mapConfig.BM.bombCurrentMax;
+				_BM.bombMax = this.mapConfig.BM.bombMax;
+				_BM.power = this.mapConfig.BM.power;
+				_BM.powerMax = this.mapConfig.BM.powerMax;
+				_BM.speed = this.mapConfig.BM.speed;
+				_BM.speedMax = this.mapConfig.BM.speedMax;
 				this.elementList.push(_BM);
 				//_grid.addElement(_BM);
 				break;	
 			case "B"://Box
 				var rand = Math.random();
-				var buff = "None";
-				for(var key in _buffList){
-					if(rand < _buffList[key]){
-						buff = key;
-						break;
+				if(rand < this.mapConfig.box.NormalBox){
+					var rand = Math.random();
+					var buff = "None";
+					for(var key in _buffList){
+						if(rand < _buffList[key]){
+							buff = key;
+							break;
+						}
 					}
+					//_grid.addElement( new Box.Box(_grid, buff));
+					new Box.Box(_grid, buff);
 				}
-				//_grid.addElement( new Box.Box(_grid, buff));
-				new Box.Box(_grid, buff);
-				break;		
+				break;
 			default://space
 				break;
 			}

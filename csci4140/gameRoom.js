@@ -6,7 +6,7 @@
  * clientList:
  * seatList:
  * host:
- * BMM:     Game core
+ * bmm:     Game core
  * np():      number of players
  * ping():    average player ping (default: 0)
  */
@@ -21,7 +21,7 @@ function create(isLobby, name){
 		clientList : [],	// client list in that room
 		seatList: [false, false, false, false],
 		host: false,
-		BMM : null,
+		bmm : null,
 		np: function(){ return room.clientList.length; },
 		ping: function(){
 			var n = 0, sum = 0;
