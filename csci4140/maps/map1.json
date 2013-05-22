@@ -1,0 +1,31 @@
+{
+	"width" : 17,
+	"height" : 11,
+	"map" : [
+		"WWWWWWWWWWWWWWWWW",
+		"WPSBBBBBBBBBBBSPW",
+		"WSWBWBWBWBWBWBWBW",
+		"WBBBBBBBBBBBBBBBW",
+		"WBWBWBWBWBWBWBWBW",
+		"WBBBBBBBBBBBBBBBW",
+		"WBWBWBWBWBWBWBWBW",
+		"WBBBBBBBBBBBBBBBW",
+		"WSWBWBWBWBWBWBWSW",
+		"WPSBBBBBBBBBBBSPW",
+		"WWWWWWWWWWWWWWWWW"
+	],
+	"buff" : {
+		"BombPlusPlus" : 0.2,
+		"FirePlusPlus" : 0.2,
+		"SpeedPlusPlus" : 0.2,
+		"None" : 0.4
+	},
+	"BM" : {
+		"bombCurrentMax" : 1,
+		"bombMax" : 8,
+		"power" : 2,
+		"powerMax": 8,
+		"speed" : 0.05,
+		"speedMax" : 0.5
+	}
+}

@@ -187,7 +187,14 @@ function AddEventListenter(handlers, wsClient) {
 			}
 		
 		}
-	
+		
+		handlers["room_newGameACK"] = function(data, wsClient){};
+		handlers["room_newGame"] = function(data, wsClient){
+			if(data){
+				document.location.pathname = data;
+			}
+		};
+		
 		//create chatroom
 		var div = document.getElementById('left');
         div.innerHTML = "";

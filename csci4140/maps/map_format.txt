@@ -1,0 +1,44 @@
+//A demo JSON with comment
+{
+	"width" : 17,		//width of the map, including borader
+	"height" : 11,		//height of the map, including boarder
+	
+	//the map girds setting
+	//W for Wall
+	//P for Player initial position
+	//B for Box
+	//S for Space
+	"map" : [
+		"WWWWWWWWWWWWWWWWW",
+		"WPSBBBBBBBBBBBSPW",
+		"WSWBWBWBWBWBWBWBW",
+		"WBBBBBBBBBBBBBBBW",
+		"WBWBWBWBWBWBWBWBW",
+		"WBBBBBBBBBBBBBBBW",
+		"WBWBWBWBWBWBWBWBW",
+		"WBBBBBBBBBBBBBBBW",
+		"WSWBWBWBWBWBWBWSW",
+		"WPSBBBBBBBBBBBSPW",
+		"WWWWWWWWWWWWWWWWW"
+	],
+	
+	//buff setting about each box
+	//value means the probability
+	//value sum = 1
+	"buff" : {
+		"BombPlusPlus" : 0.2,
+		"FirePlusPlus" : 0.2,
+		"SpeedPlusPlus" : 0.2,
+		"None" : 0.4
+	},
+	
+	//BM initial setting
+	"BM" : {
+		"bombCurrentMax" : 1,
+		"bombMax" : 8,
+		"power" : 2,
+		"powerMax": 8,
+		"speed" : 0.05,
+		"speedMax" : 0.5
+	}
+}

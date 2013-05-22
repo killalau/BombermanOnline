@@ -4,90 +4,120 @@ var Element = require("./Element");
 var Box = require("./Box");
 var BM = require("./BM");
 
-function BMM(server, room, w, h, mapConfig, numOfPlayer){
-	w = w ? w : 17;
-	h = h ? h : 11;
-	numOfPlayer = numOfPlayer ? numOfPlayer : 4;
-	
+function BMM(server, room, mapConfig){
 	this.classname = "BMM";
 	this.server = server;
 	this.room = room;
-	this.width = w;
-	this.height = h;
+	this.width = 0;
+	this.height = 0;
 	this.mapConfig = mapConfig;
 	this.gridList = [];
 	this.elementList = [];	//BM only
-	this.numOfPlayer = numOfPlayer;
-	//this.playerList = [];
+	this.numOfPlayer = 0;
 	this.gameState = [0,0,0,0,0];//Server state, p1 state, p2 state.....
 }
 
 /*
 @public method initialilze
-@param pidList: ["p1ID","p2ID"....]
 **/
-BMM.prototype.initialize = function(pidList){
+BMM.prototype.initialize = function(){
 	this.setGrid();
 	this.gameState[0]++;
 	this.setMap();
 	this.gameState[0]++;
-	this.setPlayer(pidList);
+	this.setPlayer();
 	this.gameState[0]++;
+	console.log("[BMM] new BMM()");
 }
 
-BMM.prototype.setPlayer = function(pidList){
-	var _randomSeat = [[0,1,2,3],[1,0,2,3],[1,2,0,3],[1,2,3,0]];
-	var seed = Math.round(Math.random()*10)%3;
-	for(var i = 0;i<pidList.length;i++){
-		var _pid = pidList[i];
-		//TO DO MORE
-		//Maybe do some random postion placing
-		this.elementList[_randomSeat[seed][i]].id = _pid;
+BMM.prototype.setPlayer = function(){
+	var np = this.numOfPlayer = this.room.np();
+	for(var i = 0; i < np; i++){
+		//bind a client to dummy BM element, which is already on the game board
+		var _pid = this.room.clientList[i].username;
+		this.elementList[i].id = _pid;
+		this.elementList[i].gClient = this.room.clientList[i]; 
+	}
+	
+	//Randomize the initial position
+	this.elementList.sort(function(a,b){
+		return Math.random() - 0.5;
+	});
+	
+	//Remove no player BM
+	for(var i = this.elementList.length -1; i >= 0; i--){
+		var e = this.elementList[i];
+		if(e.gClient == null){
+			this.elementList.splice(i, 1);
+			e.grid.removeElement(e);
+		}
 	}
 }
 
 BMM.prototype.setMap = function(){
-	/*mapConfig format{//make sure map.length == this.height && map[0].length == this.width
+	/*
+	for details, read maps/map_format.txt
+	mapConfig format{
 		map:["WWWWWWW..","WSWSWB..."...]
 	}*/
-	var map = [];//TO DO MORE
-	var _buffList = ["BombPlusPlus","FirePlusPlus","SpeedPlusPlus"];
+	
+	
+	var map = this.mapConfig.map;
+	
+	/* Create items' cumulative probability
+	 * _buffList = { "item0" : 0.1, "item1" : 0.5, "None" : 1}
+	 */
+	var _buffList = {};
+	var cumSum = 0;
+	for(var key in this.mapConfig.buff){
+		cumSum += this.mapConfig.buff[key];
+		_buffList[key] = cumSum;
+	}
+	
 	for(var i = 0; i < this.height; i++){
 		var _row = map[i];
-		for(var j = 0; j < this.weight; j++){
+		for(var j = 0; j < this.width; j++){
 			var _grid = this.gridList[i][j];
 			switch (_row[j]){
 			case "W"://Wall
-				_grid.addElement( new Wall.Wall(_grid));
+				//_grid.addElement( new Wall.Wall(_grid));
+				//auto add to grid, when the object create
+				new Wall.Wall(_grid);
 				break;
-			case "P"://Player		
-				if (this.elementList.length < this.numOfPlayer){
-					var _BM = new BM.BM("DUMMY",_grid);
-					this.elementList.push(_BM);
-					_grid.addElement(_BM);
-				}
+			case "P"://Player
+				var _BM = new BM.BM(null,_grid);
+				this.elementList.push(_BM);
+				//_grid.addElement(_BM);
 				break;	
-			case "B"://BOx
-				_grid.addElement( new Box.Box(_grid,_buffList[Math.round(Math.random() *10)%3]));
+			case "B"://Box
+				var rand = Math.random();
+				var buff = "None";
+				for(var key in _buffList){
+					if(rand < _buffList[key]){
+						buff = key;
+						break;
+					}
+				}
+				//_grid.addElement( new Box.Box(_grid, buff));
+				new Box.Box(_grid, buff);
 				break;		
 			default://space
-				break;	
+				break;
 			}
 		}
-	}	
+	}
 }
 
-BMM.prototype.setGrid = function(){	
+BMM.prototype.setGrid = function(){
+	this.width = this.mapConfig.width;
+	this.height = this.mapConfig.height;
+	
 	for(var i = 0; i < this.height; i++){
 		this.gridList[i] = [];
-		for(var j = 0; j < this.weight; j++){
+		for(var j = 0; j < this.width; j++){
 			this.gridList[i][j] = new Grid.Grid(this, {x:j, y:i});
 		}
 	}
-	/*
-	if(position.x >= 0 && position.x < this.width || position.y >= 0 || position.y < this.height){
-		this.gridList[position.y][position.x] = grid;
-	}*/
 }
 
 BMM.prototype.getElementById = function(id){

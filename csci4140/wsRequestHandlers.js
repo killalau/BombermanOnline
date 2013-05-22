@@ -1,6 +1,7 @@
 var fs = require("fs");
 var exec = require('child_process').exec;
 var requestHandlers = require("./requestHandlers");
+var BMM = require("./game_core/BMM");
 
 /* Handler for 'setName' message
  *
@@ -880,6 +881,43 @@ function game_vanishBuff(data, gServer, gClient){//Andy
 	}catch(e){console.log(e);throw e;};
 }
 
+/* Handler for 'room_newGame' message, called by Host when count down finish
+ *
+ * data : 
+ * gServer : game server object
+ * gClient : game client object
+ */
+function room_newGame(data, gServer, gClient){
+	console.log("[wsHandler] Request for 'room_newGame'");
+	
+	//check if gClient is host, the room status is ok to start game, etc.
+	var valid = true;
+	if(!valid){
+		gClient.sendData('room_newGameACK', false);
+		return;
+	}
+	gClient.sendData('room_newGameACK', true);
+	
+	// The map config file
+	mapFile = "maps/map1.json";
+	
+	fs.readFile(mapFile, "utf-8", function(error, file){
+		if(error){
+			console.log(error.toString());
+		}else{
+			//console.log(file);
+			var mapObj = JSON.parse(file);
+			var room = gServer.roomList[gClient.room];
+			var bmm = new BMM.BMM(gServer, room, mapObj);
+			bmm.initialize();
+			room.BMM = bmm;
+			
+			//tell all room client, the game is ready, redirect to playGame.html
+			gClient.broadcastData('room_newGame', '/playGame.html');
+		}
+	});
+	
+}
 
 // Public function
 exports.setName = setName;
@@ -903,6 +941,8 @@ exports.kick_your_ass = kick_your_ass;
 exports.state_change = state_change;
 exports.GameClickStart = GameClickStart;
 //end
+
+exports.room_newGame = room_newGame;
 
 exports.game_jsonList = game_jsonList;
 exports.game_init = game_init;
