@@ -37,11 +37,15 @@ BMO.BM.prototype = Object.create( BMO.Element.prototype );
 @private method startMove
 @param self: BMO.BM
 **/
-BMO.BM.prototype.startMove = function(self){
-	if(self.moveFunction == null){
+BMO.BM.prototype.startMove = function(dir){
+	var self = this;
+	if(self.moveFunction == null || dir != self.direction){
+		self.setDirection(dir);
 		if(self.id == self.wsClient.username){
 			self.wsClient.sendData("game_playerMove", self.direction);
 		}
+	}
+	if(self.moveFunction == null){
 		self.moveFunction = setInterval(function(){
 			var gy,gx;
 			switch (self.direction){
@@ -249,15 +253,12 @@ BMO.BM.prototype.eventProcesser = function(e){
 		//console.log("BM:keydown,keyIdentifier="+e.keyIdentifier);
 		//canMove?
 		try{	
-			if (e.keyCode == 40 ) self.setDirection("D");
-			else if(e.keyCode == 38) self.setDirection("U");
-			else if(e.keyCode == 37) self.setDirection("L");
-			else if(e.keyCode == 39) self.setDirection("R");
+			if (e.keyCode == 40 ) self.startMove("D");
+			else if(e.keyCode == 38) self.startMove("U");
+			else if(e.keyCode == 37) self.startMove("L");
+			else if(e.keyCode == 39) self.startMove("R");
 			else if(e.keyCode == 32){self.eventProcesser({'type':'plantBomb','payload':e.payload});return;}
 			else return;
-			
-			self.startMove(self);
-			
 		}catch(err){throw err;};			
 	}else if( e.type === "keyup"){
 		if (e.keyCode == 40 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 37){
