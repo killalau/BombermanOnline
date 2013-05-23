@@ -42,3 +42,10 @@ BMO.Grid.prototype.removeElement = function(element){
 	}
 }
 
+BMO.Grid.prototype.isBlockable = function(){
+	for(var i = 0, e; e = this.elementList[i]; i++){
+		if(e.isBlockable)
+			return true;
+	}
+	return false;
+}

@@ -5,15 +5,17 @@ var BMO = window.BMO ? window.BMO : {};
 @construtor
 @param _grid (BMO.Grid)
 **/
-BMO.Element =function(_grid,_BMM){
+BMO.Element =function(_grid,_BMM,_wsClient){
 	try{
 		this.BMM = _BMM;
 		this.grid = _grid;
+		this.wsClient = _wsClient;
+		this.classname = "Element";
+		this.isBlockable = false;
 		this.X = 0;		//Model current X pos
 		this.Y = 0;		//Model current Y pos
 		this._X = 0;	//View current X pos
 		this._Y = 0;	//View current Y pos
-		this.classname = "Element";
 		this.view = null;
 		this.moveFunction = null;
 	}catch(e){throw(e);};
