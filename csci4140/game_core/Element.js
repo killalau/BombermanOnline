@@ -93,7 +93,7 @@ Element.prototype.moveStart = function(){
 			self.move(gy,gx);
 		};
 	}(), 30);
-	this.gClient.sendData();
+	//this.gClient.sendData();
 }
 
 Element.prototype.moveStop = function(){
