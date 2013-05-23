@@ -108,7 +108,7 @@ Element.prototype.increaseSpeed = function(num){
 }
 
 Element.prototype.vanish = function(){
-
+	this.grid.removeElement(this);
 }
 
 exports.Element = Element;

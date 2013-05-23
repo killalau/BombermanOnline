@@ -3,6 +3,7 @@ var Wall = require("./Wall");
 var Element = require("./Element");
 var Box = require("./Box");
 var BM = require("./BM");
+var Bomb = require("./Bomb");
 
 function BMM(server, room, mapConfig){
 	this.classname = "BMM";
@@ -175,6 +176,7 @@ BMM.prototype.plantBombValidation = function(x,y,id){
 				_out.bombNum = --_BM.bombNum;
 				_out.result = true;
 				//create bomb
+				new Bomb.Bomb(_grid,_BM);
 			}
 		}
 		return _out;
