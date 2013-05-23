@@ -8,7 +8,8 @@ function Fire(grid){
 }
 
 Fire.prototype.vanish = function(){
-	this.grid.removeElement(this);
+	//this.grid.removeElement(this);
+	Element.prototype.vanish.call(this);
 }
 
 exports.Fire = Fire;

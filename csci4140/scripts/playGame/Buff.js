@@ -2,9 +2,7 @@ var BMO = window.BMO ? window.BMO : {};
 
 BMO.Buff = function(_grid, _BMM, _wsClient){
 	try{
-	BMO.Element.call(this,_grid,_BMM);
-	//wsClient is useless in this class
-	this.wsClient = _wsClient;
+	BMO.Element.call(this,_grid,_BMM,_wsClient);
 	//this.classname = 'Buff';
 	this.classname = "BombPlusPlus";
 	this.ownerBM = null;

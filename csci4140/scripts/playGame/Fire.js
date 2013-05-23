@@ -8,10 +8,9 @@ var BMO = window.BMO ? window.BMO : {};
 @param _BMM: BMO.BMM
 @param _wsClient: BMO.BMM.wsClient
 **/
-BMO.Fire =function(_grid,_BMM,wsClient){
+BMO.Fire =function(_grid,_BMM,_wsClient){
 	try{
-	BMO.Element.call(this,_grid,_BMM);
-	this.wsClient = wsClient;
+	BMO.Element.call(this,_grid,_BMM,_wsClient);
 	this.classname = "Fire";
 	}catch(e){throw e;};
 }

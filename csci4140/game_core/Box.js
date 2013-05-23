@@ -13,7 +13,8 @@ function Box(grid, buffName){
 
 Box.prototype.vanish = function(){
 	var newBuff = Buff.Builder(this.grid, this.buff);
-	this.grid.removeElement(this);
+	//this.grid.removeElement(this);
+	Element.prototype.vanish.call(this);
 }
 
 exports.Box = Box;

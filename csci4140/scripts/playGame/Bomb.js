@@ -14,14 +14,15 @@ PS. this.view is special from other element
         IE. this.view.position = {x:48/2,y:48/2}
         while this.X = 0 && this.Y = 0 && this._X = 48/2 && this._Y = 48/2
 **/
-BMO.Bomb =function(_grid,_BMM,wsClient,_BM,_pow){
+BMO.Bomb =function(_grid,_BMM,_wsClient,_BM,_pow){
 	try{
-	BMO.Element.call(this,_grid,_BMM);
+	BMO.Element.call(this,_grid,_BMM,_wsClient);
 	this.classname = "Bomb";
-	this.wsClient = wsClient;
 	this.waitIndex = 0;
 	this.owner = _BM;
 	this.powerOfFire = _pow;
+	
+	this.isBlockable = true;
 	}catch(e){throw e;};
 }
 

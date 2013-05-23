@@ -8,16 +8,15 @@ var BMO = window.BMO ? window.BMO : {};
 @param _BMM: BMO.BMM
 @param _wsClient: BMO.BMM.wsClient
 **/
-BMO.BM =function(_grid,_BMM,wsClient){
+BMO.BM =function(_grid,_BMM,_wsClient){
 	try{
-		BMO.Element.call(this,_grid,_BMM);
+		BMO.Element.call(this,_grid,_BMM,_wsClient);
 		this.classname = "BM";
 		this.id = false;
 		this.viewPrefix = null;
 		this.speed = 4;
 		this.direction = "D";		
 		this.animationIndex = 0;
-		this.wsClient = wsClient;
 		
 		this.bombMax = 8;
 		this.powerMax = 8;
@@ -93,110 +92,104 @@ BMO.BM.prototype.move = function(dest_row,dest_col){
 		this.animationIndex++;	
 		this.animationIndex = this.animationIndex % 4	;
 		
-		var changeGrid = false;
+		var changeGridView = false;
+		var dest_grid = this.BMM.gridList[dest_row][dest_col];
 		
 		switch (this.direction){
 			case "U":
-				/*
-				this.Y -= this.speed;
-				if ( this.Y <= -24){
-					this.Y = 24;
-					this.BMM.gridList[dest_row][dest_col].view.addChild(this.view);
-					this.grid = this.BMM.gridList[dest_row][dest_col];
-				}*/
 				var oldY = this.Y;
 				this.Y -= this.speed;
 				if(this.Y <= -24){
+<<<<<<< HEAD
 					this.Y +=48;
 					//this.grid = this.BMM.gridList[dest_row][dest_col];
 					this.BMM.gridList[dest_row][dest_col].addElement(this);
 					this.checkBuffExist();//Andy
+=======
+					//this.Y +=48;
+					//this.BMM.gridList[dest_row][dest_col].addElement(this);
+					changeGrid(this, dest_grid, "Y", 1);
+>>>>>>> 1ceb1e7c4ba73a3a476c4003e18e6fca5591240d
 				}else if(this.Y <= 0 && oldY >0){
-					changeGrid = true;
+					changeGridView = true;
 				}
-				
 				break;
 			case "D":
-				/*
-				this.Y += this.speed;
-				if ( this.Y >= 24){
-					this.Y = -24;
-					this.BMM.gridList[dest_row][dest_col].view.addChild(this.view);
-					this.grid = this.BMM.gridList[dest_row][dest_col];
-				}
-				*/
 				var oldY = this.Y;
 				this.Y += this.speed;
 				if(this.Y >= 24){
-					this.Y -=48;
-					//this.grid = this.BMM.gridList[dest_row][dest_col];
-					this.BMM.gridList[dest_row][dest_col].addElement(this);
+					//this.Y -=48;
+					//this.BMM.gridList[dest_row][dest_col].addElement(this);
+					changeGrid(this, dest_grid, "Y", -1);
 				}else if(this.Y > 0 && oldY <=0){
-					changeGrid = true;
+					changeGridView = true;
 				}
 				break;
 			case "L":
-				/*
-				this.X -= this.speed;
-				if (this.X <= -24 ){
-					this.X = 24;
-					this.BMM.gridList[dest_row][dest_col].view.addChild(this.view);
-					this.grid = this.BMM.gridList[dest_row][dest_col];
-				}
-				*/
 				var oldX = this.X;
 				this.X -= this.speed;
 				if(this.X <= -24){
-					this.X +=48;
-					//this.grid = this.BMM.gridList[dest_row][dest_col];
-					this.BMM.gridList[dest_row][dest_col].addElement(this);
+					//this.X +=48;
+					//this.BMM.gridList[dest_row][dest_col].addElement(this);
+					changeGrid(this, dest_grid, "X", 1);
 				}else if(this.X <= 0 && oldX >0){
-					changeGrid = true;
+					changeGridView = true;
 				}
 				break;
 			case "R":
-				/*
-				this.X += this.speed;
-				if (this.X >= 24 ){
-					this.X = -24;
-					this.BMM.gridList[dest_row][dest_col].view.addChild(this.view);
-					this.grid = this.BMM.gridList[dest_row][dest_col];
-					//PIXI will remove the child from old grid automatically
-				}
-				*/
 				var oldX = this.X;
 				this.X += this.speed;
 				if(this.X >= 24){
-					this.X -=48;
-					//this.grid = this.BMM.gridList[dest_row][dest_col];
-					this.BMM.gridList[dest_row][dest_col].addElement(this);
+					//this.X -=48;
+					//this.BMM.gridList[dest_row][dest_col].addElement(this);
+					changeGrid(this, dest_grid, "X", -1);
 				}else if(this.X > 0 && oldX <=0){
-					changeGrid = true;
+					changeGridView = true;
 				}
-				break;		
+				break;
 		}
+		
+		function changeGrid(self, dest_gird, dir, v){
+			if(self.canMove(dest_grid)){
+				self[dir] += v * 48;
+				self.grid.removeElement(self);
+				dest_grid.addElement(self);
+			}else{
+				self[dir] += self.speed * v;
+			}
+		}
+		
 		var _id = this.viewPrefix + this.direction + this.animationIndex;
 		this.setView(_id);
-		/*
-		this.view.position.x = this.X;
-		this.view.position.y = this.Y;
-		*/
-		this.updateGridView();
+		this.updateGridView(changeGridView);	//update the view position, make sure it would not be chopped
 	}catch(e){throw e;};
 }
 
-BMO.BM.prototype.updateGridView = function(){
+BMO.BM.prototype.canMove = function(grid){
+	return !grid.isBlockable();
+}
+
+/* update the view position, make sure it would not be chopped
+ * the data model and view is seperated.
+ * 
+ * in data model: this.X / Y, range: -24 to 24
+ * in view:       this._X/_Y, range: 0 to -48
+ * 
+ * which means, when a element data model position is : grid[1][1].X = 1
+ * in the view it may represent as : gird[1][2]._X = -47
+ */
+BMO.BM.prototype.updateGridView = function(changeGridView){
 	this._X = this.X;
 	if(this._X > 0) this._X -= 48;
 	this._Y = this.Y;
 	if(this._Y > 0) this._Y -= 48;
-	//if(changeGrid == true){
+	if(changeGridView == true){
 		var gx = this.grid.X;
 		var gy = this.grid.Y;
 		if(this.X > 0) gx++;
 		if(this.Y > 0) gy++;
 		this.BMM.gridList[gy][gx].view.addChild(this.view);
-	//}
+	}
 	this.view.position.x = this._X;
 	this.view.position.y = this._Y;
 }

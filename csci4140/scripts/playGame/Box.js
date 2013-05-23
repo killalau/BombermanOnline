@@ -10,9 +10,9 @@ var BMO = window.BMO ? window.BMO : {};
 **/
 BMO.Box =function(_grid,_BMM,_wsClient){
 	try{
-	BMO.Element.call(this,_grid,_BMM);
-	this.wsClient = _wsClient;
+	BMO.Element.call(this,_grid,_BMM,_wsClient);
 	this.classname = "Box";
+	this.isBlockable = true;
 	}catch(e){throw e;};
 }
 
