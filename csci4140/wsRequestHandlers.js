@@ -961,13 +961,14 @@ function game_vanishBuff(data, gServer, gClient){//Andy
 	//if (targetBM !=
 	try{
 	var out = {
-			classname: 'fireplusplus', //classname: _in.classname,				
+			classname: 'BombPlusPlus', //classname: _in.classname, //AndyQ - to be changed				
 			//identify the buff by posiiton (x,y)
 			id: data.id,
 			payload: gClient.username
 			
 	}
-	gClient.sendData('game_broadcastvanishBuff',JSON.stringify(out));
+	gServer.roomList[gClient.room].broadcastData('game_broadcastvanishBuff',JSON.stringify(out));
+	//gClient.broadcastData('game_broadcastvanishBuff',JSON.stringify(out));
 	}catch(e){console.log(e);throw e;};
 }
 

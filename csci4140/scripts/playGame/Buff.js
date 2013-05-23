@@ -6,7 +6,7 @@ BMO.Buff = function(_grid, _BMM, _wsClient){
 	//wsClient is useless in this class
 	this.wsClient = _wsClient;
 	//this.classname = 'Buff';
-	this.classname = "fireplusplus";
+	this.classname = "BombPlusPlus";
 	this.ownerBM = null;
 	}catch(e){throw e;};
 }
@@ -25,6 +25,7 @@ BMO.Buff.prototype.setView = function(_id){
 }
 
 //@protected method applyBuff()
+//to apply the funciton of the buff to self BM
 BMO.Buff.prototype.applyBuff = function(targetBM){
 //applybuff
 //AndyQ - how to change myself's BM's property?
@@ -41,6 +42,7 @@ BMO.Buff.prototype.vanish = function(targetBM){
 		do nothing...
 	*/
 	try{
+	console.log('[Buff.vanish] vanish');
 	BMO.Element.prototype.vanish.call(self);
 	self.wsClient= null;
 	}catch(e){console.log(e);throw e;};

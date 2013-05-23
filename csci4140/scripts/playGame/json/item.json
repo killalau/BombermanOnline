@@ -1,7 +1,7 @@
 {"frames": {
 
 
-"bombplusplus":
+"BombPlusPlus":
 {
 	"frame": {"x":0,"y":0,"w":48,"h":48},
 	"trimmed": false
@@ -16,7 +16,7 @@
 	"frame": {"x":96,"y":0,"w":48,"h":48},
 	"trimmed": false
 },
-"fireplusplus":
+"FirePlusPlus":
 {
 	"frame": {"x":0,"y":48,"w":48,"h":48},
 	"trimmed": false
@@ -31,7 +31,7 @@
 	"frame": {"x":96,"y":48,"w":48,"h":48},
 	"trimmed": false
 },
-"speedplusplus":
+"SpeedPlusPlus":
 {
 	"frame": {"x":0,"y":96,"w":48,"h":48},
 	"trimmed": false

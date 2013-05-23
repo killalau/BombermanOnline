@@ -26,10 +26,11 @@
 	//value means the probability
 	//value sum = 1
 	"buff" : {
+		//this is cumulative according to /gameCore/BMM.js
 		"BombPlusPlus" : 0.2,
-		"FirePlusPlus" : 0.2,
-		"SpeedPlusPlus" : 0.2,
-		"None" : 0.4
+		"FirePlusPlus" : 0.4,
+		"SpeedPlusPlus" : 0.6,
+		"None" : 1
 	},
 	
 	//probability of box

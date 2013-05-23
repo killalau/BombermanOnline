@@ -110,6 +110,7 @@ BMO.BM.prototype.move = function(dest_row,dest_col){
 					this.Y +=48;
 					//this.grid = this.BMM.gridList[dest_row][dest_col];
 					this.BMM.gridList[dest_row][dest_col].addElement(this);
+					this.checkBuffExist();//Andy
 				}else if(this.Y <= 0 && oldY >0){
 					changeGrid = true;
 				}
@@ -198,6 +199,36 @@ BMO.BM.prototype.updateGridView = function(){
 	//}
 	this.view.position.x = this._X;
 	this.view.position.y = this._Y;
+}
+
+/*
+@private method checkBuffExist
+**/
+BMO.BM.prototype.checkBuffExist = function(){//Andy
+	var elementList = this.grid.elementList;
+	var len = elementList.length;
+	console.log('[BM.checkBuffExist]');
+	for (var i = 0; i < len; i++){
+		var classname = elementList[i].classname;
+		if ((classname == 'BombPlusPlus') || (classname == 'FirePlusPlus') || (classname == 'SpeedPlusPlus')){
+			this.requestVanishBuff(classname);
+			break;//assuming only one buff per grid
+		}
+	}
+}
+
+/*
+@private method requestVanishBuff
+**/
+BMO.BM.prototype.requestVanishBuff = function(classname){//Andy
+	//data : {id:{x:x,y:y}, classname:<buffClassName>}
+	console.log('[BM.requestVanishBuff]');
+	var req = {
+		'id':{	'x':this.X,
+				'y':this.Y},
+		'classname': className
+	};
+	this.wsClient.sendData("game_vanishBuff",req);
 }
 
 /*

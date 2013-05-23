@@ -113,7 +113,7 @@ BMO.BMM.prototype.setPlayer = function(data){
 **/
 BMO.BMM.prototype.setMap = function(data){
 	try{
-	//console.log("setMap");
+	console.log("setMap");
 	var self = this;
 	self.width = data.width;
 	self.height = data.height;	
@@ -130,6 +130,7 @@ BMO.BMM.prototype.setMap = function(data){
 	
 	//initialize wall, box
 	if(data.gameState && data.gameState[0] >= 3){
+		console.log('set wall set box');
 		for(var i = 0, e; e = data.elements[i]; i++){
 			var _grid = this.gridList[e.pos.y][e.pos.x];
 			switch(e.classname){
@@ -149,6 +150,10 @@ BMO.BMM.prototype.setMap = function(data){
 			//TO-DO
 			break;
 			case "BombPlusPlus":
+				var _bombPP = new BMO.Buff(_grid,this,this.wsClient);//AndyQ - to be changed BMO.Buff->BMO.BombPlusPlus
+				_bombPP.setView("BombPlusPlus");							
+				_grid.addElement(_bombPP);
+				_grid.view.addChild(_bombPP.view);
 			//TO-DO
 			break;
 			case "FirePlusPlus":
@@ -173,7 +178,7 @@ BMO.BMM.prototype.setMap = function(data){
 **/
 BMO.BMM.prototype.setWall = function(data){
 	try{
-	//console.log("setWall");
+	console.log("setWall");
 	if(data.default){
 		for(var i = 0; i < this.height; i++){
 			for(var j =0; j < this.width; j++){
@@ -218,16 +223,16 @@ BMO.BMM.prototype.setWall = function(data){
 **/
 BMO.BMM.prototype.setBuff = function(data){//Andy
 	try{
-		//console.log("setBuff");
+		console.log("setBuff");
 		if(data.default){
 		//default position for planting buff
 			for(var i = 0; i < this.height; i++){
 				for(var j =0; j < this.width; j++){
 					var _grid = this.gridList[i][j];
 					
-					if ( i == 1 && j == 3){
+					if ( i == 1 && j == 2){
 						var _buff = new BMO.Buff(_grid,this,this.wsClient);
-						_buff.setView("fireplusplus");							
+						_buff.setView("BombPlusPlus");							
 						_grid.addElement(_buff);
 						_grid.view.addChild(_buff.view);
 						//_grid.view.addChild(PIXI.Sprite.fromFrame("box"));
@@ -418,17 +423,17 @@ BMO.BMM.prototype.broadcastExplodeBomb =function(data,wsClient){
 /*
 @private method broadcastExplodeBomb
 @param data: {
-		classname : 'firepluss' or 'speedplusplus' or 'bombplusplus',
+		classname : 'firepluss' or 'SpeedPlusPlus' or 'BombPlusPlus',
 		id: "username" / {x:x ,y:y},
-		payload: '<targer BM>'
+		payload: '<target BM which get the buff>'
 	}
 @param wsClient: wsClient
 **/
 BMO.BMM.prototype.broadcastVanishBuff = function(data,wsClient){//Andy
 	try{
 		var _in = JSON.parse(data);
-		
-		if(_in.classname == "fireplusplus" || _in.classname == "speedplusplus" || _in.classname == "bombplusplus"){
+		console.log('[broadcastVanishBuff] receive vanish buff msg from server');
+		if(_in.classname == "FirePlusPlus" || _in.classname == "SpeedPlusPlus" || _in.classname == "BombPlusPlus"){
 				var _grid = this.gridList[_in.id.y][_in.id.x];
 				var element;
 				for(var i =0;i<_grid.elementList.length;i++){

@@ -21,6 +21,7 @@ BombPlusPlus.prototype = new Buff();
 BombPlusPlus.prototype.constructor = BombPlusPlus;
 function BombPlusPlus(grid, buff){
 	Buff.call(this, grid, buff);
+	this.classname = 'BombPlusPlus';//Andy
 }
 
 BombPlusPlus.prototype.applyBuff = function(BM){

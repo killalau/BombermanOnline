@@ -4,6 +4,8 @@ var Element = require("./Element");
 var Box = require("./Box");
 var BM = require("./BM");
 
+var Buff = require('./Buff');//AndyQ - for testing
+
 function BMM(server, room, mapConfig){
 	this.classname = "BMM";
 	this.server = server;
@@ -110,6 +112,19 @@ BMM.prototype.setMap = function(){
 					//_grid.addElement( new Box.Box(_grid, buff));
 					new Box.Box(_grid, buff);
 				}
+				break;
+			case "N"://Buff(bombpp, fire, speedpp) //AndyQ - only for testing, shud be intergrated in 'Box'
+				var rand = Math.random();
+				rand = 0;//fixed for BombPlusPlus
+				for(var key in _buffList){
+					if(rand < _buffList[key]){
+						buff = key;
+						break;
+					}
+				}
+				//_grid.addElement( new Box.Box(_grid, buff));
+				new Buff.BombPlusPlus(grid, buff);
+				Buff.Builder(_grid, 'BombPlusPlus');
 				break;
 			default://space
 				break;

@@ -32,7 +32,16 @@ webSocket.createConnection = function(url, handlers, username, session){
 	ws.onerror = function(error){
 		alert(error);
 	};
-
+	
+	/*
+	var msg = {
+				username: client.username,
+				requestTimestamp : client.requestTimestamp,
+				serverTimestamp : stime,
+				type: type,
+				data: data
+			};
+	*/
 	// Response to websocket message
 	ws.onmessage = function(message){
 		try{
