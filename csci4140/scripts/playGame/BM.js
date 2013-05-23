@@ -268,8 +268,7 @@ BMO.BM.prototype.eventProcesser = function(e){
 			}else self.stopMove(self);
 		}
 	}else if( e.type === "otherPlayerMove"){
-		self.setDirection(e.payload.dir);
-		self.startMove(self);
+		self.startMove(e.payload.dir);
 	}else if( e.type === "otherPlayerStopMove"){
 		self.BMM.gridList[e.payload.grid.y][e.payload.grid.x].addElement(self);
 		self.X = Math.round(e.payload.pos.x * 48);
