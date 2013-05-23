@@ -100,16 +100,13 @@ BMO.BM.prototype.move = function(dest_row,dest_col){
 				var oldY = this.Y;
 				this.Y -= this.speed;
 				if(this.Y <= -24){
-<<<<<<< HEAD
 					this.Y +=48;
 					//this.grid = this.BMM.gridList[dest_row][dest_col];
 					this.BMM.gridList[dest_row][dest_col].addElement(this);
 					this.checkBuffExist();//Andy
-=======
 					//this.Y +=48;
 					//this.BMM.gridList[dest_row][dest_col].addElement(this);
 					changeGrid(this, dest_grid, "Y", 1);
->>>>>>> 1ceb1e7c4ba73a3a476c4003e18e6fca5591240d
 				}else if(this.Y <= 0 && oldY >0){
 					changeGridView = true;
 				}
