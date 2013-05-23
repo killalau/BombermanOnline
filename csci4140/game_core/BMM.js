@@ -115,17 +115,17 @@ BMM.prototype.setMap = function(){
 				}
 				break;
 			case "N"://Buff(bombpp, fire, speedpp) //AndyQ - only for testing, shud be intergrated in 'Box'
+				console.log('[BMM] setMap: N');
 				var rand = Math.random();
 				rand = 0;//fixed for BombPlusPlus
-				for(var key in _buffList){
+				for(var key in _buffList){					
 					if(rand < _buffList[key]){
 						buff = key;
+						Buff.Builder(_grid, 'BombPlusPlus');
 						break;
 					}
 				}
-				//_grid.addElement( new Box.Box(_grid, buff));
-				new Buff.BombPlusPlus(grid, buff);
-				Buff.Builder(_grid, 'BombPlusPlus');
+				
 				break;
 			default://space
 				break;
