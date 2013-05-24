@@ -320,6 +320,8 @@ BMO.BM.prototype.eventProcesser = function(e){
 		self.updateGridView();
 	}else if( e.type === "plantBomb"){
 		self.plantBomb(e.payload);
+	}else if(e.type === "vanish"){
+		self.vanish();
 	}
 }
 
