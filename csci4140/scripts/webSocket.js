@@ -34,7 +34,7 @@ webSocket.createConnection = function(url, handlers, username, session){
 	};
 	
 	/*
-	var msg = {
+	var message.data = {
 				username: client.username,
 				requestTimestamp : client.requestTimestamp,
 				serverTimestamp : stime,

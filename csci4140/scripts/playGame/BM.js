@@ -119,12 +119,13 @@ BMO.BM.prototype.move = function(dest_row,dest_col){
 		var dest_grid = this.BMM.gridList[dest_row][dest_col];
 		
 		switch (this.direction){
-			case "U":
+			case "U":				
 				var oldY = this.Y;
 				this.Y -= this.speed;
-				if(this.Y <= -24){
-					this.checkBuffExist();//Andy
+				if(this.Y <= -24){					
 					changeGrid(this, dest_grid, "Y", 1);
+					this.checkBuffExist();//Andy
+					console.log('[BM] X:'+this.grid.X+' Y:'+this.grid.Y);
 				}else if(this.Y <= 0 && oldY >0){
 					changeGridView = true;
 				}
@@ -134,15 +135,19 @@ BMO.BM.prototype.move = function(dest_row,dest_col){
 				this.Y += this.speed;
 				if(this.Y > 24){
 					changeGrid(this, dest_grid, "Y", -1);
+					this.checkBuffExist();//Andy
+					console.log('[BM] X:'+this.grid.X+' Y:'+this.grid.Y);
 				}else if(this.Y > 0 && oldY <=0){
 					changeGridView = true;
 				}
 				break;
-			case "L":
+			case "L":			
 				var oldX = this.X;
 				this.X -= this.speed;
 				if(this.X <= -24){
 					changeGrid(this, dest_grid, "X", 1);
+					this.checkBuffExist();//Andy
+					console.log('[BM] X:'+this.grid.X+' Y:'+this.grid.Y);
 				}else if(this.X <= 0 && oldX >0){
 					changeGridView = true;
 				}
@@ -152,6 +157,8 @@ BMO.BM.prototype.move = function(dest_row,dest_col){
 				this.X += this.speed;
 				if(this.X > 24){
 					changeGrid(this, dest_grid, "X", -1);
+					this.checkBuffExist();//Andy
+					console.log('[BM] X:'+this.grid.X+' Y:'+this.grid.Y);
 				}else if(this.X > 0 && oldX <=0){
 					changeGridView = true;
 				}
@@ -224,13 +231,13 @@ BMO.BM.prototype.checkBuffExist = function(){//Andy
 **/
 BMO.BM.prototype.requestVanishBuff = function(classname){//Andy
 	//data : {id:{x:x,y:y}, classname:<buffClassName>}
-	console.log('[BM.requestVanishBuff]');
+	console.log('[BM.requestVanishBuff] To vanish:'+classname+' At X:'+this.grid.X+' Y:'+this.grid.Y);
 	var req = {
-		'id':{	'x':this.X,
-				'y':this.Y},
-		'classname': className
+		'id':{	'x':this.grid.X,
+				'y':this.grid.Y},
+		'classname': classname
 	};
-	this.wsClient.sendData("game_vanishBuff",req);
+	this.wsClient.sendData("game_vanishBuff",JSON.stringify(req));
 }
 
 /*
