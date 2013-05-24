@@ -126,7 +126,9 @@ BMM.prototype.setMap = function(){
 						break;
 					}
 				}
-				
+				console.log('[BMM] _grid.elementList:');
+				console.log(_grid.elementList);
+				console.log('[BMM] grid.position (x:'+_grid.position.x+' y:'+_grid.position.y);
 				break;
 			default://space
 				break;
