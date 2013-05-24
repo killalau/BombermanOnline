@@ -32,12 +32,21 @@ BMO.BM =function(_grid,_BMM,_wsClient){
 BMO.BM.construtor = BMO.BM;
 BMO.BM.prototype = Object.create( BMO.Element.prototype );
 
+BMO.BM.dirKey = [];
 /*
 @private method startMove
 @param self: BMO.BM
 **/
 BMO.BM.prototype.startMove = function(dir){
 	var self = this;
+	
+	var index = BMO.BM.dirKey.indexOf(dir);
+	if(index == -1){
+		BMO.BM.dirKey.push(dir);
+	}else{
+		return;
+	}
+	
 	if(self.moveFunction == null || dir != self.direction){
 		self.setDirection(dir);
 		if(self.id == self.wsClient.username){
@@ -74,12 +83,26 @@ BMO.BM.prototype.startMove = function(dir){
 @private method stopMove
 @param self: BMO.BM
 **/
-BMO.BM.prototype.stopMove = function(self){
-	clearInterval(self.moveFunction);
-	self.moveFunction = null;
+BMO.BM.prototype.stopMove = function(dir){
+	if(!dir){
+		clearInterval(this.moveFunction);
+		this.moveFunction = null;
+	}else{
+		var index = BMO.BM.dirKey.indexOf(dir);
+		if(index != -1){
+			BMO.BM.dirKey.splice(index, 1);
+			if(BMO.BM.dirKey.length == 0){
+				clearInterval(this.moveFunction);
+				this.moveFunction = null;
+				this.wsClient.sendData("game_playerStopMove", true);
+			}
+		}
+	}
+	/*
 	if(self.id == self.wsClient.username){
 		self.wsClient.sendData("game_playerStopMove", true);
 	}
+	*/
 }
 
 /*
@@ -109,7 +132,7 @@ BMO.BM.prototype.move = function(dest_row,dest_col){
 			case "D":
 				var oldY = this.Y;
 				this.Y += this.speed;
-				if(this.Y >= 24){
+				if(this.Y > 24){
 					changeGrid(this, dest_grid, "Y", -1);
 				}else if(this.Y > 0 && oldY <=0){
 					changeGridView = true;
@@ -127,7 +150,7 @@ BMO.BM.prototype.move = function(dest_row,dest_col){
 			case "R":
 				var oldX = this.X;
 				this.X += this.speed;
-				if(this.X >= 24){
+				if(this.X > 24){
 					changeGrid(this, dest_grid, "X", -1);
 				}else if(this.X > 0 && oldX <=0){
 					changeGridView = true;
@@ -169,13 +192,13 @@ BMO.BM.prototype.updateGridView = function(changeGridView){
 	if(this._X > 0) this._X -= 48;
 	this._Y = this.Y;
 	if(this._Y > 0) this._Y -= 48;
-	if(changeGridView == true){
+	//if(changeGridView == true){
 		var gx = this.grid.X;
 		var gy = this.grid.Y;
 		if(this.X > 0) gx++;
 		if(this.Y > 0) gy++;
 		this.BMM.gridList[gy][gx].view.addChild(this.view);
-	}
+	//}
 	this.view.position.x = this._X;
 	this.view.position.y = this._Y;
 }
@@ -271,12 +294,17 @@ BMO.BM.prototype.eventProcesser = function(e){
 			else return;
 		}catch(err){throw err;};			
 	}else if( e.type === "keyup"){
+		/*
 		if (e.keyCode == 40 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 37){
 			if (e.keyIdentifier.substr(0,1) !== self.direction){ 
 				e.type = "keydown";
 				self.eventProcesser(e);
 			}else self.stopMove(self);
-		}
+		}*/
+		if (e.keyCode == 40 ) self.stopMove("D");
+		else if(e.keyCode == 38) self.stopMove("U");
+		else if(e.keyCode == 37) self.stopMove("L");
+		else if(e.keyCode == 39) self.stopMove("R");
 	}else if( e.type === "otherPlayerMove"){
 		self.startMove(e.payload.dir);
 	}else if( e.type === "otherPlayerStopMove"){
@@ -284,7 +312,7 @@ BMO.BM.prototype.eventProcesser = function(e){
 		self.X = Math.round(e.payload.pos.x * 48);
 		self.Y = Math.round(e.payload.pos.y * 48);
 		self.updateGridView();
-		self.stopMove(self);
+		self.stopMove();
 	}else if( e.type === "thisPlayerStopMove"){
 		self.BMM.gridList[e.payload.grid.y][e.payload.grid.x].addElement(self);
 		self.X = Math.round(e.payload.pos.x * 48);

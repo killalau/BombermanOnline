@@ -10,6 +10,6 @@ function Wall(grid){
 }
 
 //Override
-Fire.prototype.vanish = function(){}
+Wall.prototype.vanish = function(){}
 
 exports.Wall = Wall;
