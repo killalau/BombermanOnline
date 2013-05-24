@@ -42,3 +42,18 @@ BMO.Fire.prototype.vanish = function(){
         this.wsClient= null;
         }catch(e){console.log(e);throw e;};
 }
+
+/*
+@public method eventProcesser
+@param event: event object
+		var event ={
+			type: "",
+			payload: ""
+		}
+**/
+BMO.Fire.prototype.eventProcesser = function(event){
+	if (event.type === "vanish"){
+		//console.log("Bomb.explode:",event);
+		this.vanish();
+	}
+}

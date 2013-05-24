@@ -64,51 +64,59 @@ BMO.Bomb.prototype.setView = function(_id){
                 U:{},
                 D:{},
                 L:{},
-                R:{}
+                R:{},
+				C:{}
         }
 **/
 BMO.Bomb.prototype.explode = function(payload){
 	try{
 	console.log("Bomb.explode():payload=",payload);
-	var _fire; 
-	var _grid;
+	var self = this;
+	var placeFire = function(_direction){
+		var _fire; 
+		var _grid;
+		if ( _direction === "U" ){	
+				_grid = self.BMM.gridList[self.grid.Y-1-i][self.grid.X];
+				_fire = new BMO.Fire(_grid,self.BMM,self.wsClient);
+				if (i != (payload[_direction].length -1 )) _fire.setView("fire_v");
+				else _fire.setView("fire_u");
+		}else if (_direction === "D" ){
+				_grid = self.BMM.gridList[self.grid.Y+1+i][self.grid.X];
+				_fire = new BMO.Fire(_grid,self.BMM,self.wsClient);
+				if (i != (payload[_direction].length -1 )) _fire.setView("fire_v");
+				else _fire.setView("fire_d");
+		}else if (_direction === "L" ){
+				_grid = self.BMM.gridList[self.grid.Y][self.grid.X-1-i];
+				_fire = new BMO.Fire(_grid,self.BMM,self.wsClient);
+				if (i != (payload[_direction].length -1 )) _fire.setView("fire_h");
+				else _fire.setView("fire_l");
+		}else if (_direction === "R" ){
+				_grid = self.BMM.gridList[self.grid.Y][self.grid.X+1+i];
+				_fire = new BMO.Fire(_grid,self.BMM,self.wsClient);
+				if (i != (payload[_direction].length -1 )) _fire.setView("fire_h");
+				else _fire.setView("fire_r");
+		}else if (_direction === "C" ){
+				_fire = new BMO.Fire(self.grid,self.BMM,self.wsClient); 
+				_grid = self.grid;
+				_fire.setView("fire_c");					
+		}
+		_grid.addElement(_fire);
+		_grid.view.addChild(_fire.view);
+	};
 	for(var _direction in payload){
 		//console.log("Bomb.explode()._dir=",_direction);
 		for(var i =0;i<payload[_direction].length;i++){
-			if(payload[_direction][i] == null){
-			if ( _direction === "U" ){
-					_grid = this.BMM.gridList[this.grid.Y-1-i][this.grid.X];
-					_fire = new BMO.Fire(_grid,this.BMM,this.wsClient);
-					if (i != (payload[_direction].length -1 )) _fire.setView("fire_v");
-					else _fire.setView("fire_u");
-			}else if (_direction === "D" ){
-					_grid = this.BMM.gridList[this.grid.Y+1+i][this.grid.X];
-					_fire = new BMO.Fire(_grid,this.BMM,this.wsClient);
-					if (i != (payload[_direction].length -1 )) _fire.setView("fire_v");
-					else _fire.setView("fire_d");
-			}else if (_direction === "L" ){
-					_grid = this.BMM.gridList[this.grid.Y][this.grid.X-1-i];
-					_fire = new BMO.Fire(_grid,this.BMM,this.wsClient);
-					if (i != (payload[_direction].length -1 )) _fire.setView("fire_h");
-					else _fire.setView("fire_l");
-			}else if (_direction === "R" ){
-					_grid = this.BMM.gridList[this.grid.Y][this.grid.X+1+i];
-					_fire = new BMO.Fire(_grid,this.BMM,this.wsClient);
-					if (i != (payload[_direction].length -1 )) _fire.setView("fire_h");
-					else _fire.setView("fire_r");
-			}else if (_direction === "C" ){
-					_fire = new BMO.Fire(this.grid,this.BMM,this.wsClient); 
-					_grid = this.grid;
-					_fire.setView("fire_c");					
-			}
-			_grid.addElement(_fire);
-			_grid.view.addChild(_fire.view);
-			}
+			placeFire(_direction);
+			if(payload[_direction][i] !== null){
+				//{type:"Box",extra:_object.buff}
+				//{type:"Buff",extra:null}
+				//{type:"BM",extra:idList}				
+			}			
 		}
 
 	}
 	if (this.owner.alive) this.owner.bombNum++;
-	this.vanish();
+	this.eventProcesser({type:"vanish",payload:null});
 	}catch(e){console.log(e);throw e;};
 }
 
@@ -140,5 +148,7 @@ BMO.Bomb.prototype.eventProcesser = function(event){
 	if (event.type === "explode"){
 		//console.log("Bomb.explode:",event);
 		this.explode(event.payload);
+	}else if (event.type === "vanish"){
+		this.vanish();
 	}
 }
