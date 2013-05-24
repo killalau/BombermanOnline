@@ -100,12 +100,7 @@ BMO.BM.prototype.move = function(dest_row,dest_col){
 				var oldY = this.Y;
 				this.Y -= this.speed;
 				if(this.Y <= -24){
-					this.Y +=48;
-					//this.grid = this.BMM.gridList[dest_row][dest_col];
-					this.BMM.gridList[dest_row][dest_col].addElement(this);
 					this.checkBuffExist();//Andy
-					//this.Y +=48;
-					//this.BMM.gridList[dest_row][dest_col].addElement(this);
 					changeGrid(this, dest_grid, "Y", 1);
 				}else if(this.Y <= 0 && oldY >0){
 					changeGridView = true;
@@ -115,8 +110,6 @@ BMO.BM.prototype.move = function(dest_row,dest_col){
 				var oldY = this.Y;
 				this.Y += this.speed;
 				if(this.Y >= 24){
-					//this.Y -=48;
-					//this.BMM.gridList[dest_row][dest_col].addElement(this);
 					changeGrid(this, dest_grid, "Y", -1);
 				}else if(this.Y > 0 && oldY <=0){
 					changeGridView = true;
@@ -126,8 +119,6 @@ BMO.BM.prototype.move = function(dest_row,dest_col){
 				var oldX = this.X;
 				this.X -= this.speed;
 				if(this.X <= -24){
-					//this.X +=48;
-					//this.BMM.gridList[dest_row][dest_col].addElement(this);
 					changeGrid(this, dest_grid, "X", 1);
 				}else if(this.X <= 0 && oldX >0){
 					changeGridView = true;
@@ -137,8 +128,6 @@ BMO.BM.prototype.move = function(dest_row,dest_col){
 				var oldX = this.X;
 				this.X += this.speed;
 				if(this.X >= 24){
-					//this.X -=48;
-					//this.BMM.gridList[dest_row][dest_col].addElement(this);
 					changeGrid(this, dest_grid, "X", -1);
 				}else if(this.X > 0 && oldX <=0){
 					changeGridView = true;

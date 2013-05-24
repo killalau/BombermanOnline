@@ -7,9 +7,4 @@ function Fire(grid){
 	this.classname = "Fire";
 }
 
-Fire.prototype.vanish = function(){
-	//this.grid.removeElement(this);
-	Element.prototype.vanish.call(this);
-}
-
 exports.Fire = Fire;

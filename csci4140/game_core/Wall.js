@@ -9,4 +9,7 @@ function Wall(grid){
 	this.isBlockable = true;
 }
 
+//Override
+Fire.prototype.vanish = function(){}
+
 exports.Wall = Wall;

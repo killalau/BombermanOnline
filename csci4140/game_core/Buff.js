@@ -9,10 +9,6 @@ function Buff(grid, buff){
 	this.buff = buff;
 }
 
-Buff.prototype.vanish = function(){
-	this.grid.removeElement(this);
-}
-
 Buff.prototype.applyBuff = function(BM){
 
 }

@@ -41,7 +41,6 @@ Bomb.prototype.destroyRule = function(_grid){
 }
 
 Bomb.prototype.vanish = function(){
-	//this.grid.removeElement(this);
 	var y = this.grid.position.y;
 	var x = this.grid.position.x;
 	var y0 = this.grid.position.y-this.powerOfFire;

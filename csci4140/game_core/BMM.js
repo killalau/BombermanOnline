@@ -68,6 +68,7 @@ BMM.prototype.setMap = function(){
 	var map = this.mapConfig.map;
 	
 	/* Create items' cumulative probability
+	 * original = { "item0" : 0.1, "item1" : 0.4, "None" : 0.5}
 	 * _buffList = { "item0" : 0.1, "item1" : 0.5, "None" : 1}
 	 */
 	var _buffList = {};
