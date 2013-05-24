@@ -22,7 +22,7 @@ function init(e){
 
 }
 
-function AddEventListenter(handlers, wsClient) {	
+function AddEventListenter(handlers, wsClient) {
 	wsClient.sendData("host_update",JSON.stringify(null));
 	wsClient.sendData("seat_update", JSON.stringify(null));
 	
@@ -47,90 +47,42 @@ function AddEventListenter(handlers, wsClient) {
 		
 		handlers["seat_update_ACK"] = function(data, wsClient) {
 			var message = JSON.parse(data);
-			
-			for(var i=1;i<=4;i++){
-				var player_div = document.getElementById("player" +i);
-				player_div.innerHTML = "";
-			}
-			for(var i=0;i<message.length;i++){
-				var playernum = message[i][1] + 1;
-				var player_div = document.getElementById("player"+ playernum);
-				
-				var inner_img = document.createElement('img');
-				inner_img.setAttribute("id", "p1_img");
-				inner_img.setAttribute("class", "player_img");
-				inner_img.setAttribute("title", message[i][0]);
-				
-				
-				if(message[i][2]) {
-					var img_path = "../icon/" + message[i][0];
-				}
-				else{
-					var img_path = "../images/default.jpg";
-				}
-				
-				inner_img.setAttribute("src", img_path);
-				player_div.appendChild(inner_img);
-			}
-
+			web_update(message);
 		}
 		
 		//Only Host receive this message
 		handlers["H_seat_update_ACK"] = function(data, wsClient) {
 			try{
 				var message = JSON.parse(data);
-				//console.log(message);
-				for(var i=1;i<=4;i++){
-					var player_div = document.getElementById("player" +i);
-					player_div.innerHTML = "";
-				}
-				for(var i=0;i<message.length;i++){
-					var playernum = message[i][1] + 1;
-					//console.log("playernum " + playernum);
-					var player_div = document.getElementById("player"+ playernum);
-					
-					//create the profile fic
-					var inner_img = document.createElement('img');
-					inner_img.setAttribute("id", "p1_img");
-					inner_img.setAttribute("class", "player_img");
-					inner_img.setAttribute("title", message[i][0]);
-					
-					if(message[i][2]) {
-						var img_path = "../icon/" + message[i][0];
-					}
-					else{
-						var img_path = "../images/default.jpg";
-					}
-					
-					//console.log(img_path);
-					inner_img.setAttribute("src", img_path);
-					player_div.appendChild(inner_img);
-					
-					//console.log(wsClient.username + " " + message[i][0]);
-					
+				web_update(message);
+
+			
 					//create the cross
-					if(!(message[i][0] == wsClient.username)) {
-						var cross_img = document.createElement('img');
-						//console.log(wsClient.username);
-						cross_img.setAttribute("id", "cross"+playernum);
-						cross_img.setAttribute("class", "cross");
-						cross_img.setAttribute("src", "../images/cross.png");
-						//setAttributes(cross_img, {"id": "cross" + playernumm, "class": "cross", "src": "../images/cross.png"});
-						player_div.appendChild(cross_img);
-						cross_img.addEventListener("click",function(e) {
-							e.stopPropagation();
-							e.preventDefault();
-							var string = e.currentTarget.getAttribute("id").substring(5);
-							var i = string - 1;
-							var k_user = message[i][0];
-							var json = {
-								username : k_user,
-							};
-	
-							wsClient.sendData("kick_your_ass", JSON.stringify(json));
-						} ,false);
-					}			
-				}
+					for(var i=0;i<message.length;i++){
+						var playernum = message[i][1] + 1;
+						if(!(message[i][0] == wsClient.username)) {
+							var cross_img = document.createElement('img');
+							//console.log(wsClient.username);
+							cross_img.setAttribute("id", "cross"+playernum);
+							cross_img.setAttribute("class", "cross");
+							cross_img.setAttribute("src", "../images/cross.png");
+							//setAttributes(cross_img, {"id": "cross" + playernumm, "class": "cross", "src": "../images/cross.png"});
+							player_div.appendChild(cross_img);
+							cross_img.addEventListener("click",function(e) {
+								e.stopPropagation();
+								e.preventDefault();
+								var string = e.currentTarget.getAttribute("id").substring(5);
+								var i = string - 1;
+								var k_user = message[i][0];
+								var json = {
+									username : k_user,
+								};
+		
+								wsClient.sendData("kick_your_ass", JSON.stringify(json));
+							} ,false);
+						}	
+					}					
+				
 				//modify state button event
 				var inner_div = document.getElementById("second_div");
 				var state_button = document.getElementById("State");
@@ -143,7 +95,7 @@ function AddEventListenter(handlers, wsClient) {
 				
 			}
 			catch(e){
-					alert("error: " + e);
+					alert("H_seat_update_ACK_error: " + e);
 			};
 	
 		}
@@ -179,7 +131,7 @@ function AddEventListenter(handlers, wsClient) {
 					alert("Someone left or unknow problem");	
 				}
 				else{
-					document.location.pathname = "/playGame.html";
+					wsClient.sendData("room_newGame", true);
 				}
 			}
 			catch(e){
@@ -229,5 +181,34 @@ function AddEventListenter(handlers, wsClient) {
 	state_change(handlers, wsClient);
 	}, false);
 
+}
+
+
+//update icon and player
+function web_update(message, host){	
+	for(var i=1;i<=4;i++){
+		var player_div = document.getElementById("player" +i);
+		player_div.innerHTML = "";
+	}
+	for(var i=0;i<message.length;i++){
+		var playernum = message[i][1] + 1;
+		var player_div = document.getElementById("player"+ playernum);
+		
+		var inner_img = document.createElement('img');
+		inner_img.setAttribute("id", "p1_img");
+		inner_img.setAttribute("class", "player_img");
+		inner_img.setAttribute("title", message[i][0]);
+		
+		
+		if(message[i][2]) {
+			var img_path = "../icon/" + message[i][0];
+		}
+		else{
+			var img_path = "../images/default.jpg";
+		}
+		
+		inner_img.setAttribute("src", img_path);
+		player_div.appendChild(inner_img);
+	}
 }
 

@@ -293,7 +293,6 @@ function joinRoom(data,gServer,gClient){
 		};
 		//console.log("bufRm="+bufRm);
 					
-
 		if (_result){
 			//console.log(gServer.roomList[bufRm].clientList);
 			
@@ -531,6 +530,7 @@ function host_update(data, gServer, gClient){
 };
 
 function seat_update(data, gServer, gClient){
+	var message = JSON.parse(data); 
 	var clientRm = gClient.room;
 	//console.log(gServer.roomList[clientRm].clientList[0]);
 	var reply = [];
@@ -548,6 +548,8 @@ function seat_update(data, gServer, gClient){
 		reply[i].push(username);
 		reply[i].push(gServer.roomList[clientRm].clientList[i].seat);
 		reply[i].push(havepic);
+		//reply[i].push(gServer.roomList[clientRm].clientList[i].ping);
+
 	}
 	//console.log(reply);
 	var room = gServer.roomList[clientRm];
@@ -569,11 +571,13 @@ function seat_maintain(gServer, gClient, rmnum){
 		catch(e){
 			havepic = false;
 		}
-		
+		//console.log("dfdfdf"+gServer.roomList[rmnum].clientList[i].ping);
 		reply[i] = [];
 		reply[i].push(username);
 		reply[i].push(gServer.roomList[rmnum].clientList[i].seat);	
 		reply[i].push(havepic);		//this is to tell client the user have profile or not
+		//reply[i].push(gServer.roomList[rmnum].clientList[i].ping);
+
 	}
 	//console.log(reply);
 	var room = gServer.roomList[rmnum];
@@ -624,9 +628,9 @@ try{
 	//console.log(room);
 	
 	
-	if(room.clientList.length == 4) {
+	if(room.clientList.length > 1) {
 		var flag = true;
-		for(var i = 0; i<4;i++)
+		for(var i = 0; i<room.clientList.length;i++)
 		{
 			if(!room.clientList[i].isReady)
 			{
@@ -656,7 +660,7 @@ function GameClickStart(data, gServer, gClient) {
 	try{
 		var room = gServer.roomList[gClient.room];
 		var flag = true;
-		console.log("here");
+
 		
 		for(var i = 0;i<room.clientList.length;i++){
 			if(!room.clientList[i].isReady){
@@ -666,7 +670,7 @@ function GameClickStart(data, gServer, gClient) {
 		}
 		
 		if(flag){
-		console.log(room);
+		//console.log(room);
 			room.broadcastData("GameClickStart_ACK", flag);
 		}
 
