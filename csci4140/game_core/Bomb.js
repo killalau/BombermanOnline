@@ -58,15 +58,15 @@ Bomb.prototype.vanish = function(){
 	Element.Element.prototype.vanish.call(this);// put it here avoid bomb explode loop
 	var _out = {U:[],D:[],L:[],R:[],C:[]};
 	y0 = y0 < 0 ? 0 : y0;
-	y1 = y1 >= _BMM.height ? (_BMM.height) : y1;
+	y1 = y1 >= _BMM.height ? (_BMM.height) -1: y1;
 	x0 = x0 < 0 ? 0 : x0;
-	x1 = x1 >= _BMM.width ? (_BMM.width) : x1;
+	x1 = x1 >= _BMM.width ? (_BMM.width) -1 : x1;
 
-	
+	//console.log("Bomb.vansih:y,y0,y1,x,x0,x1",{y:y,y0:y0,y1:y1,x:x,x0:x0,x1:x1});
 	for(var i=y-1;i>=y0;i--)	if ( ! (this.destroyRule(_BMM.gridList[i][x],_out["U"]))) break;
-	for(var i=y+1;i<y1;i++)		if ( ! (this.destroyRule(_BMM.gridList[i][x],_out["D"]))) break;
+	for(var i=y+1;i<=y1;i++)	if ( ! (this.destroyRule(_BMM.gridList[i][x],_out["D"]))) break;
 	for(var i=x-1;i>=x0;i--)	if ( ! (this.destroyRule(_BMM.gridList[y][i],_out["L"]))) break;
-	for(var i=x+1;i<x1;i++)		if ( ! (this.destroyRule(_BMM.gridList[y][i],_out["R"]))) break;
+	for(var i=x+1;i<=x1;i++)	if ( ! (this.destroyRule(_BMM.gridList[y][i],_out["R"]))) break;
 	this.destroyRule(_BMM.gridList[y][x],_out["C"]);
 	
 	return _out;

@@ -15,7 +15,7 @@ Box.prototype.vanish = function(){
 	try{
 	var newBuff = Buff.Builder(this.grid, this.buff);
 	Element.Element.prototype.vanish.call(this);
-	}catch(e){console.log("Bomb.vanish:err=",e);};
+	}catch(e){console.log("Box.vanish:err=",e);};
 }
 
 exports.Box = Box;
