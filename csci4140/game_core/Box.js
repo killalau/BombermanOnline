@@ -12,8 +12,10 @@ function Box(grid, buffName){
 }
 
 Box.prototype.vanish = function(){
+	try{
 	var newBuff = Buff.Builder(this.grid, this.buff);
-	Element.prototype.vanish.call(this);
+	Element.Element.prototype.vanish.call(this);
+	}catch(e){console.log("Bomb.vanish:err=",e);};
 }
 
 exports.Box = Box;

@@ -70,11 +70,8 @@ BMO.Bomb.prototype.setView = function(_id){
 BMO.Bomb.prototype.explode = function(payload){
 	try{
 	console.log("Bomb.explode():payload=",payload);
-	var _fire = new BMO.Fire(this.grid,this.BMM,this.wsClient); 
-	var _grid = this.grid;
-	_fire.setView("fire_c");
-	_grid.addElement(_fire);
-	_grid.view.addChild(_fire.view);
+	var _fire; 
+	var _grid;
 	for(var _direction in payload){
 		//console.log("Bomb.explode()._dir=",_direction);
 		for(var i =0;i<payload[_direction].length;i++){
@@ -99,6 +96,10 @@ BMO.Bomb.prototype.explode = function(payload){
 					_fire = new BMO.Fire(_grid,this.BMM,this.wsClient);
 					if (i != (payload[_direction].length -1 )) _fire.setView("fire_h");
 					else _fire.setView("fire_r");
+			}else if (_direction === "C" ){
+					_fire = new BMO.Fire(this.grid,this.BMM,this.wsClient); 
+					_grid = this.grid;
+					_fire.setView("fire_c");					
 			}
 			_grid.addElement(_fire);
 			_grid.view.addChild(_fire.view);

@@ -168,12 +168,14 @@ BMM.prototype.getElementById = function(id){
 @param x: grid.x
 @param y: grid.y
 @param id: BM.id
+@param callback: explod bomb call back
+		@param out: broadcast data
 @return null or object{
 					result: Boolean
 					bombnum: integer
 				}
 **/
-BMM.prototype.plantBombValidation = function(x,y,id){
+BMM.prototype.plantBombValidation = function(x,y,id,callback){
 	try{		
 		var _grid = this.gridList[y][x];
 		var _BM = this.getElementById(id);
@@ -193,6 +195,11 @@ BMM.prototype.plantBombValidation = function(x,y,id){
 				_out.result = true;
 				//create bomb
 				new Bomb.Bomb(_grid,_BM);
+				//spawn time out event
+				var self = this;
+				setTimeout(function(){self.explodeBomb(_grid.position.x,_grid.position.y,
+										_BM.id,callback
+										);},3000);
 			}
 		}
 		return _out;
@@ -204,21 +211,35 @@ BMM.prototype.plantBombValidation = function(x,y,id){
 @param x: grid.x
 @param y: grid.y
 @param id: bomb owner
+@param callback: explode call back
+		@param out: broadcast data
 @return object{
 				classname: 'Bomb'
-				id:data.id
+				id:data.id//data : {id:{x:x,y:y},bm:username}
 				payload:{
 						U:[],
 						D:[],
 						L:[],
-						R:[]
+						R:[],
+						C:[]
 				}
 			}
 **/
-BMM.prototype.explodeBomb = function(x,y,id){
+BMM.prototype.explodeBomb = function(x,y,id,callback){
 	try{
 		var _BM;
-		if ((_BM = this.getElementById(id)) !== null ) _BM.bombNum++;//BM hasn't die yet
+		var _out = {
+			classname:'Bomb',
+			id:{x:x,y:y},
+			payload:{}
+		};
+		if ((_BM = this.getElementById(id)) !== null ) _BM.bombNum++;//BM hasn't die yet		
+		//console.log("core_explode:_out=",(this.getElementById({position:{x:x,y:y},classname:"Bomb"})).vanish());
+		_out.payload = (this.getElementById({position:{x:x,y:y},classname:"Bomb"})).vanish();
+		//console.log("core_explode:_out=\n",_out.payload);
+		
+		//broadcast
+		callback(_out);
 		
 	}catch(e){console.error("[CoreBMM explodeBomb]err=",e);};
 }
