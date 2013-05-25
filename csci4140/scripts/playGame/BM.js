@@ -32,27 +32,34 @@ BMO.BM =function(_grid,_BMM,_wsClient){
 BMO.BM.construtor = BMO.BM;
 BMO.BM.prototype = Object.create( BMO.Element.prototype );
 
+//static value, remember which keys the client is pressing
 BMO.BM.dirKey = [];
 /*
 @private method startMove
-@param self: BMO.BM
+@param dir: the move direction, triggered by key event, or server command
 **/
 BMO.BM.prototype.startMove = function(dir){
 	var self = this;
 	
-	var index = BMO.BM.dirKey.indexOf(dir);
-	if(index == -1){
-		BMO.BM.dirKey.push(dir);
-	}else{
-		return;
+	//client key event, record the key is pressing
+	if(self.id == BMO.webPageBMM.wsClient.username){
+		var index = BMO.BM.dirKey.indexOf(dir);
+		if(index == -1){
+			BMO.BM.dirKey.push(dir);
+		}else{
+			return;
+		}
 	}
 	
+	//new move, or changing direction
 	if(self.moveFunction == null || dir != self.direction){
 		self.setDirection(dir);
 		if(self.id == self.wsClient.username){
 			self.wsClient.sendData("game_playerMove", self.direction);
 		}
 	}
+	
+	//regester move event, run every 30ms
 	if(self.moveFunction == null){
 		self.moveFunction = setInterval(function(){
 			var gy,gx;
@@ -81,16 +88,23 @@ BMO.BM.prototype.startMove = function(dir){
 
 /*
 @private method stopMove
-@param self: BMO.BM
+@param dir: which arrow key is keyup
 **/
 BMO.BM.prototype.stopMove = function(dir){
+	//not client release key, but server stop command
 	if(!dir){
 		clearInterval(this.moveFunction);
 		this.moveFunction = null;
+	
+	//a client keyup a arrow key
 	}else{
 		var index = BMO.BM.dirKey.indexOf(dir);
+		
+		//check wheather it is recorded as pressed
 		if(index != -1){
 			BMO.BM.dirKey.splice(index, 1);
+			
+			//all arrow key is keyup
 			if(BMO.BM.dirKey.length == 0){
 				clearInterval(this.moveFunction);
 				this.moveFunction = null;
@@ -98,11 +112,6 @@ BMO.BM.prototype.stopMove = function(dir){
 			}
 		}
 	}
-	/*
-	if(self.id == self.wsClient.username){
-		self.wsClient.sendData("game_playerStopMove", true);
-	}
-	*/
 }
 
 /*
@@ -188,7 +197,7 @@ BMO.BM.prototype.canMove = function(grid){
 /* update the view position, make sure it would not be chopped
  * the data model and view is seperated.
  * 
- * in data model: this.X / Y, range: -24 to 24
+ * in data model: this.X / Y, range: -24 to 23
  * in view:       this._X/_Y, range: 0 to -48
  * 
  * which means, when a element data model position is : grid[1][1].X = 1
@@ -208,6 +217,17 @@ BMO.BM.prototype.updateGridView = function(changeGridView){
 	//}
 	this.view.position.x = this._X;
 	this.view.position.y = this._Y;
+}
+
+/* set position
+ * gridX, gridY: GridList[ gridX ][ gridY ]
+ * X, Y: BM.X, BM.Y (-24 to 23)
+ */
+BMO.BM.prototype.setPosition = function(gridX, gridY, X, Y){
+	this.BMM.gridList[gridY][gridX].addElement(this);
+	this.X = Math.round(X);
+	this.Y = Math.round(Y);
+	this.updateGridView();
 }
 
 /*
@@ -291,7 +311,6 @@ BMO.BM.prototype.eventProcesser = function(e){
 	var self = this;
 	if ( e.type === "keydown" ){
 		//console.log("BM:keydown,keyIdentifier="+e.keyIdentifier);
-		//canMove?
 		try{	
 			if (e.keyCode == 40 ) self.startMove("D");
 			else if(e.keyCode == 38) self.startMove("U");
@@ -301,30 +320,20 @@ BMO.BM.prototype.eventProcesser = function(e){
 			else return;
 		}catch(err){throw err;};			
 	}else if( e.type === "keyup"){
-		/*
-		if (e.keyCode == 40 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 37){
-			if (e.keyIdentifier.substr(0,1) !== self.direction){ 
-				e.type = "keydown";
-				self.eventProcesser(e);
-			}else self.stopMove(self);
-		}*/
 		if (e.keyCode == 40 ) self.stopMove("D");
 		else if(e.keyCode == 38) self.stopMove("U");
 		else if(e.keyCode == 37) self.stopMove("L");
 		else if(e.keyCode == 39) self.stopMove("R");
+	}else if(e.type == "thisPlayerMove"){
+		self.setPosition(e.payload.grid.x, e.payload.grid.y, e.payload.pos.x * 48, e.payload.pos.y * 48);
 	}else if( e.type === "otherPlayerMove"){
+		self.setPosition(e.payload.grid.x, e.payload.grid.y, e.payload.pos.x * 48, e.payload.pos.y * 48);
 		self.startMove(e.payload.dir);
 	}else if( e.type === "otherPlayerStopMove"){
-		self.BMM.gridList[e.payload.grid.y][e.payload.grid.x].addElement(self);
-		self.X = Math.round(e.payload.pos.x * 48);
-		self.Y = Math.round(e.payload.pos.y * 48);
-		self.updateGridView();
+		self.setPosition(e.payload.grid.x, e.payload.grid.y, e.payload.pos.x * 48, e.payload.pos.y * 48);
 		self.stopMove();
 	}else if( e.type === "thisPlayerStopMove"){
-		self.BMM.gridList[e.payload.grid.y][e.payload.grid.x].addElement(self);
-		self.X = Math.round(e.payload.pos.x * 48);
-		self.Y = Math.round(e.payload.pos.y * 48);
-		self.updateGridView();
+		self.setPosition(e.payload.grid.x, e.payload.grid.y, e.payload.pos.x * 48, e.payload.pos.y * 48);
 	}else if( e.type === "plantBomb"){
 		self.plantBomb(e.payload);
 	}else if(e.type === "vanish"){

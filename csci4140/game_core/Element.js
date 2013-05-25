@@ -31,7 +31,7 @@ Element.prototype.move = function(dest_row,dest_col){
 		break;
 	case "D":
 		this.position.y += this.speed;
-		if(this.position.y >= 0.5){
+		if(this.position.y > 0.5){
 			changeGrid(this, dest_grid, "y", -1);
 		}
 		break;
@@ -43,7 +43,7 @@ Element.prototype.move = function(dest_row,dest_col){
 		break;
 	case "R":
 		this.position.x += this.speed;
-		if(this.position.x >= 0.5){
+		if(this.position.x > 0.5){
 			changeGrid(this, dest_grid, "x", -1);
 		}
 		break;		

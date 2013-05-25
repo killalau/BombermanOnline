@@ -327,11 +327,14 @@ BMO.BMM.prototype.setController = function(){
 BMO.BMM.prototype.broadcastPlayerMove = function(data, wsClient){
 	try{
 	//console.log("broadcastPlayerMove,this="+this);
-	if(data.classname == "BM" && data.id != BMO.webPageBMM.wsClient.username){
+	if(data.classname == "BM"){
 		var element = BMO.webPageBMM.getElementById(data.id);
 		var e ={
 			type: "otherPlayerMove",
 			payload: data.payload
+		}
+		if(data.id == BMO.webPageBMM.wsClient.username){
+			e.type = "thisPlayerMove";
 		}
 		element.eventProcesser(e);
 	}
