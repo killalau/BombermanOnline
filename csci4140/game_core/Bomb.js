@@ -16,6 +16,7 @@ Bomb.prototype.destroyRule = function(_grid,_out){
 	try{
 	var _object;	
 	var ret;
+	var _BMM = _grid.BMM;
 	if ( (_object = _grid.getElementById("Wall")) === null ){
 		if ( (_object = _grid.getElementById("Box")) !== null ){
 			ret = false;
