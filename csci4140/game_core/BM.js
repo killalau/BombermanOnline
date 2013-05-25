@@ -52,4 +52,14 @@ BM.prototype.increasePower = function(num){
 	if(this.power < 0) this.power = 0;
 }
 
+/*
+@public override method vanish
+**/
+BM.prototype.vanish = function(){
+	try{
+		this.alive=false;
+		Element.Element.prototype.vanish.call(this);
+	}catch(e){console.log("BM.vanish:err=",e);};
+}
+
 exports.BM = BM;

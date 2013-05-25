@@ -820,7 +820,7 @@ function game_playerMove(data, gServer, gClient){
 	}else{		
 		var bmm = gServer.roomList[gClient.room].bmm;
 		var bm = bmm.getElementById(gClient.username);
-		if ( bm !== null ){
+		if ( bm.alive ){
 			gClient.sendData("game_playerMoveACK", true);
 			bm.direction = data;
 			bm.moveStart();
@@ -846,7 +846,7 @@ function game_playerStopMove(data, gServer, gClient){
 	
 	var bmm = gServer.roomList[gClient.room].bmm;
 	var bm = bmm.getElementById(gClient.username);
-	if ( bm !== null){
+	if ( bm.alive ){
 		bm.moveStop();
 		
 		var json = {

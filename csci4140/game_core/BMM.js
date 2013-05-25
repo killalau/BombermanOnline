@@ -184,6 +184,7 @@ BMM.prototype.plantBombValidation = function(x,y,id,callback){
 		var _out = {result:null,bombnum:_BM.bombNum};
 		//console.log("COre_BMM: plantBomb_BM",_BM,"plantBomb_Grid",_grid);
 		if (_grid === null || _BM === null ) throw "_grid or _BM is null";
+		if (! _BM.alive ) return {result:false,bombnum:0};
 		//Any trick things on that grid atm
 		if ( !(_grid.getElementById("Bomb") === null && 
 				_grid.getElementById("Wall") === null &&
