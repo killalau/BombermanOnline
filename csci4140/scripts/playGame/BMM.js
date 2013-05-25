@@ -136,6 +136,7 @@ BMO.BMM.prototype.setMap = function(data){
 	if(data.gameState && data.gameState[0] >= 3){
 		console.log('set wall set box');
 		for(var i = 0, e; e = data.elements[i]; i++){
+			console.log(e.classname);
 			var _grid = this.gridList[e.pos.y][e.pos.x];
 			switch(e.classname){
 			case "Wall":
@@ -154,7 +155,9 @@ BMO.BMM.prototype.setMap = function(data){
 			//TO-DO
 			break;
 			case "BombPlusPlus":
-				var _bombPP = new BMO.Buff(_grid,this,this.wsClient);//AndyQ - to be changed BMO.Buff->BMO.BombPlusPlus
+				console.log('here');
+				var _bombPP = new BMO.BombPlusPlus(_grid,this,this.wsClient);//AndyQ - to be changed BMO.Buff->BMO.BombPlusPlus
+				console.log('here2');
 				_bombPP.setView("BombPlusPlus");							
 				_grid.addElement(_bombPP);
 				_grid.view.addChild(_bombPP.view);
