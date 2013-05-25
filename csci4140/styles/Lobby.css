@@ -36,6 +36,11 @@ div.title div.logout{
 	width:68px;
 	float:right;
 	background-color:7F1F26;
+	cursor: default;
+}
+
+div.title div.logout:hover{
+	background-color:FF3333
 }
 
 div.lobby{
