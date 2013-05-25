@@ -247,9 +247,9 @@ BMM.prototype.explodeBomb = function(x,y,bomb,callback){
 		
 		//console.log("BMM.explodeBomb:_out.combo=",_out.payload.Combo);
 		for(var i = 0 ; i < _out.payload["Combo"].length;i++){
+			var self = this;
 			setTimeout(function(){
-					var _bomb = _out.payload["Combo"][i]["bomb"];
-					var self = this;
+					var _bomb = _out.payload["Combo"][i]["bomb"];					
 					var _x = _out.payload.Combo[i].x;
 					var _y = _out.payload.Combo[i].y;
 					return function(){
