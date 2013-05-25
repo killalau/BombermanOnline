@@ -452,7 +452,6 @@ BMO.BMM.prototype.broadcastVanishBuff = function(data,wsClient){//Andy
 		console.log('[BMM.broadcastVanishBuff] receive vanish buff msg from server');
 		console.log('[BMM.broadcastVanishBuff] _in:'+JSON.stringify(_in));		
 		if((_in.classname == "FirePlusPlus") || (_in.classname == "SpeedPlusPlus") || (_in.classname == "BombPlusPlus")){
-			console.log('[BMM.broadcastVanishBuff] _in.classname:'+_in.classname);
 			var _grid = this.gridList[_in.id.y][_in.id.x];
 			var element;
 			for(var i =0;i<_grid.elementList.length;i++){

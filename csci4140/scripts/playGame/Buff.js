@@ -28,6 +28,8 @@ BMO.Buff.prototype.applyBuff = function(targetBM){
 	var bmm = this.BMM;
 	var playerId = bmm.wsClient.username;
 	
+	try{
+	console.log('[Buff.applyBuff]');
 	console.log('[Buff.applyBuff] targetBM:'+targetBM+' playerId:'+playerId);
 	if (targetBM == playerId){
 		var bm = bmm.getElementById(targetBM);
@@ -35,6 +37,7 @@ BMO.Buff.prototype.applyBuff = function(targetBM){
 		console.log('[Buff.applyBuff] classname:'+this.classname+' targetBM.id:'+bm.id+' targetBM.currentBombMax:'+bm.currentBombMax);
 		this.vanish();
 	}
+	}catch(e){console.log("Buff.applyBuff:err=",e);throw e;};
 }
 
 /*
@@ -56,6 +59,7 @@ BMO.Buff.prototype.eventProcesser = function(event){
 	if (event.type === "vanish"){
 		this.vanish();
 	}else if(event.type === "applyBuff"){
+		console.log('[Buff.eventProcesssor] applyBuf');
 		this.applyBuff(event.payload);
 	}
 }
