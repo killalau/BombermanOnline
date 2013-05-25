@@ -464,9 +464,9 @@ BMO.BMM.prototype.broadcastVanishBuff = function(data,wsClient){//Andy
 			//event message for vanish
 			var e = {
 					//AndyQ
-					type: "vanish",
+					type: "applyBuff",
 					payload: _in.payload
-			}
+			};
 			element.eventProcesser(e);
 		}
 	}catch(e){console.log(e);throw 'vanishBuffErr='+e};

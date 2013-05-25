@@ -24,40 +24,37 @@ BMO.Buff.prototype.setView = function(_id){
 
 //@protected method applyBuff()
 //to apply the funciton of the buff to self BM
-BMO.Buff.prototype.applyBuff = function(targetBM){
+BMO.Buff.prototype.applyBuff = function(targetBM){	
 	var bmm = this.BMM;
-	var bm = null;
-	console.log('[Buff.applyBuff]');
-	bm = bmm.getElementById(targetBM);
+	var playerId = bmm.wsClient.username;
 	
-	bm.increaseBombNum();
-	console.log('[Buff.applyBuff] classname:'+this.classname+' targetBM.id:'+bm.id+' targetBM.currentBombMax:'+bm.currentBombMax);
+	console.log('[Buff.applyBuff] targetBM:'+targetBM+' playerId:'+playerId);
+	if (targetBM == playerId){
+		var bm = bmm.getElementById(targetBM);
+		bm.increaseBombNum();
+		console.log('[Buff.applyBuff] classname:'+this.classname+' targetBM.id:'+bm.id+' targetBM.currentBombMax:'+bm.currentBombMax);
+	}
 }
 
 /*
 @protected override method vanish()
 */
-
 BMO.Buff.prototype.vanish = function(targetBM){
-	var self = this;
-	var playerId = self.BMM.wsClient.username;
-	
-	/*if targetBM = self BM
-		applyBuff()
-	  else
-		do nothing...
-	*/	
-	console.log('[Buff.vanish] check targetBM targetBM:'+targetBM+' playerId:'+playerId);
-	if (targetBM == playerId)
-		self.applyBuff(targetBM);
-
 	try{
-	BMO.Element.prototype.vanish.call(this);	
+		BMO.Element.prototype.vanish.call(this);	
 	}catch(e){console.log("Buff.vanish:err=",e);throw e;};
 }
 
+/*
+ *	var e ={
+ *			type: "explode",
+ *			payload: _in.payload
+ *	}
+ */
 BMO.Buff.prototype.eventProcesser = function(event){
 	if (event.type === "vanish"){
-		this.vanish(event.payload);
+		this.vanish();
+	}else if(event.type === "applyBuff"){
+		this.applyBuff(event.payload);
 	}
 }
