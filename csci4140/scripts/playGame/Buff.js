@@ -27,6 +27,7 @@ BMO.Buff.prototype.setView = function(_id){
 BMO.Buff.prototype.applyBuff = function(targetBM){
 	var bmm = this.BMM;
 	var bm = null;
+	console.log('[Buff.applyBuff]');
 	bm = bmm.getElementById(targetBM);
 	
 	bm.increaseBombNum();
@@ -46,6 +47,7 @@ BMO.Buff.prototype.vanish = function(targetBM){
 	  else
 		do nothing...
 	*/	
+	console.log('[Buff.vanish] check targetBM targetBM:'+targetBM+' playerId:'+playerId);
 	if (targetBM == playerId)
 		self.applyBuff(targetBM);
 
@@ -56,6 +58,6 @@ BMO.Buff.prototype.vanish = function(targetBM){
 
 BMO.Buff.prototype.eventProcesser = function(event){
 	if (event.type === "vanish"){
-		this.vanish();
+		this.vanish(event.payload);
 	}
 }

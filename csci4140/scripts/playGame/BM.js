@@ -267,9 +267,15 @@ BMO.BM.prototype.requestVanishBuff = function(classname){//Andy
 **/
 BMO.BM.prototype.increaseBombNum = function(num){
 	num = num ? parseInt(num) : 1;
+	
+	if(this.currentBombMax + num > this.bombMax){
+		num = this.bombMax - this.currentBombMax;
+	}
 	this.bombNum += num;
-	if(this.bombNum > this.currentBombMax) this.bombNum = this.currentBombMax;
+	this.currentBombMax += num;
 	if(this.bombNum < 0) this.bombNum = 0;
+	if(this.currentBombMax < 0) this.currentBombMax = 0;
+	console.log('[BM.increaseBombNum] currentBombMax:'+this.currentBombMax);
 }
 
 /*
