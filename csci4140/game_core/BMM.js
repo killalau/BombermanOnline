@@ -246,4 +246,51 @@ BMM.prototype.explodeBomb = function(x,y,id,callback){
 	}catch(e){console.error("[CoreBMM explodeBomb]err=",e);};
 }
 
+/*
+@public method vanishBuffValidation
+@param _x: grid.x
+@param _y: grid.y
+@param buffname: 'BombPlusPlus' || 'SpeedPlusPlus' || 'FirePlusPlus'
+@param data : {	id:	{x:x,
+					y:y}, 
+				classname:<buffClassName>
+			}
+@param requestBM: the BM sending vanishBuff request
+@param callback: wsRequestHandlers.game_broadcastVanishBuff(_out)
+@param out: null || object {
+	classname: buffname,
+	id:	{x:x, y:y}, //identify the buff by posiiton (x,y)
+	payload: requestBM //payload indicates which BM get the buff
+}
+*/
+BMM.prototype.vanishBuffValidation = function(X, Y, buffname, requestBM, callback){
+	var grid = this.gridList[Y][X];
+	var out = null;
+	
+	/*
+	 *	AndyQ - further timing validation to be implemented
+	 */	
+	
+	console.log('[CoreBMM.vanishBuffValidation]');
+	try{
+		for (var i = 0, e; e = grid.elementList[i]; i++){
+			if (e.classname == buffname){
+				var out = {
+						classname: buffname,
+						id:	{	x:X,
+								y:Y},
+						payload: requestBM 
+				};
+				console.log('[CoreBMM.vanishBuffValidation] grid.elementList:');
+				console.log(grid.elementList);
+				console.log('[CoreBMM.vanishBuffValidation] grid.removeElement: '+e.classname);				
+				grid.removeElement(e);
+				console.log(grid.elementList);
+				break;
+			}
+		}
+		callback(out);
+	}catch(e){console.log('[CoreBMM.vanishBuffValidation] err:', e);};
+}
+
 exports.BMM = BMM;

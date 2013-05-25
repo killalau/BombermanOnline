@@ -935,21 +935,43 @@ function game_explodeBomb(out, gServer, gClient){
  */
 function game_vanishBuff(data, gServer, gClient){//Andy
 	var _in = JSON.parse(data);
-	var targetBM = gClient.username;
+	var requestBM = gClient.username;
+	var bmm = gServer.roomList[gClient.room].bmm;
+	//var timeBuffer = 200;
 	
 	/*waiting for server side gameModel
 	var targerBM = gameModel.applyBuff(targetBM);
 	*/
+	bmm.vanishBuffValidation(_in.id.x, _in.id.y, _in.classname, requestBM, game_broadcastVanishBuff);
 	
-	//if (targetBM !=
+	
+	//moved to the game_broadcastVanishBuff callback function
+	/*
 	try{
-		var out = {
-				classname: 'BombPlusPlus', //classname: _in.classname, //AndyQ - to be changed				
-				//identify the buff by posiiton (x,y)
-				id:	_in.id,
-				payload: gClient.username				
-		};
+	var out = {
+			classname: 'BombPlusPlus', //classname: _in.classname, //AndyQ - to be changed				
+			//identify the buff by posiiton (x,y)
+			id:	_in.id,
+			//payload indicates which BM get the buff
+			payload: gClient.username				
+	};
 	gClient.broadcastData('game_broadcastVanishBuff',JSON.stringify(out));
+	}catch(e){console.log(e);throw e;};*/
+}
+
+/*
+ *	callback: game_broadcastVanishBuff
+ *
+ *	var out = {
+ *		classname: 'BombPlusPlus', //classname: _in.classname, //AndyQ - to be changed		
+ *		id:	_in.id, //identify the buff by posiiton (x,y)		
+ *		payload: gClient.username //payload indicates which BM get the buff
+ *	} 
+ */
+function game_broadcastVanishBuff(_out){
+	try{
+		if (_out !== null)
+			gClient.broadcastData('game_broadcastVanishBuff',JSON.stringify(_out));
 	}catch(e){console.log(e);throw e;};
 }
 
