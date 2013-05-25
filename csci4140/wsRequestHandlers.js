@@ -937,13 +937,13 @@ function game_vanishBuff(data, gServer, gClient){//Andy
 	var _in = JSON.parse(data);
 	var requestBM = gClient.username;
 	var bmm = gServer.roomList[gClient.room].bmm;
-	//var timeBuffer = 200;
 	
-	/*waiting for server side gameModel
-	var targerBM = gameModel.applyBuff(targetBM);
-	*/
-	bmm.vanishBuffValidation(_in.id.x, _in.id.y, _in.classname, requestBM, game_broadcastVanishBuff);
-	
+	bmm.vanishBuffValidation(_in.id.x, _in.id.y, _in.classname, requestBM,
+		function(_out){
+			//make use of the gClient whose request reaches the server first
+			//to broadcast
+			game_broadcastVanishBuff(_out, gServer, gClient);
+		});	
 	
 	//moved to the game_broadcastVanishBuff callback function
 	/*
@@ -968,7 +968,7 @@ function game_vanishBuff(data, gServer, gClient){//Andy
  *		payload: gClient.username //payload indicates which BM get the buff
  *	} 
  */
-function game_broadcastVanishBuff(_out){
+function game_broadcastVanishBuff(_out, gServer, gClient){
 	try{
 		if (_out !== null)
 			gClient.broadcastData('game_broadcastVanishBuff',JSON.stringify(_out));

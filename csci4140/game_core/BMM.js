@@ -268,7 +268,7 @@ BMM.prototype.vanishBuffValidation = function(X, Y, buffname, requestBM, callbac
 	var out = null;
 	
 	/*
-	 *	AndyQ - further timing validation to be implemented
+	 *	AndyQ - further implementation for timing consideration
 	 */	
 	
 	console.log('[CoreBMM.vanishBuffValidation]');
