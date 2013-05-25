@@ -309,6 +309,7 @@ BMO.BM.prototype.vanish = function(){
 			document.body.removeEventListener("keyup",this.BMM.myKeyUp,false);
 		}
 		this.alive = false;
+		this.stopMove(this.direction);
 		this.wsClient = null;
 		var _id = this.viewPrefix + "die";
 		var self = this;

@@ -125,7 +125,7 @@ BMO.Bomb.prototype.explode = function(payload){
 	if (this.owner.alive) this.owner.bombNum++;
 	//this.eventProcesser({type:"vanish",payload:null});
 	this.vanish();
-	}catch(e){console.error("Bomb.explode:err=",e);alert(e);throw e;};
+	}catch(e){console.error("Bomb.explode:err=",e);throw e;};
 }
 
 
