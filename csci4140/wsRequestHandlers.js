@@ -901,7 +901,7 @@ function game_playerPlantBomb(data, gServer, gClient){
 	};
 	//plantBomb validation....
 	var pass = gServer.roomList[gClient.room].bmm.plantBombValidation(_in.x,_in.y,
-					gClient.username,function(_out){ game_explodeBomb(_out,gServer,gClient); });
+					gClient.username,function(_out){ game_explodeBomb(_out,gServer,gClient.room); });
 	//End of validation.......
 
 	//console.log("plantBomb:in=",_in,"out="+out);
@@ -932,13 +932,13 @@ function game_playerPlantBomb(data, gServer, gClient){
 			}
 		}
  * gServer : game server object
- * gClient : game client object
+ * rm : rm num franky definition
  */
-function game_explodeBomb(out, gServer, gClient){
+function game_explodeBomb(out, gServer, rm){
 	try{
 	//console.log("wsRequestHandler.game_explodeBomb:out=\n",out);	
-	gServer.roomList[gClient.room].broadcastData('game_broadcastExplodeBomb',JSON.stringify(out));
-	//gClient.sendData('game_broadcastExplodeBomb',JSON.stringify(out));
+	gServer.roomList[rm].broadcastData('game_broadcastExplodeBomb',JSON.stringify(out));
+	
 	}catch(e){console.log(e);throw e;};
 }
 

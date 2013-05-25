@@ -150,6 +150,7 @@ BMM.prototype.setGrid = function(){
 }
 
 BMM.prototype.getElementById = function(id){
+	try{
 	if(typeof id === 'string'){
 		for(var i = 0, e; e = this.elementList[i]; i++){
 			if(e.id == id){
@@ -163,6 +164,7 @@ BMM.prototype.getElementById = function(id){
 		return this.gridList[id.position.y][id.position.x].getElementByClass(id.classname);
 	}
 	return null;
+	}catch(e){console.error("BMM.getElementById:err=",e);};
 }
 
 /*
@@ -194,14 +196,14 @@ BMM.prototype.plantBombValidation = function(x,y,id,callback){
 			//Are there any bombs available for that BM ?
 			if (_BM.bombNum <= 0 ) _out.result = false;
 			else{
-				_out.bombNum = --_BM.bombNum;
+				_out.bombNum = _BM.bombNum - 1;
 				_out.result = true;
 				//create bomb
-				new Bomb.Bomb(_grid,_BM);
+				var _bomb = new Bomb.Bomb(_grid,_BM);
 				//spawn time out event
 				var self = this;
 				setTimeout(function(){self.explodeBomb(_grid.position.x,_grid.position.y,
-										_BM.id,callback
+										_bomb,callback
 										);},3000);
 			}
 		}
@@ -213,7 +215,7 @@ BMM.prototype.plantBombValidation = function(x,y,id,callback){
 @public method explodeBomb
 @param x: grid.x
 @param y: grid.y
-@param id: bomb owner
+@param bomb: bomb going to explode
 @param callback: explode call back
 		@param out: broadcast data
 @return object{
@@ -228,23 +230,39 @@ BMM.prototype.plantBombValidation = function(x,y,id,callback){
 				}
 			}
 **/
-BMM.prototype.explodeBomb = function(x,y,id,callback){
+BMM.prototype.explodeBomb = function(x,y,bomb,callback){
 	try{
+		if ( bomb.grid === null ) return;
 		var _BM;
 		var _out = {
 			classname:'Bomb',
 			id:{x:x,y:y},
 			payload:{}
 		};
-		if ((_BM = this.getElementById(id)) !== null ) _BM.bombNum++;//BM hasn't die yet		
-		//console.log("core_explode:_out=",(this.getElementById({position:{x:x,y:y},classname:"Bomb"})).vanish());
-		//console.log("BMM.explodeBomb:bomb.vanish=",
-		//(this.getElementById({position:{x:x,y:y},classname:"Bomb"})).vanish);
 		
-		_out.payload = (this.getElementById({position:{x:x,y:y},classname:"Bomb"})).vanish(callback);
+		//console.log("BMM.explodeBomb:bomb.owner=",bomb.owner);
+		if ( bomb.owner !== null)
+		if ((_BM = this.getElementById(bomb.owner.id)) !== null ) _BM.bombNum = _BM.bombNum+1;//BM hasn't die yet			
+		_out.payload = bomb.vanish();
+		
+		//console.log("BMM.explodeBomb:_out.combo=",_out.payload.Combo);
+		for(var i = 0 ; i < _out.payload["Combo"].length;i++){
+			var _bomb = _out.payload["Combo"][i]["bomb"];
+			var self = this;
+			var _x = _out.payload.Combo[i].x;
+			var _y = _out.payload.Combo[i].y;
+			setTimeout(function(){self.explodeBomb(_x,
+										_y,
+										_bomb,callback);
+										},10);
+		}
+		//console.log("BMM.explodeBomb:_out=",_out);
 		//console.log("core_explode:_out=\n",_out.payload);
 		
 		//broadcast
+		_out.payload = {U:_out.payload["U"],D:_out.payload["D"],
+						L:_out.payload["L"],R:_out.payload["R"],C:_out.payload["C"]
+						};		
 		callback(_out);
 		
 	}catch(e){console.error("BMM.explodeBomb:err=",e);};
