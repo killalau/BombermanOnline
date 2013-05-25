@@ -36,21 +36,19 @@ BMO.Buff.prototype.applyBuff = function(targetBM){
 /*
 @protected override method vanish()
 */
-<<<<<<< HEAD
+
 BMO.Buff.prototype.vanish = function(targetBM){
 	var self = this;
+	var playerId = self.BMM.wsClient.username;
+	
 	/*if targetBM = self BM
 		applyBuff()
 	  else
 		do nothing...
-	*/
-	var playerId = self.BMM.wsClient.username;
+	*/	
 	if (targetBM == playerId)
 		self.applyBuff(targetBM);
-	
-=======
-BMO.Buff.prototype.vanish = function(){
->>>>>>> 7d598df763e3220aecd3ed4d5539b3ec7070ffa1
+
 	try{
 	BMO.Element.prototype.vanish.call(this);	
 	}catch(e){console.log("Buff.vanish:err=",e);throw e;};
