@@ -196,7 +196,7 @@ BMM.prototype.plantBombValidation = function(x,y,id,callback){
 			//Are there any bombs available for that BM ?
 			if (_BM.bombNum <= 0 ) _out.result = false;
 			else{
-				_out.bombNum = _BM.bombNum - 1;
+				_out.bombNum = --_BM.bombNum;
 				_out.result = true;
 				//create bomb
 				var _bomb = new Bomb.Bomb(_grid,_BM);
