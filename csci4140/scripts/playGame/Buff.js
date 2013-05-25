@@ -55,9 +55,11 @@ BMO.Buff.prototype.vanish = function(){
  *	}
  */
 BMO.Buff.prototype.eventProcesser = function(event){
+	console.log('[Buff.eventProcesser]');
 	if (event.type === "vanish"){
 		this.vanish();
 	}else if(event.type === "applyBuff"){
+		console.log('[Buff.eventProcesser] applyBuff');
 		this.applyBuff(event.payload);
 	}
 }
