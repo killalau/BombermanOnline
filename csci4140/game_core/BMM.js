@@ -247,14 +247,15 @@ BMM.prototype.explodeBomb = function(x,y,bomb,callback){
 		
 		//console.log("BMM.explodeBomb:_out.combo=",_out.payload.Combo);
 		for(var i = 0 ; i < _out.payload["Combo"].length;i++){
-			var _bomb = _out.payload["Combo"][i]["bomb"];
-			var self = this;
-			var _x = _out.payload.Combo[i].x;
-			var _y = _out.payload.Combo[i].y;
-			setTimeout(function(){self.explodeBomb(_x,
-										_y,
-										_bomb,callback);
-										},10);
+			setTimeout(function(){
+					var _bomb = _out.payload["Combo"][i]["bomb"];
+					var self = this;
+					var _x = _out.payload.Combo[i].x;
+					var _y = _out.payload.Combo[i].y;
+					return function(){
+						self.explodeBomb(_x,_y,_bomb,callback);
+					}
+										}(),10);
 		}
 		//console.log("BMM.explodeBomb:_out=",_out);
 		//console.log("core_explode:_out=\n",_out.payload);
