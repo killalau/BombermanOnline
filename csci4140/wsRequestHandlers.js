@@ -783,6 +783,7 @@ function game_init(data, gServer, gClient){
 				username : c.username,
 				seat : c.seat,
 				viewPrefix : bmm.mapConfig.PIXI.avatar[c.seat].replace(/.json$/, "") + "_",
+				alive: bm.alive, 
 				pos : bm.grid.position,
 				bombNum : bm.bombNum,
 				bombCurrentMax : bm.bombCurrentMax,
@@ -790,7 +791,7 @@ function game_init(data, gServer, gClient){
 				power : bm.power,
 				powerMax : bm.powerMax,
 				speed : bm.speed,
-				speedMax : bm.speedMax
+				speedMax : bm.speedMax				
 			});
 		}
 		for(var i = 0, row; row = bmm.gridList[i]; i++){
@@ -816,24 +817,27 @@ function game_init(data, gServer, gClient){
 function game_playerMove(data, gServer, gClient){
 	if(data != 'U' && data != 'D' && data != 'L' && data != 'R'){
 		gClient.sendData("game_playerMoveACK", false);
-	}else{
-		gClient.sendData("game_playerMoveACK", true);
-		
+	}else{		
 		var bmm = gServer.roomList[gClient.room].bmm;
 		var bm = bmm.getElementById(gClient.username);
-		bm.direction = data;
-		bm.moveStart();
-		
-		var json = {
-			classname : "BM",
-			id: gClient.username,
-			payload: {
-				dir : data,
-				grid : bm.grid.position,
-				pos : bm.position
-			}
-		};
-		gClient.broadcastData("game_broadcastPlayerMove", json);
+		if ( bm !== null ){
+			gClient.sendData("game_playerMoveACK", true);
+			bm.direction = data;
+			bm.moveStart();
+			
+			var json = {
+				classname : "BM",
+				id: gClient.username,
+				payload: {
+					dir : data,
+					grid : bm.grid.position,
+					pos : bm.position
+				}
+			};
+			gClient.broadcastData("game_broadcastPlayerMove", json);
+		}else{
+			gClient.sendData("game_playerMoveACK", false);
+		}
 	}
 }
 
@@ -842,17 +846,19 @@ function game_playerStopMove(data, gServer, gClient){
 	
 	var bmm = gServer.roomList[gClient.room].bmm;
 	var bm = bmm.getElementById(gClient.username);
-	bm.moveStop();
-	
-	var json = {
-		classname : "BM",
-		id: gClient.username,
-		payload: {
-			grid : bm.grid.position,
-			pos : bm.position
-		}
-	};
-	gClient.broadcastData("game_broadcastPlayerStopMove", json);
+	if ( bm !== null){
+		bm.moveStop();
+		
+		var json = {
+			classname : "BM",
+			id: gClient.username,
+			payload: {
+				grid : bm.grid.position,
+				pos : bm.position
+			}
+		};
+		gClient.broadcastData("game_broadcastPlayerStopMove", json);
+	}
 }
 
 /* Handler for 'game_playerPlantBomb' message

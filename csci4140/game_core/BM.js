@@ -7,6 +7,7 @@ function BM(gClient, grid){
 	this.classname = "BM";
 	this.gClient = gClient;
 	this.id = gClient ? gClient.username : "NPC";
+	this.alive = true;
 	this.bombNum = 1;
 	this.bombCurrentMax = 1;
 	this.bombMax = 8;

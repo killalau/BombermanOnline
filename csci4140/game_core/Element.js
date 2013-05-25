@@ -109,6 +109,7 @@ Element.prototype.increaseSpeed = function(num){
 
 Element.prototype.vanish = function(){
 	try{
+	if (this.moveFunction !== null ) this.moveStop();
 	this.grid.removeElement(this);
 	}catch(e){console.log("Element.vanish:err",e);};
 }

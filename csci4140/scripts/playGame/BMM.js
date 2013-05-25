@@ -57,6 +57,7 @@ BMO.BMM.prototype.getElementById = function(id){
 				return e;
 			}
 		}
+		return null;
 	}
 }
 
@@ -81,20 +82,23 @@ BMO.BMM.prototype.setPlayer = function(data){
 	for(var i=0;i<data.players.length;i++){
 		var _player = data.players[i];
 		var _grid = this.gridList[_player.pos.y][_player.pos.x];
-		var _BM = new BMO.BM(_grid,this,this.wsClient);
-		this.addElement(_BM);
-		_BM.id = _player.username;
-		_BM.viewPrefix = _player.viewPrefix;
-		_BM.setView(_player.viewPrefix + "D0");
-		_BM.bombNum = _player.bombNum;
-		_BM.currentBombMax = _player.bombCurrentMax;
-		_BM.bombMax = _player.bombMax;
-		_BM.powerOfFire = _player.power;
-		_BM.powerMax = _player.powerMax;
-		_BM.speed = _player.speed * 48;
-		_BM.speedMax = _player.speedMax * 48;
-		_grid.view.addChild(_BM.view);
-		_grid.addElement(_BM);		
+		if ( _player.alive ){
+			var _BM = new BMO.BM(_grid,this,this.wsClient);
+			this.addElement(_BM);
+			_BM.id = _player.username;
+			_BM.viewPrefix = _player.viewPrefix;
+			_BM.setView(_player.viewPrefix + "D0");
+			_BM.alive = _player.alive;
+			_BM.bombNum = _player.bombNum;
+			_BM.currentBombMax = _player.bombCurrentMax;
+			_BM.bombMax = _player.bombMax;
+			_BM.powerOfFire = _player.power;
+			_BM.powerMax = _player.powerMax;
+			_BM.speed = _player.speed * 48;
+			_BM.speedMax = _player.speedMax * 48;
+			_grid.view.addChild(_BM.view);
+			_grid.addElement(_BM);	
+		}
 	}
 	}catch(e){console.log(e);alert(e);throw e};	
 }
@@ -298,8 +302,11 @@ BMO.BMM.prototype.setController = function(){
 		//self.elementList[0].eventProcesser(e);
 		self.getElementById( self.wsClient.username).eventProcesser(e);
 	};
-	document.body.addEventListener("keydown",this.myKeyDown,false);
-	document.body.addEventListener("keyup",this.myKeyUp,false);
+	
+	if ( self.getElementById(self.wsClient.username) !== null){
+		document.body.addEventListener("keydown",this.myKeyDown,false);
+		document.body.addEventListener("keyup",this.myKeyUp,false);
+	}   
 	
 	self.handlers["game_playerMoveACK"] = function(){};
 	self.handlers["game_playerStopMoveACK"] = function(){};
@@ -395,7 +402,14 @@ BMO.BMM.prototype.broadcastPlantBomb = function(data,wsClient){
 @param data: {
 		classname : "",
 		id: "username" / {x:x ,y:y},
-		payload: Not yet define
+		payload: {
+				U:[],
+				D:[],
+				L:[],
+				R:[],
+				C:[]
+			}
+		}
 	}
 @param wsClient: wsClient
 **/
@@ -424,7 +438,7 @@ BMO.BMM.prototype.broadcastExplodeBomb =function(data,wsClient){
 };
 
 /*
-@private method broadcastExplodeBomb
+@private method broadcastVanishBuff
 @param data: {
 		classname : 'firepluss' or 'SpeedPlusPlus' or 'BombPlusPlus',
 		id: "username" / {x:x ,y:y},
