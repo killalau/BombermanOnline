@@ -71,8 +71,10 @@ BMO.Bomb.prototype.setView = function(_id){
 BMO.Bomb.prototype.explode = function(payload){
 	try{
 	console.log("Bomb.explode():payload=",payload);
-	var self = this;
-	var placeFire = function(_direction,i,_grid,_fire){
+	var self = this;	
+	var _grid;
+	var _fire;
+	var placeFire = function(_direction,i){
 		if ( _direction === "U" ){	
 				_grid = self.BMM.gridList[self.grid.Y-1-i][self.grid.X];
 				_fire = new BMO.Fire(_grid,self.BMM,self.wsClient);
@@ -104,10 +106,8 @@ BMO.Bomb.prototype.explode = function(payload){
 	for(var _direction in payload){
 		//console.log("Bomb.explode()._dir=",_direction);
 		for(var i =0;i<payload[_direction].length;i++){
-			var _grid;
-			var _fire;
-			placeFire(_direction,i,_grid,_fire);
-			_fire.vanish(payload[_directio][i]);
+			placeFire(_direction,i);
+			_fire.vanish(payload[_direction][i]);
 				//{type:"Box",extra:_object.buff}
 				//{type:"Buff",extra:null}
 				//{type:"BM",extra:idList}				
@@ -116,8 +116,9 @@ BMO.Bomb.prototype.explode = function(payload){
 
 	}
 	if (this.owner.alive) this.owner.bombNum++;
-	this.eventProcesser({type:"vanish",payload:null});
-	}catch(e){console.log(e);throw e;};
+	//this.eventProcesser({type:"vanish",payload:null});
+	this.vanish();
+	}catch(e){console.error("Bomb.explode:err=",e);throw e;};
 }
 
 
@@ -149,6 +150,6 @@ BMO.Bomb.prototype.eventProcesser = function(event){
 		//console.log("Bomb.explode:",event);
 		this.explode(event.payload);
 	}else if (event.type === "vanish"){
-		this.vanish();
+		//this.vanish();
 	}
 }

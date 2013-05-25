@@ -30,7 +30,7 @@ BMO.Box.prototype.setView = function(_id){
 
 /*
 @protected override method vanish()
-@param e = null or Buff.classname;
+@param e = None or Buff.classname;
 **/
 BMO.Box.prototype.vanish = function(payload){
 	try{
@@ -43,11 +43,11 @@ BMO.Box.prototype.vanish = function(payload){
 		setTimeout(function(){
 			var _buff = null;
 			var _grid = null;
-			if (payload !== null ){
-				_grid = this.grid;
+			if (payload !== "None" ){
+				_grid = self.grid;
 				_buff = new BMO.Buff(_grid,self.BMM,self.wsClient);
 			}
-			this.wsClient= null;
+			self.wsClient= null;
 			BMO.Element.prototype.vanish.call(self);
 			if ( _buff !== null ){
 				_buff.setView(payload);
@@ -57,7 +57,7 @@ BMO.Box.prototype.vanish = function(payload){
 		},300);
 	},300);
 	
-	}catch(e){console.log(e);throw e;};
+	}catch(e){console.error("Box.vanish:err=",e);throw e;};
 }
 
 /*
