@@ -467,6 +467,7 @@ BMO.BMM.prototype.broadcastVanishBuff = function(data,wsClient){//Andy
 					type: "applyBuff",
 					payload: _in.payload
 			};
+			console.log('[BMM.broadcastVanishBuff] applyBuff');
 			element.eventProcesser(e);
 		}
 	}catch(e){console.log(e);throw 'vanishBuffErr='+e};
