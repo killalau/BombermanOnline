@@ -779,20 +779,29 @@ function game_init(data, gServer, gClient){
 		};
 		for(var i = 0, c; c = gServer.roomList[gClient.room].clientList[i]; i++){
 			var bm = bmm.getElementById(c.username);
-			json.players.push({
-				username : c.username,
-				seat : c.seat,
-				viewPrefix : bmm.mapConfig.PIXI.avatar[c.seat].replace(/.json$/, "") + "_",
-				alive: bm.alive, 
-				pos : bm.grid.position,
-				bombNum : bm.bombNum,
-				bombCurrentMax : bm.bombCurrentMax,
-				bombMax : bm.bombMax,
-				power : bm.power,
-				powerMax : bm.powerMax,
-				speed : bm.speed,
-				speedMax : bm.speedMax				
-			});
+			if ( bm.alive){
+				json.players.push({
+					username : c.username,
+					seat : c.seat,
+					viewPrefix : bmm.mapConfig.PIXI.avatar[c.seat].replace(/.json$/, "") + "_",
+					alive: bm.alive, 
+					pos : bm.grid.position,
+					bombNum : bm.bombNum,
+					bombCurrentMax : bm.bombCurrentMax,
+					bombMax : bm.bombMax,
+					power : bm.power,
+					powerMax : bm.powerMax,
+					speed : bm.speed,
+					speedMax : bm.speedMax				
+				});
+			}else{
+				json.players.push({
+					username : c.username,
+					seat : c.seat,
+					viewPrefix : bmm.mapConfig.PIXI.avatar[c.seat].replace(/.json$/, "") + "_",
+					alive: bm.alive});
+			}
+			
 		}
 		for(var i = 0, row; row = bmm.gridList[i]; i++){
 			for(var j = 0, gird; grid = row[j]; j++){

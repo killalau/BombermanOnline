@@ -81,8 +81,8 @@ BMO.BMM.prototype.setPlayer = function(data){
 	//console.log("setPlayer");
 	for(var i=0;i<data.players.length;i++){
 		var _player = data.players[i];
-		var _grid = this.gridList[_player.pos.y][_player.pos.x];
 		if ( _player.alive ){
+			var _grid = this.gridList[_player.pos.y][_player.pos.x];		
 			var _BM = new BMO.BM(_grid,this,this.wsClient);
 			this.addElement(_BM);
 			_BM.id = _player.username;

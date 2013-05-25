@@ -72,7 +72,7 @@ BMO.Bomb.prototype.explode = function(payload){
 	try{
 	console.log("Bomb.explode():payload=",payload);
 	var self = this;
-	var placeFire = function(_direction){
+	var placeFire = function(_direction,i){
 		var _fire; 
 		var _grid;
 		if ( _direction === "U" ){	
@@ -106,7 +106,7 @@ BMO.Bomb.prototype.explode = function(payload){
 	for(var _direction in payload){
 		//console.log("Bomb.explode()._dir=",_direction);
 		for(var i =0;i<payload[_direction].length;i++){
-			placeFire(_direction);
+			placeFire(_direction,i);
 			if(payload[_direction][i] !== null){
 				//{type:"Box",extra:_object.buff}
 				//{type:"Buff",extra:null}
