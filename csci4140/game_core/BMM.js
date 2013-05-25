@@ -160,7 +160,7 @@ BMM.prototype.getElementById = function(id){
 		if(id.position.x < 0 || id.position.x > this.width || id.position.y < 0 || id.position.y > this.height){
 			return null;
 		}
-		return this.gridList[id.position.y][id.position.x].getElementById(id.classname);
+		return this.gridList[id.position.y][id.position.x].getElementByClass(id.classname);
 	}
 	return null;
 }
@@ -186,9 +186,9 @@ BMM.prototype.plantBombValidation = function(x,y,id,callback){
 		if (_grid === null || _BM === null ) throw "_grid or _BM is null";
 		if (! _BM.alive ) return {result:false,bombnum:0};
 		//Any trick things on that grid atm
-		if ( !(_grid.getElementById("Bomb") === null && 
-				_grid.getElementById("Wall") === null &&
-				_grid.getElementById("Box") === null 
+		if ( !(_grid.getElementByClass("Bomb") === null && 
+				_grid.getElementByClass("Wall") === null &&
+				_grid.getElementByClass("Box") === null 
 				)) _out.result = false;
 		else{
 			//Are there any bombs available for that BM ?
@@ -238,13 +238,16 @@ BMM.prototype.explodeBomb = function(x,y,id,callback){
 		};
 		if ((_BM = this.getElementById(id)) !== null ) _BM.bombNum++;//BM hasn't die yet		
 		//console.log("core_explode:_out=",(this.getElementById({position:{x:x,y:y},classname:"Bomb"})).vanish());
-		_out.payload = (this.getElementById({position:{x:x,y:y},classname:"Bomb"})).vanish();
+		//console.log("BMM.explodeBomb:bomb.vanish=",
+		//(this.getElementById({position:{x:x,y:y},classname:"Bomb"})).vanish);
+		
+		_out.payload = (this.getElementById({position:{x:x,y:y},classname:"Bomb"})).vanish(callback);
 		//console.log("core_explode:_out=\n",_out.payload);
 		
 		//broadcast
 		callback(_out);
 		
-	}catch(e){console.error("[CoreBMM explodeBomb]err=",e);};
+	}catch(e){console.error("BMM.explodeBomb:err=",e);};
 }
 
 /*
