@@ -303,24 +303,26 @@ BMO.BM.prototype.setView = function(_id){
 **/
 BMO.BM.prototype.vanish = function(){
 	try{
-	if (this.alive){
-		if (this.id == this.wsClient.username){
-			document.body.removeEventListener("keydown",this.BMM.myKeyDown,false);
-			document.body.removeEventListener("keyup",this.BMM.myKeyUp,false);
-		}
-		this.alive = false;
-		this.stopMove(this.direction);
-		this.wsClient = null;
-		var _id = this.viewPrefix + "die";
-		var self = this;
-		//setTimeout(function(){self.vanish();},200);
-		self.setView(_id+1);
-		setTimeout(function(){
-			self.setView(_id+2);
+	if (this.isDestroyable){
+		if (this.alive){
+			if (this.id == this.wsClient.username){
+				document.body.removeEventListener("keydown",this.BMM.myKeyDown,false);
+				document.body.removeEventListener("keyup",this.BMM.myKeyUp,false);
+			}
+			this.alive = false;
+			this.stopMove(this.direction);
+			this.wsClient = null;
+			var _id = this.viewPrefix + "die";
+			var self = this;
+			//setTimeout(function(){self.vanish();},200);
+			self.setView(_id+1);
 			setTimeout(function(){
-				BMO.Element.prototype.vanish.call(self);
-			},500);
-		},800);
+				self.setView(_id+2);
+				setTimeout(function(){
+					BMO.Element.prototype.vanish.call(self);
+				},500);
+			},800);
+		}
 	}
 	}catch(e){console.log("BM.vanish:err=",e);};
 }

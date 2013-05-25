@@ -44,7 +44,8 @@ BMO.Buff.prototype.applyBuff = function(targetBM){
 */
 BMO.Buff.prototype.vanish = function(){
 	try{
-		BMO.Element.prototype.vanish.call(this);	
+		if (this.isDestroyable)
+			BMO.Element.prototype.vanish.call(this);	
 	}catch(e){console.log("Buff.vanish:err=",e);throw e;};
 }
 

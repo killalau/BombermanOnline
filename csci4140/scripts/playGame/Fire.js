@@ -12,7 +12,7 @@ BMO.Fire =function(_grid,_BMM,_wsClient){
 	try{
 	BMO.Element.call(this,_grid,_BMM,_wsClient);
 	this.classname = "Fire";
-	this.fireID = null;
+	this.fireID = null;	
 	}catch(e){throw e;};
 }
 
@@ -39,19 +39,23 @@ BMO.Fire.prototype.vanish = function(payload){
 	//{type:"Box",extra:_object.buff}
 	//{type:"Buff",extra:null}
 	//{type:"BM",extra:idList}
-	var self = this;
-	setTimeout(function(){		
-		BMO.Element.prototype.setView.call(self,self.fireID+"1");		
-		var _grid = self.grid;
-		BMO.Element.prototype.vanish.call(self);
-		self.wsClient= null;
-		if ( payload !== null ){
-			var _elementList = [];
-			for(var i in _grid.elementList) _elementList.push(_grid.elementList[i]);//COPY
-			for(var i = 0 ; i < _elementList.length; i++)
-				_elementList[i].eventProcesser({type:"vanish",payload:payload.extra});			
-		} 
-	},200);	      
+	if (this.isDestroyable){
+		this.isDestroyable = false;
+		var self = this;
+		setTimeout(function(){		
+			BMO.Element.prototype.setView.call(self,self.fireID+"1");		
+			var _grid = self.grid;
+			self.isDestroyable = true;
+			BMO.Element.prototype.vanish.call(self);
+			self.wsClient= null;
+			if ( payload !== null ){
+				var _elementList = [];
+				for(var i in _grid.elementList) _elementList.push(_grid.elementList[i]);//COPY
+				for(var i = 0 ; i < _elementList.length; i++)
+					_elementList[i].eventProcesser({type:"vanish",payload:payload.extra});			
+			} 
+		},200);	
+	}	
 	}catch(e){console.error("Fire.vanish:err=",e);throw e;};
 }
 

@@ -58,8 +58,10 @@ BM.prototype.increasePower = function(num){
 **/
 BM.prototype.vanish = function(){
 	try{
-		this.alive=false;
-		Element.Element.prototype.vanish.call(this);
+		if (this.isDestroyable){
+			this.alive=false;
+			Element.Element.prototype.vanish.call(this);
+		}
 	}catch(e){console.log("BM.vanish:err=",e);};
 }
 

@@ -2,6 +2,7 @@ function Element(grid){
 	this.classname = "Element";
 	this.grid = grid;
 	this.isBlockable = false;
+	this.isDestroyable = true;
 	this.position = {x : 0, y : 0};
 	this.speed = 0;			//grid per 30ms
 	this.speedMax = 0;
@@ -109,8 +110,11 @@ Element.prototype.increaseSpeed = function(num){
 
 Element.prototype.vanish = function(){
 	try{
-	if (this.moveFunction !== null ) this.moveStop();
-	this.grid.removeElement(this);
+	if (this.isDestroyable){
+		this.isDestroyable = false;
+		if (this.moveFunction !== null ) this.moveStop();
+		this.grid.removeElement(this);
+	}
 	}catch(e){console.log("Element.vanish:err",e);};
 }
 

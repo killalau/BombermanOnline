@@ -68,32 +68,34 @@ Bomb.prototype.destroyRule = function(_grid,_out,direction){
 
 Bomb.prototype.vanish = function(){
 	try{
-	var y = this.grid.position.y;
-	var x = this.grid.position.x;
-	var y0 = this.grid.position.y-this.powerOfFire;
-	var y1 = this.grid.position.y+this.powerOfFire;
-	var x0 = this.grid.position.x-this.powerOfFire;
-	var x1 = this.grid.position.x+this.powerOfFire;
-	var _BMM = this.grid.BMM;
-	Element.Element.prototype.vanish.call(this);// put it here avoid bomb explode loop
-	var _out = {U:[],D:[],L:[],R:[],C:[],Combo:[]};
-	y0 = y0 < 0 ? 0 : y0;
-	y1 = y1 >= _BMM.height ? (_BMM.height) -1: y1;
-	x0 = x0 < 0 ? 0 : x0;
-	x1 = x1 >= _BMM.width ? (_BMM.width) -1 : x1;
+	if (this.isDestroyable){
+		var y = this.grid.position.y;
+		var x = this.grid.position.x;
+		var y0 = this.grid.position.y-this.powerOfFire;
+		var y1 = this.grid.position.y+this.powerOfFire;
+		var x0 = this.grid.position.x-this.powerOfFire;
+		var x1 = this.grid.position.x+this.powerOfFire;
+		var _BMM = this.grid.BMM;
+		Element.Element.prototype.vanish.call(this);// put it here avoid bomb explode loop
+		var _out = {U:[],D:[],L:[],R:[],C:[],Combo:[]};
+		y0 = y0 < 0 ? 0 : y0;
+		y1 = y1 >= _BMM.height ? (_BMM.height) -1: y1;
+		x0 = x0 < 0 ? 0 : x0;
+		x1 = x1 >= _BMM.width ? (_BMM.width) -1 : x1;
 
-	//console.log("Bomb.vansih:y,y0,y1,x,x0,x1",{y:y,y0:y0,y1:y1,x:x,x0:x0,x1:x1});
-	if (this.comboSrc.indexOf("U") == -1 )
-		for(var i=y-1;i>=y0;i--) if ( ! (this.destroyRule(_BMM.gridList[i][x],_out,"U"))) break;
-	if (this.comboSrc.indexOf("D") == -1 )
-		for(var i=y+1;i<=y1;i++) if ( ! (this.destroyRule(_BMM.gridList[i][x],_out,"D"))) break;
-	if (this.comboSrc.indexOf("L") == -1 )	
-		for(var i=x-1;i>=x0;i--) if ( ! (this.destroyRule(_BMM.gridList[y][i],_out,"L"))) break;
-	if (this.comboSrc.indexOf("R") == -1 )
-		for(var i=x+1;i<=x1;i++) if ( ! (this.destroyRule(_BMM.gridList[y][i],_out,"R"))) break;
-	this.destroyRule(_BMM.gridList[y][x],_out,"C");
-	
-	return _out;
+		//console.log("Bomb.vansih:y,y0,y1,x,x0,x1",{y:y,y0:y0,y1:y1,x:x,x0:x0,x1:x1});
+		if (this.comboSrc.indexOf("U") == -1 )
+			for(var i=y-1;i>=y0;i--) if ( ! (this.destroyRule(_BMM.gridList[i][x],_out,"U"))) break;
+		if (this.comboSrc.indexOf("D") == -1 )
+			for(var i=y+1;i<=y1;i++) if ( ! (this.destroyRule(_BMM.gridList[i][x],_out,"D"))) break;
+		if (this.comboSrc.indexOf("L") == -1 )	
+			for(var i=x-1;i>=x0;i--) if ( ! (this.destroyRule(_BMM.gridList[y][i],_out,"L"))) break;
+		if (this.comboSrc.indexOf("R") == -1 )
+			for(var i=x+1;i<=x1;i++) if ( ! (this.destroyRule(_BMM.gridList[y][i],_out,"R"))) break;
+		this.destroyRule(_BMM.gridList[y][x],_out,"C");
+		
+		return _out;
+	}
 	}catch(e){console.log("Bomb.vanish:err=",e);};
 }
 

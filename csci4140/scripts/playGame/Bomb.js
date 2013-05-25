@@ -134,12 +134,14 @@ BMO.Bomb.prototype.explode = function(payload){
 **/
 BMO.Bomb.prototype.vanish = function(){
 	try{
-	BMO.Element.prototype.vanish.call(this);
-	this.BM = null;
-	this.wsClient= null;
-	if(this.waitFunc != null){
-		clearInterval(this.waitFunc);
-		this.waitFunc = null;
+	if (this.isDestroyable){
+		BMO.Element.prototype.vanish.call(this);
+		this.BM = null;
+		this.wsClient= null;
+		if(this.waitFunc != null){
+			clearInterval(this.waitFunc);
+			this.waitFunc = null;
+		}
 	}
 	}catch(e){console.log("Bomb.vanish:err=",e);throw e;};
 }

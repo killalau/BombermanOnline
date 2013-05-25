@@ -34,29 +34,29 @@ BMO.Box.prototype.setView = function(_id){
 **/
 BMO.Box.prototype.vanish = function(payload){
 	try{
-	
-	var self = this;
-	
-	self.setView("box_fire1");
-	setTimeout(function(){
-		self.setView("box_fire2");
+	if (this.isDestroyable){
+		var self = this;
+		
+		self.setView("box_fire1");
 		setTimeout(function(){
-			var _buff = null;
-			var _grid = null;
-			if (payload !== "None" ){
-				_grid = self.grid;
-				_buff = new BMO.Buff(_grid,self.BMM,self.wsClient);
-			}
-			self.wsClient= null;
-			BMO.Element.prototype.vanish.call(self);
-			if ( _buff !== null ){
-				_buff.setView(payload);
-				_grid.addElement(_buff);
-				_grid.view.addChild(_buff.view);
-			}
+			self.setView("box_fire2");
+			setTimeout(function(){
+				var _buff = null;
+				var _grid = null;
+				if (payload !== "None" ){
+					_grid = self.grid;
+					_buff = new BMO.Buff(_grid,self.BMM,self.wsClient);
+				}
+				self.wsClient= null;
+				BMO.Element.prototype.vanish.call(self);
+				if ( _buff !== null ){
+					_buff.setView(payload);
+					_grid.addElement(_buff);
+					_grid.view.addChild(_buff.view);
+				}
+			},300);
 		},300);
-	},300);
-	
+	}
 	}catch(e){console.error("Box.vanish:err=",e);throw e;};
 }
 
