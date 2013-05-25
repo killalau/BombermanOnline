@@ -100,8 +100,9 @@ BMO.Bomb.prototype.explode = function(payload){
 				_grid = self.grid;
 				_fire.setView("fire_c");					
 		}
-		_grid.addElement(_fire);
-		_grid.view.addChild(_fire.view);
+		_grid.addElement(_fire);		
+		_grid.view.addChildAt(_fire.view,1);
+
 	};
 	for(var _direction in payload){
 		//console.log("Bomb.explode()._dir=",_direction);
