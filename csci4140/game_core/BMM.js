@@ -282,12 +282,13 @@ BMM.prototype.vanishBuffValidation = function(X, Y, buffname, requestBM, callbac
 								y:Y},
 						payload: requestBM 
 				};
-				console.log('[CoreBMM.vanishBuffValidation] grid.elementList:');
+				console.log('[CoreBMM.vanishBuffValidation] (before vanish)grid.elementList:');
 				console.log(grid.elementList);
 				var bm = this.getElementById(requestBM);
 				e.applyBuff(bm);
 				console.log('[CoreBMM.vanishBuffValidation] grid.removeElement: '+e.classname);				
 				grid.removeElement(e);
+				console.log('[CoreBMM.vanishBuffValidation] (after vanish)grid.elementList:');
 				console.log(grid.elementList);
 				break;
 			}
