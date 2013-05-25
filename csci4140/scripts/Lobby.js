@@ -88,10 +88,18 @@ Lobby.rmUp = function(e){
 	if ( Lobby.firstRID == 0 ){
 		up.style.visibility = "hidden";
 		up.removeEventListener("click",Lobby.rmUp,false);
+		up.removeEventListener("dblclick",function(e){
+			e.stopPropagation();
+			e.preventDefault();
+		},false);
 	}	
 	if ( (Lobby.gameRoomList.length - Lobby.firstRID) == (Lobby.numOfRoom + 1) ){ 
 		down.style.visibility = "visible";
 		down.addEventListener("click",Lobby.rmDown,false);
+		down.addEventListener("dblclick",function(e){
+			e.stopPropagation();
+			e.preventDefault();
+		},false);
 	}
 	Lobby.rmListRefresh();
 	return null;
@@ -104,9 +112,17 @@ Lobby.rmDown = function(e){
 	if ( Lobby.firstRID + Lobby.numOfRoom == Lobby.gameRoomList.length ){ 
 		down.style.visibility = "hidden";
 		down.removeEventListener("click",Lobby.rmDown,false);
+		down.removeEventListener("dblclick",function(e){
+			e.stopPropagation();
+			e.preventDefault();
+		},false);
 	}else if ( Lobby.firstRID == 1 ){
 		up.style.visibility ="visible";
 		up.addEventListener("click",Lobby.rmUp,false);
+		up.addEventListener("dblclick",function(e){
+			e.stopPropagation();
+			e.preventDefault();
+		},false);
 	}
 	Lobby.rmListRefresh();
 	return null;
@@ -233,6 +249,10 @@ Lobby.init_phase2 = function(handlers,wsClient){
 	var up = document.getElementById("up");
 	up.style.visibility = "hidden";
 	down.addEventListener("click",Lobby.rmDown,false);
+	down.addEventListener("dblclick",function(e){
+		e.stopPropagation();
+		e.preventDefault();
+	},false);
 	//End Of Up&Down Button-----------------------	
 
 	//Player Stat
