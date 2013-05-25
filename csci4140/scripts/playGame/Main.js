@@ -50,7 +50,7 @@ BMO.webPageInit_phase2 = function(handlers,wsClient){
 			BMO.webPageBMM = _BMM;
 			BMO.webPageStage = _stage;
 			document.body.children[0].appendChild(BMO.webPageStage.view);
-			_BMM.init(_in);
+			_BMM.init(_in); 
 			requestAnimFrame(BMO.screenRefresh);
 		}else{
 				//alert("You should not in this page");

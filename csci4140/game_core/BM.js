@@ -7,6 +7,7 @@ function BM(gClient, grid){
 	this.classname = "BM";
 	this.gClient = gClient;
 	this.id = gClient ? gClient.username : "NPC";
+	this.alive = true;
 	this.bombNum = 1;
 	this.bombCurrentMax = 1;
 	this.bombMax = 8;
@@ -50,6 +51,16 @@ BM.prototype.increasePower = function(num){
 	this.power += num;
 	if(this.power > this.powerMax) this.power = this.powerMax;
 	if(this.power < 0) this.power = 0;
+}
+
+/*
+@public override method vanish
+**/
+BM.prototype.vanish = function(){
+	try{
+		this.alive=false;
+		Element.Element.prototype.vanish.call(this);
+	}catch(e){console.log("BM.vanish:err=",e);};
 }
 
 exports.BM = BM;

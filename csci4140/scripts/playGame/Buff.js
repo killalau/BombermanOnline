@@ -36,6 +36,7 @@ BMO.Buff.prototype.applyBuff = function(targetBM){
 /*
 @protected override method vanish()
 */
+<<<<<<< HEAD
 BMO.Buff.prototype.vanish = function(targetBM){
 	var self = this;
 	/*if targetBM = self BM
@@ -47,16 +48,16 @@ BMO.Buff.prototype.vanish = function(targetBM){
 	if (targetBM == playerId)
 		self.applyBuff(targetBM);
 	
+=======
+BMO.Buff.prototype.vanish = function(){
+>>>>>>> 7d598df763e3220aecd3ed4d5539b3ec7070ffa1
 	try{
-	console.log('[Buff.vanish] vanish');
-	BMO.Element.prototype.vanish.call(self);
-	self.wsClient= null;
-	}catch(e){console.log(e);throw e;};
+	BMO.Element.prototype.vanish.call(this);	
+	}catch(e){console.log("Buff.vanish:err=",e);throw e;};
 }
 
 BMO.Buff.prototype.eventProcesser = function(event){
 	if (event.type === "vanish"){
-		//console.log("Bomb.explode:",event);
-		this.vanish(event.payload);
+		this.vanish();
 	}
 }

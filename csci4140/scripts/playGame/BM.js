@@ -12,18 +12,18 @@ BMO.BM =function(_grid,_BMM,_wsClient){
 	try{
 		BMO.Element.call(this,_grid,_BMM,_wsClient);
 		this.classname = "BM";
-		this.id = false;
-		this.viewPrefix = null;
-		this.speed = 4;
-		this.direction = "D";		
 		this.animationIndex = 0;
+		this.viewPrefix = null;
+		this.direction = "D";
 		
-		this.bombMax = 8;
-		this.powerMax = 8;
-		this.currentBombMax = 2;
-		this.bombNum = 1;
-		this.powerOfFire = 2;
+		this.id = false;
 		this.alive = true;
+		this.speed = -1;	
+		this.bombMax = -1;
+		this.powerMax = -1;
+		this.currentBombMax = -1;
+		this.bombNum = -1;
+		this.powerOfFire = -1;
 
 	}catch(e){throw(e);};
 }
@@ -58,7 +58,7 @@ BMO.BM.prototype.startMove = function(dir){
 		if(self.id == self.wsClient.username){
 			self.wsClient.sendData("game_playerMove", self.direction);
 		}
-	}
+	} 
 	
 	//regester move event, run every 30ms
 	if(self.moveFunction == null){
@@ -296,23 +296,26 @@ BMO.BM.prototype.setView = function(_id){
 @protected override method vanish()
 **/
 BMO.BM.prototype.vanish = function(){
-	if (this.id == this.wsClient.username){
-		document.body.removeEventListener("keydown",this.BMM.myKeyDown,false);
-		document.body.removeEventListener("keyup",this.BMM.myKeyUp,false);
-	}
-	this.alive = false;
-	this.wsClient = null;
-	var _id = this.viewPrefix + "die";
-	var self = this;
-	//setTimeout(function(){self.vanish();},200);
-	self.setView(_id+1);
-	setTimeout(function(){
-		self.setView(_id+2);
+	try{
+	if (this.alive){
+		if (this.id == this.wsClient.username){
+			document.body.removeEventListener("keydown",this.BMM.myKeyDown,false);
+			document.body.removeEventListener("keyup",this.BMM.myKeyUp,false);
+		}
+		this.alive = false;
+		this.wsClient = null;
+		var _id = this.viewPrefix + "die";
+		var self = this;
+		//setTimeout(function(){self.vanish();},200);
+		self.setView(_id+1);
 		setTimeout(function(){
-			BMO.Element.prototype.vanish.call(self);
-		},500);
-	},800);
-
+			self.setView(_id+2);
+			setTimeout(function(){
+				BMO.Element.prototype.vanish.call(self);
+			},500);
+		},800);
+	}
+	}catch(e){console.log("BM.vanish:err=",e);};
 }
 
 /*

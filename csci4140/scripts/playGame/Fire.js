@@ -12,6 +12,7 @@ BMO.Fire =function(_grid,_BMM,_wsClient){
 	try{
 	BMO.Element.call(this,_grid,_BMM,_wsClient);
 	this.classname = "Fire";
+	this.fireID = null;
 	}catch(e){throw e;};
 }
 
@@ -26,21 +27,32 @@ BMO.Fire.prototype = Object.create( BMO.Element.prototype );
 BMO.Fire.prototype.setView = function(_id){
 	BMO.Element.prototype.setView.call(this,_id);//super.setView()....
 	var self = this;
-	setTimeout(function(){
-		//console.log(_id+"1");
-		BMO.Element.prototype.setView.call(self,_id+"1");
-		setTimeout(function(){self.vanish();},200);
-	},200);
+	this.fireID = _id;
 }
 
 /*
 @protected override method vanish()
+@param payload = null or {type:..,extra:..}
 **/
-BMO.Fire.prototype.vanish = function(){
-        try{
-        BMO.Element.prototype.vanish.call(this);
-        this.wsClient= null;
-        }catch(e){console.log(e);throw e;};
+BMO.Fire.prototype.vanish = function(payload){
+	try{
+	//{type:"Box",extra:_object.buff}
+	//{type:"Buff",extra:null}
+	//{type:"BM",extra:idList}
+	var self = this;
+	setTimeout(function(){		
+		BMO.Element.prototype.setView.call(self,self.fireID+"1");		
+		var _grid = self.grid;
+		BMO.Element.prototype.vanish.call(self);
+		self.wsClient= null;
+		if ( payload !== null ){
+			var _elementList = [];
+			for(var i in _grid.elementList) _elementList.push(_grid.elementList[i]);//COPY
+			for(var i = 0 ; i < _elementList.length; i++)
+				_elementList[i].eventProcesser({type:"vanish",payload:payload.extra});			
+		} 
+	},200);	      
+	}catch(e){console.error("Fire.vanish:err=",e);throw e;};
 }
 
 /*
@@ -54,6 +66,9 @@ BMO.Fire.prototype.vanish = function(){
 BMO.Fire.prototype.eventProcesser = function(event){
 	if (event.type === "vanish"){
 		//console.log("Bomb.explode:",event);
-		this.vanish();
+		/*
+		payload = null or {type:..,extra:..}
+		**/
+		this.vanish(e.payload);
 	}
 }
