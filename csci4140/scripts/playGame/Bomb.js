@@ -72,9 +72,7 @@ BMO.Bomb.prototype.explode = function(payload){
 	try{
 	console.log("Bomb.explode():payload=",payload);
 	var self = this;
-	var placeFire = function(_direction,i){
-		var _fire; 
-		var _grid;
+	var placeFire = function(_direction,i,_grid,_fire){
 		if ( _direction === "U" ){	
 				_grid = self.BMM.gridList[self.grid.Y-1-i][self.grid.X];
 				_fire = new BMO.Fire(_grid,self.BMM,self.wsClient);
@@ -106,12 +104,14 @@ BMO.Bomb.prototype.explode = function(payload){
 	for(var _direction in payload){
 		//console.log("Bomb.explode()._dir=",_direction);
 		for(var i =0;i<payload[_direction].length;i++){
-			placeFire(_direction,i);
-			if(payload[_direction][i] !== null){
+			var _grid;
+			var _fire;
+			placeFire(_direction,i,_grid,_fire);
+			_fire.vanish(payload[_directio][i]);
 				//{type:"Box",extra:_object.buff}
 				//{type:"Buff",extra:null}
 				//{type:"BM",extra:idList}				
-			}			
+				
 		}
 
 	}
@@ -133,7 +133,7 @@ BMO.Bomb.prototype.vanish = function(){
 		clearInterval(this.waitFunc);
 		this.waitFunc = null;
 	}
-	}catch(e){console.log(e);throw e;};
+	}catch(e){console.log("Bomb.vanish:err=",e);throw e;};
 }
 
 /*

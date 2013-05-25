@@ -32,23 +32,23 @@ BMO.Buff.prototype.applyBuff = function(targetBM){
 /*
 @protected override method vanish()
 */
-BMO.Buff.prototype.vanish = function(targetBM){
-	var self = this;
-	/*if targetBM = self BM
-		applyBuff()
-	  else
-		do nothing...
-	*/
+BMO.Buff.prototype.vanish = function(){
 	try{
-	console.log('[Buff.vanish] vanish');
-	BMO.Element.prototype.vanish.call(self);
-	self.wsClient= null;
-	}catch(e){console.log(e);throw e;};
+	var self = this;
+	//OK I borrow the box_fire explode
+	self.setView("box_fire1");
+	setTimeout(function(){
+		self.setView("box_fire2");
+		setTimeout(function(){
+			BMO.Element.prototype.vanish.call(self);
+		},100);
+	},100);
+	
+	}catch(e){console.log("Buff.vanish:err=",e);throw e;};
 }
 
 BMO.Buff.prototype.eventProcesser = function(event){
 	if (event.type === "vanish"){
-		//console.log("Bomb.explode:",event);
-		this.vanish(event.payload);
+		this.vanish();
 	}
 }

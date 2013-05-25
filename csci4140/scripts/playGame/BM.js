@@ -303,7 +303,7 @@ BMO.BM.prototype.vanish = function(){
 			},500);
 		},800);
 	}
-	}catch(e){console.log("BM.vanish:err",e);};
+	}catch(e){console.log("BM.vanish:err=",e);};
 }
 
 /*

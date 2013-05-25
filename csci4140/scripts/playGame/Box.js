@@ -30,18 +30,30 @@ BMO.Box.prototype.setView = function(_id){
 
 /*
 @protected override method vanish()
+@param e = null or Buff.classname;
 **/
-BMO.Box.prototype.vanish = function(){
+BMO.Box.prototype.vanish = function(payload){
 	try{
-	this.wsClient= null;
+	
 	var self = this;
 	
 	self.setView("box_fire1");
 	setTimeout(function(){
 		self.setView("box_fire2");
 		setTimeout(function(){
-			//DoMore
+			var _buff = null;
+			var _grid = null;
+			if (payload !== null ){
+				_grid = this.grid;
+				_buff = new BMO.Buff(_grid,self.BMM,self.wsClient);
+			}
+			this.wsClient= null;
 			BMO.Element.prototype.vanish.call(self);
+			if ( _buff !== null ){
+				_buff.setView(payload);
+				_grid.addElement(_buff);
+				_grid.view.addChild(_buff.view);
+			}
 		},300);
 	},300);
 	
@@ -58,7 +70,9 @@ BMO.Box.prototype.vanish = function(){
 **/
 BMO.Box.prototype.eventProcesser = function(event){
 	if (event.type === "vanish"){
-		//console.log("Bomb.explode:",event);
-		this.vanish();
+		/*
+		payload=null or classname
+		**/
+		this.vanish(event.payload);
 	}
 }
