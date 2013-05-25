@@ -456,7 +456,7 @@ BMO.BMM.prototype.broadcastVanishBuff = function(data,wsClient){//Andy
 			var _grid = this.gridList[_in.id.y][_in.id.x];
 			var element;
 			for(var i =0;i<_grid.elementList.length;i++){
-					if (_grid.elementList[i].classname === _in.classname){
+					if (_grid.elementList[i].classname == _in.classname){
 						element = _grid.elementList[i];
 						break;
 					}
