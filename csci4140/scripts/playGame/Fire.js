@@ -69,6 +69,6 @@ BMO.Fire.prototype.eventProcesser = function(event){
 		/*
 		payload = null or {type:..,extra:..}
 		**/
-		this.vanish(e.payload);
+		this.vanish(event.payload);
 	}
 }

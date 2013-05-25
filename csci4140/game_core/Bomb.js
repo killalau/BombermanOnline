@@ -12,25 +12,25 @@ function Bomb(grid,owner){
 	this.isBlockable = true;
 }
 
-Bomb.prototype.destroyRule = function(_grid,_out){
+Bomb.prototype.destroyRule = function(_grid,_out,callback){
 	try{
 	var _object;	
 	var ret;
 	var _BMM = _grid.BMM;
-	if ( (_object = _grid.getElementById("Wall")) === null ){
-		if ( (_object = _grid.getElementById("Box")) !== null ){
+	if ( (_object = _grid.getElementByClass("Wall")) === null ){
+		if ( (_object = _grid.getElementByClass("Box")) !== null ){
 			ret = false;
 			_out.push({type:"Box",extra:_object.buff});
 			new Fire.Fire(_grid);
-		}else if ( (_object = _grid.getElementById("Buff")) !== null ){
+		}else if ( (_object = _grid.getElementByClass("Buff")) !== null ){
 			ret = false;
 			_out.push({type:"Buff",extra:null});
 			new Fire.Fire(_grid);
-		}else if  ( (_object = _grid.getElementById("Bomb")) !== null ){
+		}else if  ( (_object = _grid.getElementByClass("Bomb")) !== null ){
 			ret = false;
 			//Asychorize handle
-			setTimeout(function(){_BMM.explodeBomb(_grid.position.x,_grid.position.y,_object.owner);},10);			
-		}else if ( (_object = _grid.getElementById("BM")) !== null ){
+			setTimeout(function(){_BMM.explodeBomb(_grid.position.x,_grid.position.y,_object.owner,callback);},10);			
+		}else if ( (_object = _grid.getElementByClass("BM")) !== null ){
 			var idList = [];
 			for(var j = 0, e; e = _grid.elementList[j]; j++)
 				if(e.classname == "BM")	idList.push(e.id);
@@ -47,7 +47,7 @@ Bomb.prototype.destroyRule = function(_grid,_out){
 	}catch(e){console.log("Core_bomb.destoryRule:err=",e);};
 }
 
-Bomb.prototype.vanish = function(){
+Bomb.prototype.vanish = function(callback){
 	try{
 	var y = this.grid.position.y;
 	var x = this.grid.position.x;
@@ -64,10 +64,10 @@ Bomb.prototype.vanish = function(){
 	x1 = x1 >= _BMM.width ? (_BMM.width) -1 : x1;
 
 	//console.log("Bomb.vansih:y,y0,y1,x,x0,x1",{y:y,y0:y0,y1:y1,x:x,x0:x0,x1:x1});
-	for(var i=y-1;i>=y0;i--)	if ( ! (this.destroyRule(_BMM.gridList[i][x],_out["U"]))) break;
-	for(var i=y+1;i<=y1;i++)	if ( ! (this.destroyRule(_BMM.gridList[i][x],_out["D"]))) break;
-	for(var i=x-1;i>=x0;i--)	if ( ! (this.destroyRule(_BMM.gridList[y][i],_out["L"]))) break;
-	for(var i=x+1;i<=x1;i++)	if ( ! (this.destroyRule(_BMM.gridList[y][i],_out["R"]))) break;
+	for(var i=y-1;i>=y0;i--)	if ( ! (this.destroyRule(_BMM.gridList[i][x],_out["U"],callback))) break;
+	for(var i=y+1;i<=y1;i++)	if ( ! (this.destroyRule(_BMM.gridList[i][x],_out["D"],callback))) break;
+	for(var i=x-1;i>=x0;i--)	if ( ! (this.destroyRule(_BMM.gridList[y][i],_out["L"],callback))) break;
+	for(var i=x+1;i<=x1;i++)	if ( ! (this.destroyRule(_BMM.gridList[y][i],_out["R"],callback))) break;
 	this.destroyRule(_BMM.gridList[y][x],_out["C"]);
 	
 	return _out;
