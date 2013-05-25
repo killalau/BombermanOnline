@@ -33,6 +33,7 @@ Bomb.prototype.destroyRule = function(_grid,_out,direction){
 				new Fire.Fire(_grid);				
 			}else{
 				_out["Combo"].push({bomb:_object,x:_grid.position.x,y:_grid.position.y});
+				_out[direction].push({type:"Bomb",extra:null});
 				switch(direction){
 				case "U":
 					_object.comboSrc.push("D");

@@ -106,7 +106,13 @@ BMO.Bomb.prototype.explode = function(payload){
 	};
 	for(var _direction in payload){
 		//console.log("Bomb.explode()._dir=",_direction);
+		
+
 		for(var i =0;i<payload[_direction].length;i++){
+			if ( (_direction !== "C") && ( payload[_direction][i] != null ) &&
+					(payload[_direction][i].type === "Bomb")) {
+					continue;
+			}
 			placeFire(_direction,i);
 			_fire.vanish(payload[_direction][i]);
 				//{type:"Box",extra:_object.buff}
@@ -119,7 +125,7 @@ BMO.Bomb.prototype.explode = function(payload){
 	if (this.owner.alive) this.owner.bombNum++;
 	//this.eventProcesser({type:"vanish",payload:null});
 	this.vanish();
-	}catch(e){console.error("Bomb.explode:err=",e);throw e;};
+	}catch(e){console.error("Bomb.explode:err=",e);alert(e);throw e;};
 }
 
 
