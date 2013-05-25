@@ -61,6 +61,9 @@ function create(isLobby, name){
 					break;
 				}
 			}
+			if(room.clientList.length == 0){
+				bmm = null;
+			}
 		},
 		broadcastData : function(eventType, data, srcName){
 			var stime = new Date();
