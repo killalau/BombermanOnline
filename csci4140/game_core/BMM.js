@@ -269,7 +269,7 @@ BMM.prototype.vanishBuffValidation = function(X, Y, buffname, requestBM, callbac
 	
 	/*
 	 *	AndyQ - further implementation for timing consideration
-	 */	
+	 */
 	
 	console.log('[CoreBMM.vanishBuffValidation]');
 	try{
@@ -283,6 +283,8 @@ BMM.prototype.vanishBuffValidation = function(X, Y, buffname, requestBM, callbac
 				};
 				console.log('[CoreBMM.vanishBuffValidation] grid.elementList:');
 				console.log(grid.elementList);
+				var bm = this.getElementById(requestBM);
+				e.applyBuff(bm);
 				console.log('[CoreBMM.vanishBuffValidation] grid.removeElement: '+e.classname);				
 				grid.removeElement(e);
 				console.log(grid.elementList);

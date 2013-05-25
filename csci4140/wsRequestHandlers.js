@@ -944,19 +944,6 @@ function game_vanishBuff(data, gServer, gClient){//Andy
 			//to broadcast
 			game_broadcastVanishBuff(_out, gServer, gClient);
 		});	
-	
-	//moved to the game_broadcastVanishBuff callback function
-	/*
-	try{
-	var out = {
-			classname: 'BombPlusPlus', //classname: _in.classname, //AndyQ - to be changed				
-			//identify the buff by posiiton (x,y)
-			id:	_in.id,
-			//payload indicates which BM get the buff
-			payload: gClient.username				
-	};
-	gClient.broadcastData('game_broadcastVanishBuff',JSON.stringify(out));
-	}catch(e){console.log(e);throw e;};*/
 }
 
 /*

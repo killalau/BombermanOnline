@@ -25,8 +25,12 @@ BMO.Buff.prototype.setView = function(_id){
 //@protected method applyBuff()
 //to apply the funciton of the buff to self BM
 BMO.Buff.prototype.applyBuff = function(targetBM){
-//applybuff
-//AndyQ - how to change myself's BM's property?
+	var bmm = this.BMM;
+	var bm = null;
+	bm = bmm.getElementById(targetBM);
+	
+	bm.increaseBombNum();
+	console.log('[Buff.applyBuff] classname:'+this.classname+' targetBM.id:'+bm.id+' targetBM.currentBombMax:'+bm.currentBombMax);
 }
 
 /*
@@ -39,6 +43,10 @@ BMO.Buff.prototype.vanish = function(targetBM){
 	  else
 		do nothing...
 	*/
+	var playerId = self.BMM.wsClient.username;
+	if (targetBM == playerId)
+		self.applyBuff(targetBM);
+	
 	try{
 	console.log('[Buff.vanish] vanish');
 	BMO.Element.prototype.vanish.call(self);

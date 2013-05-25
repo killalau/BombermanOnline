@@ -34,6 +34,7 @@ BMO.BM.prototype = Object.create( BMO.Element.prototype );
 
 //static value, remember which keys the client is pressing
 BMO.BM.dirKey = [];
+
 /*
 @private method startMove
 @param dir: the move direction, triggered by key event, or server command
@@ -258,6 +259,17 @@ BMO.BM.prototype.requestVanishBuff = function(classname){//Andy
 		'classname': classname
 	};
 	this.wsClient.sendData("game_vanishBuff",JSON.stringify(req));
+}
+
+/*
+@public method startMove
+@param num: the number of bomb to be increased
+**/
+BMO.BM.prototype.increaseBombNum = function(num){
+	num = num ? parseInt(num) : 1;
+	this.bombNum += num;
+	if(this.bombNum > this.currentBombMax) this.bombNum = this.currentBombMax;
+	if(this.bombNum < 0) this.bombNum = 0;
 }
 
 /*
