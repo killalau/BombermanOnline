@@ -33,13 +33,14 @@ BMO.Buff.prototype.applyBuff = function(targetBM){
 		var bm = bmm.getElementById(targetBM);
 		bm.increaseBombNum();
 		console.log('[Buff.applyBuff] classname:'+this.classname+' targetBM.id:'+bm.id+' targetBM.currentBombMax:'+bm.currentBombMax);
+		this.vanish();
 	}
 }
 
 /*
 @protected override method vanish()
 */
-BMO.Buff.prototype.vanish = function(targetBM){
+BMO.Buff.prototype.vanish = function(){
 	try{
 		BMO.Element.prototype.vanish.call(this);	
 	}catch(e){console.log("Buff.vanish:err=",e);throw e;};
