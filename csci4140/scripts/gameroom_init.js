@@ -43,6 +43,9 @@ function AddEventListenter(handlers, wsClient) {
 		inner_img.setAttribute("src", "../images/star.png");
 		inner_div.appendChild(inner_img);
 		inner_div.innerHTML = inner_div.innerHTML + 'Host';
+		
+		//edit room name function
+		change_name(handlers, wsClient);
 		}
 		
 		handlers["seat_update_ACK"] = function(data, wsClient) {
@@ -91,8 +94,7 @@ function AddEventListenter(handlers, wsClient) {
 				new_state_button.setAttribute("id", "State");
 				new_state_button.setAttribute("class", "State");
 				new_state_button.innerHTML = "Start";
-				inner_div.appendChild(new_state_button);
-				
+				inner_div.appendChild(new_state_button);			
 			}
 			catch(e){
 					alert("H_seat_update_ACK_error: " + e);
@@ -137,6 +139,17 @@ function AddEventListenter(handlers, wsClient) {
 			catch(e){
 				console.log("GameClickStart_ACK: " + e);
 			}
+		}
+		
+		handlers["rmname_update"] = function(data, wsClient) {
+			try{
+				var message = JSON.parse(data);
+				document.getElementById("roomname").innerHTML = message;
+			}
+			catch(e){
+				console.log("rename error, " + e);
+			}
+		
 		
 		}
 		

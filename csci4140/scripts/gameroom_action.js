@@ -69,6 +69,18 @@ function state_change(handlers, wsClient){
 	
 }
 
+function change_name(handlers, wsClient){
+	var rmname_div = document.getElementById("room_name");
+	rmname_div.addEventListener("click",function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+		var new_name = window.prompt("Please give a new name", "");
+		if(new_name){
+		wsClient.sendData("rename_room", JSON.stringify(new_name));
+		}									
+	} ,false);
+}
+
 
 
 
