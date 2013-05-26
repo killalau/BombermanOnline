@@ -122,7 +122,7 @@ BMM.prototype.setMap = function(){
 				for(var key in _buffList){					
 					if(rand < _buffList[key]){
 						buff = key;
-						Buff.Builder(_grid, 'BombPlusPlus');
+						Buff.Builder(_grid, 'FirePlusPlus');
 						break;
 					}
 				}
@@ -242,7 +242,7 @@ BMM.prototype.explodeBomb = function(x,y,bomb,callback){
 		
 		//console.log("BMM.explodeBomb:bomb.owner=",bomb.owner);
 		if ( bomb.owner !== null)
-		if ((_BM = this.getElementById(bomb.owner.id)) !== null ) _BM.bombNum = _BM.bombNum+1;//BM hasn't die yet			
+		if ((_BM = this.getElementById(bomb.owner.id)) !== null ) _BM.bombNum = _BM.increaseBombNum(1);//BM hasn't die yet //Andy: shud make use of BM builtin function			
 		_out.payload = bomb.vanish();
 		
 		//console.log("BMM.explodeBomb:_out.combo=",_out.payload.Combo);

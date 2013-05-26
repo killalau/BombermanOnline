@@ -45,15 +45,14 @@ BMO.Box.prototype.vanish = function(payload){
 				var _grid = null;
 				if (payload !== "None" ){
 					_grid = self.grid;
-					/*
-						switch payload{
-							case 'BombPlusPlus':
-							case 'SpeedPlusPlus':
-							case 'FirePlusPlus':
-							default:
-						}
-					*/
-					_buff = new BMO.BombPlusPlus(_grid,self.BMM,self.wsClient);//AndyQ - to be changed
+					
+					if (payload == 'BombPlusPlus'){
+						_buff = new BMO.BombPlusPlus(_grid,self.BMM,self.wsClient);
+					}else if (payload =='SpeedPlusPlus'){
+						_buff = new BMO.SpeedPlusPlus(_grid,self.BMM,self.wsClient);
+					}else if (payload == 'FirePlusPlus'){
+						_buff = new BMO.FirePlusPlus(_grid,self.BMM,self.wsClient);
+					}
 				}
 				self.wsClient= null;
 				BMO.Element.prototype.vanish.call(self);

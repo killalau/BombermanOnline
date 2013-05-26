@@ -46,6 +46,13 @@ BM.prototype.increaseBombCurrentMax = function(num){
 	console.log('[BM.increaseBombCurrentMax] bombCurrentMax:'+this.bombCurrentMax);
 }
 
+BM.prototype.increaseSpeed = function(num){
+	num = num ? parseInt(num) : 0.05;
+	this.speed += num;
+	if (this.speed > this.speedMax) this.speed = this.speedMax;
+	if (this.speed < 0.05) this.speed = 0.05;
+}
+
 BM.prototype.increasePower = function(num){
 	num = num ? parseInt(num) : 1;
 	this.power += num;

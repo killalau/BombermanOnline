@@ -154,16 +154,24 @@ BMO.BMM.prototype.setMap = function(data){
 			//TO-DO
 			break;
 			case "BombPlusPlus":
-				var _bombPP = new BMO.BombPlusPlus(_grid,this,this.wsClient);//AndyQ - to be changed BMO.Buff->BMO.BombPlusPlus
+				var _bombPP = new BMO.BombPlusPlus(_grid,this,this.wsClient);
 				_bombPP.setView("BombPlusPlus");							
 				_grid.addElement(_bombPP);
 				_grid.view.addChild(_bombPP.view);
 			//TO-DO
 			break;
 			case "FirePlusPlus":
+				var _bombPP = new BMO.FirePlusPlus(_grid,this,this.wsClient);
+				_bombPP.setView("FirePlusPlus");							
+				_grid.addElement(_bombPP);
+				_grid.view.addChild(_bombPP.view);
 			//TO-DO
 			break;
 			case "SpeedPlusPlus":
+				var _bombPP = new BMO.SpeedPlusPlus(_grid,this,this.wsClient);
+				_bombPP.setView("SpeedPlusPlus");							
+				_grid.addElement(_bombPP);
+				_grid.view.addChild(_bombPP.view);
 			//TO-DO
 			break;
 			}
@@ -218,6 +226,7 @@ BMO.BMM.prototype.setWall = function(data){
 	}catch(e){console.log(e);alert(e);throw e;};
 }
 
+//Below method BMM.setBuff() is no longer used
 /*
 @private method setBuff
 @param data: {
@@ -225,6 +234,7 @@ BMO.BMM.prototype.setWall = function(data){
 			payload: {}
 		}
 **/
+/*
 BMO.BMM.prototype.setBuff = function(data){//Andy
 	try{
 		console.log("setBuff");
@@ -248,6 +258,8 @@ BMO.BMM.prototype.setBuff = function(data){//Andy
 		}
 	}catch(e){console.log(e);alert(e);throw e;};
 }
+*/
+
 
 /*
 @private method setBox
