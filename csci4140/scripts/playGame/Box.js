@@ -46,11 +46,14 @@ BMO.Box.prototype.vanish = function(payload){
 				if (payload !== "None" ){
 					_grid = self.grid;
 					
-					if (payload == 'BombPlusPlus'){
-						_buff = new BMO.BombPlusPlus(_grid,self.BMM,self.wsClient);
-					}else if (payload =='SpeedPlusPlus'){
+					if (payload =='SpeedPlusPlus'){
+						console.log('[Box] new SpeedPlusPlus');
 						_buff = new BMO.SpeedPlusPlus(_grid,self.BMM,self.wsClient);
+					}else if(payload == 'BombPlusPlus'){
+						console.log('[Box] new BombPlusPlus');
+						_buff = new BMO.BombPlusPlus(_grid,self.BMM,self.wsClient);
 					}else if (payload == 'FirePlusPlus'){
+						console.log('[Box] new FirePlusPlus');
 						_buff = new BMO.FirePlusPlus(_grid,self.BMM,self.wsClient);
 					}
 				}

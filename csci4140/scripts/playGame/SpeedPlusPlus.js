@@ -1,6 +1,7 @@
 var BMO = window.BMO ? window.BMO : {};
 
 BMO.SpeedPlusPlus = function(_grid, _BMM, _wsClient){
+	console.log('[SpeedPlusPlus]');
 	try{
 	BMO.Buff.call(this,_grid,_BMM,_wsClient);
 	this.classname = "SpeedPlusPlus";
@@ -31,7 +32,7 @@ BMO.SpeedPlusPlus.prototype.applyBuff = function(targetBM){
 	if (targetBM == playerId){
 		var bm = bmm.getElementById(targetBM);
 		bm.increaseSpeed();
-		console.log('[SpeedPlusPlus.applyBuff] classname:'+this.classname+' targetBM.id:'+bm.id+' targetBM.currentBombMax:'+bm.currentBombMax);
+		console.log('[SpeedPlusPlus.applyBuff] classname:'+this.classname+' targetBM.id:'+bm.id+' targetBM.speed:'+bm.speed);
 		this.vanish();
 	}
 	}catch(e){console.log("SpeedPlusPlus.applyBuff:err=",e);throw e;};
