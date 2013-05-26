@@ -681,6 +681,22 @@ function GameClickStart(data, gServer, gClient) {
 
 }
 
+function rename(data, gServer, gClient){
+	try{
+		var message = JSON.parse(data);
+		var gameroom = gServer.roomList[gClient.room];	
+		gameroom.name = message;
+		console.log("new gameroom name = " + gameroom.name);
+		
+		gameroom.broadcastData("rmname_update", JSON.stringify(gameroom.name));	
+	}
+	catch(e){	
+		console.log("room rename error:" +e)
+	}
+
+}
+
+
 /* Handler for 'game_jsonList' message
  *
  * data : null
@@ -1036,6 +1052,7 @@ exports.seat_update = seat_update;
 exports.kick_your_ass = kick_your_ass;
 exports.state_change = state_change;
 exports.GameClickStart = GameClickStart;
+exports.rename = rename;
 //end
 
 exports.room_newGame = room_newGame;
