@@ -76,9 +76,10 @@ function change_name(handlers, wsClient){
 		e.preventDefault();
 		var new_name = window.prompt("Please give a new name", "");
 		if(new_name){
-		wsClient.sendData("rename_room", JSON.stringify(new_name));
+		wsClient.sendData("rename", JSON.stringify(new_name));
 		}									
 	} ,false);
+	flag = true;
 }
 
 
