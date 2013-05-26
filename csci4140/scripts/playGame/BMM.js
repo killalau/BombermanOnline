@@ -317,14 +317,16 @@ BMO.BMM.prototype.setTimer = function(time){
 	var _t = parseInt(time);
 	if (this.timer === null){
 		this.timer = new PIXI.Text("");
-		this.timer.position = {x:(10*48),y:(17*48)};
-
-		this.view.addChild(this.timer.view);
+		this.timer.position = {x:(17*48),y:(11*48)};
+		this.timer.setStyle({font: "bold 30px Arial", fill: "yellow", align: "center"});
+		this.view.addChild(this.timer);
 	}
 	var min = Math.floor(_t/60);
 	var sec = _t %60;
 	sec = sec > 10 ? sec : ("0"+sec) ;
-	this.timer.setText("0"+min+":"+sec);
+	var _show = "0"+min+":"+sec;
+	_show = "---"+_show+"---";
+	this.timer.setText(_show);
 	
 	}catch(e){console.error("BMM.setTimer:err=",e);};
 }
