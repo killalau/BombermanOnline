@@ -45,7 +45,15 @@ BMO.Box.prototype.vanish = function(payload){
 				var _grid = null;
 				if (payload !== "None" ){
 					_grid = self.grid;
-					_buff = new BMO.Buff(_grid,self.BMM,self.wsClient);
+					/*
+						switch payload{
+							case 'BombPlusPlus':
+							case 'SpeedPlusPlus':
+							case 'FirePlusPlus':
+							default:
+						}
+					*/
+					_buff = new BMO.BombPlusPlus(_grid,self.BMM,self.wsClient);//AndyQ - to be changed
 				}
 				self.wsClient= null;
 				BMO.Element.prototype.vanish.call(self);

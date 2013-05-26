@@ -54,5 +54,5 @@ BMO.BombPlusPlus.prototype.vanish = function(){
  *	}
  */
 BMO.BombPlusPlus.prototype.eventProcesser = function(event){
-	BMO.Buff.prototype.Buff.call(this,event);
+	BMO.Buff.prototype.eventProcesser.call(this,event);
 }
