@@ -7,6 +7,7 @@ function Wall(grid){
 	this.classname = "Wall";
 	
 	this.isBlockable = true;
+	this.isDestroyable = false;
 }
 
 //Override

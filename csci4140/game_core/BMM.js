@@ -206,17 +206,17 @@ BMM.prototype.getElementById = function(id){
 		@param out: broadcast data
 @return null or object{
 					result: Boolean
-					bombnum: integer
+					bombNum: integer
 				}
 **/
 BMM.prototype.plantBombValidation = function(x,y,id,callback){
 	try{		
 		var _grid = this.gridList[y][x];
 		var _BM = this.getElementById(id);
-		var _out = {result:null,bombnum:_BM.bombNum};
+		var _out = {result:null,bombNum:_BM.bombNum};
 		//console.log("COre_BMM: plantBomb_BM",_BM,"plantBomb_Grid",_grid);
 		if (_grid === null || _BM === null ) throw "_grid or _BM is null";
-		if (! _BM.alive ) return {result:false,bombnum:0};
+		if (! _BM.alive ) return {result:false,bombNum:0};
 		//Any trick things on that grid atm
 		if ( !(_grid.getElementByClass("Bomb") === null && 
 				_grid.getElementByClass("Wall") === null &&

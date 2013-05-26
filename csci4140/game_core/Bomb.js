@@ -69,6 +69,7 @@ Bomb.prototype.destroyRule = function(_grid,_out,direction){
 Bomb.prototype.vanish = function(){
 	try{
 	if (this.isDestroyable){
+		this.isDestroyable = false;
 		var y = this.grid.position.y;
 		var x = this.grid.position.x;
 		var y0 = this.grid.position.y-this.powerOfFire;
