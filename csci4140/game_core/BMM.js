@@ -272,11 +272,7 @@ BMM.prototype.explodeBomb = function(x,y,bomb,callback){
 		
 		//console.log("BMM.explodeBomb:bomb.owner=",bomb.owner);
 		if ( bomb.owner !== null)
-<<<<<<< HEAD
 		if ((_BM = this.getElementById(bomb.owner.id)) !== null ) _BM.increaseBombNum(1);//BM hasn't die yet
-=======
-		if ((_BM = this.getElementById(bomb.owner.id)) !== null ) _BM.bombNum = _BM.bombNum+1;//BM hasn't die yet
->>>>>>> 2b2ec3061694e1dfdeb97b9bb794cbe4e6a60a85
 		_out.payload = bomb.vanish();
 		
 		//console.log("BMM.explodeBomb:_out.combo=",_out.payload.Combo);
