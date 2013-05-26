@@ -154,16 +154,22 @@ BMO.BMM.prototype.setMap = function(data){
 			//TO-DO
 			break;
 			case "BombPlusPlus":
+				console.log('[BMM] new BombPlusPlus');
 				var _bombPP = new BMO.BombPlusPlus(_grid,this,this.wsClient);
+				console.log('[BMM] setView BombPlusPlus');
 				_bombPP.setView("BombPlusPlus");							
 				_grid.addElement(_bombPP);
 				_grid.view.addChild(_bombPP.view);
 			//TO-DO
 			break;
 			case "FirePlusPlus":
+				console.log('[BMM] new FirePlusPlus');
 				var _bombPP = new BMO.FirePlusPlus(_grid,this,this.wsClient);
-				_bombPP.setView("FirePlusPlus");							
+				console.log('[BMM] setView FirePlusPlus');
+				_bombPP.setView("FirePlusPlus");
+				console.log('[BMM] grid.addElement FirePlusPlus');
 				_grid.addElement(_bombPP);
+				console.log('[BMM] view.addChild FirePlusPlus');
 				_grid.view.addChild(_bombPP.view);
 			//TO-DO
 			break;
@@ -178,7 +184,7 @@ BMO.BMM.prototype.setMap = function(data){
 		}
 	}
 	
-	}catch(e){console.log(e);alert(e);throw e;};
+	}catch(e){console.log(e.message);alert(e);throw e;};
 }
 
 /*

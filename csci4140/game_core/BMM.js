@@ -115,7 +115,22 @@ BMM.prototype.setMap = function(){
 					new Box.Box(_grid, buff);
 				}
 				break;
-			case "N"://Buff(bombpp, fire, speedpp) //AndyQ - only for testing, shud be intergrated in 'Box'
+			case "N"://Buff(bombpp) //AndyQ - only for testing, shud be intergrated in 'Box'
+				console.log('[BMM] setMap: N');
+				var rand = Math.random();
+				rand = 0;//fixed for BombPlusPlus
+				for(var key in _buffList){					
+					if(rand < _buffList[key]){
+						buff = key;
+						Buff.Builder(_grid, 'BombPlusPlus');
+						break;
+					}
+				}
+				console.log('[BMM] _grid.elementList:');
+				console.log(_grid.elementList);
+				console.log('[BMM] grid.position (x:'+_grid.position.x+' y:'+_grid.position.y);
+				break;
+			case "P"://Buff(firepp) //AndyQ - only for testing, shud be intergrated in 'Box'
 				console.log('[BMM] setMap: N');
 				var rand = Math.random();
 				rand = 0;//fixed for BombPlusPlus
@@ -123,6 +138,21 @@ BMM.prototype.setMap = function(){
 					if(rand < _buffList[key]){
 						buff = key;
 						Buff.Builder(_grid, 'FirePlusPlus');
+						break;
+					}
+				}
+				console.log('[BMM] _grid.elementList:');
+				console.log(_grid.elementList);
+				console.log('[BMM] grid.position (x:'+_grid.position.x+' y:'+_grid.position.y);
+				break;
+			case "F"://Buff(speedpp) //AndyQ - only for testing, shud be intergrated in 'Box'
+				console.log('[BMM] setMap: N');
+				var rand = Math.random();
+				rand = 0;//fixed for BombPlusPlus
+				for(var key in _buffList){					
+					if(rand < _buffList[key]){
+						buff = key;
+						Buff.Builder(_grid, 'SpeedPlusPlus');
 						break;
 					}
 				}
@@ -241,8 +271,10 @@ BMM.prototype.explodeBomb = function(x,y,bomb,callback){
 		};
 		
 		//console.log("BMM.explodeBomb:bomb.owner=",bomb.owner);
-		if ( bomb.owner !== null)
-		if ((_BM = this.getElementById(bomb.owner.id)) !== null ) _BM.bombNum = _BM.increaseBombNum(1);//BM hasn't die yet //Andy: shud make use of BM builtin function			
+		if ( bomb.owner !== null)			
+		if ((_BM = this.getElementById(bomb.owner.id)) !== null )
+			//Andy: shud make use of BM builtin function to increaase bombNum by 1		
+			_BM.bombNum = _BM.increaseBombNum();//BM hasn't die yet
 		_out.payload = bomb.vanish();
 		
 		//console.log("BMM.explodeBomb:_out.combo=",_out.payload.Combo);
