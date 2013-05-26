@@ -64,6 +64,7 @@ function AddEventListenter(handlers, wsClient) {
 					//create the cross
 					for(var i=0;i<message.length;i++){
 						var playernum = message[i][1] + 1;
+						var player_div = document.getElementById("player"+ playernum);
 						if(!(message[i][0] == wsClient.username)) {
 							var cross_img = document.createElement('img');
 							//console.log(wsClient.username);
@@ -228,5 +229,9 @@ function web_update(message, host){
 		inner_img.setAttribute("src", img_path);
 		player_div.appendChild(inner_img);
 	}
+	
+	//set the rename
+	document.getElementById("room_name").innerHTML = message[0][3];
+	
 }
 

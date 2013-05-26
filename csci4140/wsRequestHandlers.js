@@ -548,6 +548,7 @@ function seat_update(data, gServer, gClient){
 		reply[i].push(username);
 		reply[i].push(gServer.roomList[clientRm].clientList[i].seat);
 		reply[i].push(havepic);
+		reply[i].push(gServer.roomList[clientRm].name);
 		//reply[i].push(gServer.roomList[clientRm].clientList[i].ping);
 
 	}
@@ -576,6 +577,7 @@ function seat_maintain(gServer, gClient, rmnum){
 		reply[i].push(username);
 		reply[i].push(gServer.roomList[rmnum].clientList[i].seat);	
 		reply[i].push(havepic);		//this is to tell client the user have profile or not
+		reply[i].push(gServer.roomList[clientRm].name);
 		//reply[i].push(gServer.roomList[rmnum].clientList[i].ping);
 
 	}
@@ -688,7 +690,20 @@ function rename(data, gServer, gClient){
 		gameroom.name = message;
 		console.log("new gameroom name = " + gameroom.name);
 		
-		gameroom.broadcastData("rmname_update", JSON.stringify(gameroom.name));	
+		//refresh gameroom
+		gameroom.broadcastData("rmname_update", JSON.stringify(gameroom.name));
+		
+		//refresh lobby
+		gameroom = gServer.roomList[gClient.room];
+		var _data = {
+				rid : gServer.roomList[gameroom.rid+1].rid,
+				name : gServer.roomList[gameroom.rid+1].name,
+				np : gServer.roomList[gameroom.rid+1].np(),
+				ping : gServer.roomList[gameroom.rid+1].ping()
+			};
+			
+			rmList(JSON.stringify(_data),gServer,gClient);
+		
 	}
 	catch(e){	
 		console.log("room rename error:" +e)
