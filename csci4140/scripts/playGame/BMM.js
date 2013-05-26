@@ -323,7 +323,7 @@ BMO.BMM.prototype.setTimer = function(time){
 	}
 	var min = Math.floor(_t/60);
 	var sec = _t %60;
-	sec = sec > 10 ? sec : ("0"+sec) ;
+	sec = sec >= 10 ? sec : ("0"+sec) ;
 	var _show = "0"+min+":"+sec;
 	_show = "---"+_show+"---";
 	this.timer.setText(_show);
@@ -370,7 +370,7 @@ BMO.BMM.prototype.setController = function(){
 	self.handlers["game_broadcastExplodeBomb"] = function(data,wsClient){
 												self.broadcastExplodeBomb(data,wsClient);};
 	self.handlers["game_broadcastVanishBuff"] = function(data,wsClient){//Andy
-												self.broadcastVanishBuff(data,wsClient);};											
+												self.broadcastVanishBuff(data,wsClient);};	
 	}catch(e){console.log(e);alert(e);throw e;};
 }
 
@@ -547,3 +547,28 @@ BMO.BMM.prototype.removeElement = function(element){
 		}
 	}
 }
+
+/*
+@public method timerStart
+**/
+BMO.BMM.prototype.timerStart = function(){
+	var self = this;
+	var bar = function(){
+			var _str = self.timer.text;
+			var re = /([0-9]{2}):([0-9]{2})/;
+			re.test(_str);
+			var min = parseInt(RegExp.$1);
+			var sec = parseInt(RegExp.$2);
+			var time = min*60+sec;
+			return --time;
+		};
+	var foo = setInterval(function(){
+			var t;
+			console.log("timer");
+			if ( (t = bar()) > -1 ){
+				self.setTimer(t);				
+			}else{
+				clearInterval(foo);
+			}
+		},1000);
+};
