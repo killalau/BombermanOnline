@@ -271,10 +271,8 @@ BMM.prototype.explodeBomb = function(x,y,bomb,callback){
 		};
 		
 		//console.log("BMM.explodeBomb:bomb.owner=",bomb.owner);
-		if ( bomb.owner !== null)			
-		if ((_BM = this.getElementById(bomb.owner.id)) !== null )
-			//Andy: shud make use of BM builtin function to increaase bombNum by 1		
-			_BM.bombNum = _BM.increaseBombNum();//BM hasn't die yet
+		if ( bomb.owner !== null)
+		if ((_BM = this.getElementById(bomb.owner.id)) !== null ) _BM.increaseBombNum(1);//BM hasn't die yet
 		_out.payload = bomb.vanish();
 		
 		//console.log("BMM.explodeBomb:_out.combo=",_out.payload.Combo);
