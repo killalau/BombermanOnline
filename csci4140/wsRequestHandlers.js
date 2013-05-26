@@ -828,6 +828,7 @@ function game_init(data, gServer, gClient){
 			gameState : bmm.gameState,
 			width : bmm.width,
 			height : bmm.height,
+			timer: bmm.timer,
 			players : [],
 			elements : []
 		};
@@ -1058,7 +1059,7 @@ function room_newGame(data, gServer, gClient){
 			//console.log(file);
 			var mapObj = JSON.parse(file);
 			var room = gServer.roomList[gClient.room];
-			var bmm = new BMM.BMM(gServer, room, mapObj);
+			var bmm = new BMM.BMM(gServer, room, mapObj,120);
 			bmm.initialize();
 			room.bmm = bmm;
 			

@@ -12,6 +12,7 @@ BMO.BMM = function(wsClient, handlers){
 	this.view = new PIXI.Stage(0x000000); 
 	this.wsClient = wsClient;
 	this.handlers = handlers;
+	this.timer = null;
 	this.gameState = 0;
 };
 
@@ -21,6 +22,8 @@ BMO.BMM.consturctor = BMO.BMM;
 /*
 @public method init
 @param data: {
+			gameState:[]
+			timer:
 			width:
 			height:
 			players:[
@@ -45,6 +48,7 @@ BMO.BMM.prototype.init = function(data){
 		this.setBuff({'default':true,payload:null});//Andy
 		this.setBox({'default':true,payload:null});
 	}
+	if (data.timer) this.setTimer(data.timer);
 	this.setPlayer(data);
 	this.setController();
 	console.log("BMM.init() end");
@@ -274,7 +278,6 @@ BMO.BMM.prototype.setBuff = function(data){//Andy
 }
 */
 
-
 /*
 @private method setBox
 @param data: {
@@ -304,6 +307,28 @@ BMO.BMM.prototype.setBox = function(data){
 	}
 	}catch(e){console.log(e);alert(e);throw e;};
 }
+
+/*
+@private method setTimer
+@param data: string in seconds eg 120 //120 second left
+**/
+BMO.BMM.prototype.setTimer = function(time){
+	try{
+	var _t = parseInt(time);
+	if (this.timer === null){
+		this.timer = new PIXI.Text("");
+		this.timer.position = {x:(10*48),y:(17*48)};
+
+		this.view.addChild(this.timer.view);
+	}
+	var min = Math.floor(_t/60);
+	var sec = _t %60;
+	sec = sec > 10 ? sec : ("0"+sec) ;
+	this.timer.setText("0"+min+":"+sec);
+	
+	}catch(e){console.error("BMM.setTimer:err=",e);};
+}
+
 
 /*
 @private method setController

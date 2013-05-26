@@ -7,7 +7,7 @@ var Bomb = require("./Bomb");
 
 var Buff = require('./Buff');//AndyQ - for testing
 
-function BMM(server, room, mapConfig){
+function BMM(server, room, mapConfig, timer){
 	this.classname = "BMM";
 	this.server = server;
 	this.room = room;
@@ -17,6 +17,7 @@ function BMM(server, room, mapConfig){
 	this.gridList = [];
 	this.elementList = [];	//BM only
 	this.numOfPlayer = 0;
+	this.timer = timer;
 	this.gameState = [0,0,0,0,0];//Server state, p1 state, p2 state.....
 }
 
