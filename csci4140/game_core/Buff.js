@@ -29,6 +29,8 @@ FirePlusPlus.prototype = new Buff();
 FirePlusPlus.prototype.constructor = FirePlusPlus;
 function FirePlusPlus(grid, buff){
 	Buff.call(this, grid, buff);
+	this.classname = 'FirePlusPlus';//Andy
+	console.log('[Buff] new FirePlusPlus');
 }
 
 FirePlusPlus.prototype.applyBuff = function(BM){
@@ -39,6 +41,8 @@ SpeedPlusPlus.prototype = new Buff();
 SpeedPlusPlus.prototype.constructor = SpeedPlusPlus;
 function SpeedPlusPlus(grid, buff){
 	Buff.call(this, grid, buff);
+	this.classname = 'SpeedPlusPlus';//Andy
+	console.log('[Buff] new SpeedPlusPlus');
 }
 
 SpeedPlusPlus.prototype.applyBuff = function(BM){

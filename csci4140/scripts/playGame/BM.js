@@ -18,13 +18,13 @@ BMO.BM =function(_grid,_BMM,_wsClient){
 		
 		this.id = false;
 		this.alive = true;
-		this.speed = -1;	
-		this.bombMax = -1;
-		this.powerMax = -1;
-		this.currentBombMax = -1;
 		this.bombNum = -1;
+		this.currentBombMax = -1;
+		this.speed = -1;
 		this.powerOfFire = -1;
-
+		this.bombMax = -1;		
+		this.speedMax = 0.5;
+		this.powerMax = 8;
 	}catch(e){throw(e);};
 }
 
@@ -262,10 +262,10 @@ BMO.BM.prototype.requestVanishBuff = function(classname){//Andy
 }
 
 /*
-@public method startMove
+@public method increaseCurrentBombMax
 @param num: the number of bomb to be increased
 **/
-BMO.BM.prototype.increaseBombNum = function(num){
+BMO.BM.prototype.increaseCurrentBombMax = function(num){
 	num = num ? parseInt(num) : 1;
 	
 	if(this.currentBombMax + num > this.bombMax){
@@ -275,7 +275,29 @@ BMO.BM.prototype.increaseBombNum = function(num){
 	this.currentBombMax += num;
 	if(this.bombNum < 0) this.bombNum = 0;
 	if(this.currentBombMax < 0) this.currentBombMax = 0;
-	console.log('[BM.increaseBombNum] currentBombMax:'+this.currentBombMax);
+	console.log('[BM.increaseCurrentBombMax] currentBombMax:'+this.currentBombMax);
+}
+
+/*
+@public method increaseSpeed
+@param num: the amount of speed to be increased
+**/
+BMO.BM.prototype.increaseSpeed = function(num){
+	num = num ? parseInt(num) : 0.05;
+	this.speed += num;
+	if (this.speed > this.speedMax) this.speed = this.speedMax;
+	if (this.speed < 0.05) this.speed = 0.05;
+}
+
+/*
+@public method increasePower
+@param num: the number of firepower to be increased
+**/
+BMO.BM.prototype.increasePower = function(num){
+	num = num ? parseInt(num) : 1;
+	this.powerOfFire += num;
+	if(this.powerOfFire > this.powerMax) this.powerOfFire = this.powerMax;
+	if(this.powerOfFire < 0) this.powerOfFire = 0;
 }
 
 /*
