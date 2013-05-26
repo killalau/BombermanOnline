@@ -131,7 +131,7 @@ BMM.prototype.setMap = function(){
 				console.log('[BMM] grid.position (x:'+_grid.position.x+' y:'+_grid.position.y);
 				break;
 			case "P"://Buff(firepp) //AndyQ - only for testing, shud be intergrated in 'Box'
-				console.log('[BMM] setMap: N');
+				console.log('[BMM] setMap: P');
 				var rand = Math.random();
 				rand = 0;//fixed for BombPlusPlus
 				for(var key in _buffList){					
@@ -146,7 +146,7 @@ BMM.prototype.setMap = function(){
 				console.log('[BMM] grid.position (x:'+_grid.position.x+' y:'+_grid.position.y);
 				break;
 			case "F"://Buff(speedpp) //AndyQ - only for testing, shud be intergrated in 'Box'
-				console.log('[BMM] setMap: N');
+				console.log('[BMM] setMap: F');
 				var rand = Math.random();
 				rand = 0;//fixed for BombPlusPlus
 				for(var key in _buffList){					

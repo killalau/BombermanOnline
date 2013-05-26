@@ -8,15 +8,15 @@ function BM(gClient, grid){
 	this.gClient = gClient;
 	this.id = gClient ? gClient.username : "NPC";
 	this.alive = true;
+	//below attributes are overriden by map's config
 	this.bombNum = 1;
 	this.bombCurrentMax = 1;
 	this.bombMax = 8;
 	this.power = 2;
 	this.powerMax = 8;
-	
-	//"override" attributes
-	this.speed = 0.05;			//grid per 30ms
-	this.speedMax = 0.5;
+
+	this.speed = 0.1;			//grid per 30ms
+	this.speedMax = 0.8;
 }
 
 BM.prototype.initialize = function(){

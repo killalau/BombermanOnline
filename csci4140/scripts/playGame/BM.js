@@ -15,15 +15,16 @@ BMO.BM =function(_grid,_BMM,_wsClient){
 		this.animationIndex = 0;
 		this.viewPrefix = null;
 		this.direction = "D";
-		
+
 		this.id = false;
 		this.alive = true;
+		//below attributes are overriden by map's config
 		this.bombNum = -1;
 		this.currentBombMax = -1;
 		this.speed = -1;
 		this.powerOfFire = -1;
 		this.bombMax = -1;		
-		this.speedMax = 0.5;
+		this.speedMax = 0.8*48;
 		this.powerMax = 8;
 	}catch(e){throw(e);};
 }
@@ -283,10 +284,10 @@ BMO.BM.prototype.increaseCurrentBombMax = function(num){
 @param num: the amount of speed to be increased
 **/
 BMO.BM.prototype.increaseSpeed = function(num){
-	num = num ? parseInt(num) : 0.05;
+	num = num ? parseInt(num) : 0.05 * 48;
 	this.speed += num;
 	if (this.speed > this.speedMax) this.speed = this.speedMax;
-	if (this.speed < 0.05) this.speed = 0.05;
+	if (this.speed < 0.1*48) this.speed = 0.1*48;
 }
 
 /*
