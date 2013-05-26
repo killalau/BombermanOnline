@@ -154,7 +154,7 @@ BMO.BMM.prototype.setMap = function(data){
 			//TO-DO
 			break;
 			case "BombPlusPlus":
-				var _bombPP = new BMO.Buff(_grid,this,this.wsClient);//AndyQ - to be changed BMO.Buff->BMO.BombPlusPlus
+				var _bombPP = new BMO.BombPlusPlus(_grid,this,this.wsClient);//AndyQ - to be changed BMO.Buff->BMO.BombPlusPlus
 				_bombPP.setView("BombPlusPlus");							
 				_grid.addElement(_bombPP);
 				_grid.view.addChild(_bombPP.view);
@@ -235,7 +235,7 @@ BMO.BMM.prototype.setBuff = function(data){//Andy
 					var _grid = this.gridList[i][j];
 					
 					if ( i == 1 && j == 2){
-						var _buff = new BMO.Buff(_grid,this,this.wsClient);
+						var _buff = new BMO.BombPlusPlus(_grid,this,this.wsClient);
 						_buff.setView("BombPlusPlus");							
 						_grid.addElement(_buff);
 						_grid.view.addChild(_buff.view);
