@@ -410,6 +410,7 @@ BMO.BM.prototype.plantBomb = function(payload){
 				this.wsClient.sendData("game_playerPlantBomb",JSON.stringify(req));
 		}
 	}else{//payload is not null
+		console.log("plantBomb: payload=",payload);
 		console.log("plantBomb: payload.y="+payload.y+",payload.x="+payload.x);
 		if ( payload.x < 0 || payload.y < 0){//invalid plantBomb
 			console.log("plantBomb: invalid");	

@@ -66,6 +66,7 @@ BM.prototype.increasePower = function(num){
 BM.prototype.vanish = function(){
 	try{
 		if (this.isDestroyable){
+			this.isDestroyable = false;
 			this.alive=false;
 			Element.Element.prototype.vanish.call(this);
 		}

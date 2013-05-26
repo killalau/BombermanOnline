@@ -13,6 +13,13 @@ Buff.prototype.applyBuff = function(BM){
 
 }
 
+Buff.prototype.vanish = function(){
+	if (this.isDestroyable){
+		this.isDestroyable = false;
+		Element.Element.prototype.vanish.call(this);
+	}
+}
+
 BombPlusPlus.prototype = new Buff();
 BombPlusPlus.prototype.constructor = BombPlusPlus;
 function BombPlusPlus(grid, buff){
@@ -60,6 +67,7 @@ function Builder(grid, buff){
 	}
 	return newBuff;
 }
+
 
 exports.Buff = Buff;
 exports.Builder = Builder;
