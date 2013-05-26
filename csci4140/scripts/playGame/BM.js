@@ -405,7 +405,7 @@ BMO.BM.prototype.plantBomb = function(payload){
 						bombNum: this.bombNum
 				};
 				this.bombNum--;
-				console.log('[BM.plantBomb] 'JSON.stringify(req));
+				console.log('[BM.plantBomb] '+JSON.stringify(req));
 				this.wsClient.sendData("game_playerPlantBomb",JSON.stringify(req));
 		}
 	}else{//payload is not null
