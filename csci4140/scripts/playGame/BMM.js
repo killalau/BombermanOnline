@@ -80,7 +80,7 @@ BMO.BMM.prototype.setThumbnail = function(playerID){
 	var pass = false;
 	for(var i = 0, blk; blk = this.thumbnailList[i];i++){
 			if ( blk.id.text == playerID ) pass = true;
-			pass && (_infoBlock = blk ) && break;
+			pass && (_infoBlock = blk ) && console.log("");break;
 	}
 	if ( pass ){
 		//SET hamster && ICON
