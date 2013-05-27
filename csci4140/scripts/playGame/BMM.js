@@ -54,6 +54,13 @@ BMO.BMM.prototype.init = function(data){
 	console.log("BMM.init() end");
 }
 
+/*
+@pravite method 
+**/
+BMO.BMM.prototype.setPlayerImage = function(){
+	
+}
+
 BMO.BMM.prototype.getElementById = function(id){
 	if(typeof id === 'string'){
 		for(var i = 0, e; e = this.elementList[i]; i++){
