@@ -326,7 +326,6 @@ BMM.prototype.vanishBuffValidation = function(X, Y, buffname, requestBM, callbac
 	 *	AndyQ - further implementation for timing consideration
 	 */
 	
-	console.log('[CoreBMM.vanishBuffValidation]');
 	try{
 		var bm = this.getElementById(requestBM);
 		if (bm.alive){
@@ -337,14 +336,9 @@ BMM.prototype.vanishBuffValidation = function(X, Y, buffname, requestBM, callbac
 							id:	{	x:X,
 									y:Y},
 							payload: requestBM 
-					};
-					console.log('[CoreBMM.vanishBuffValidation] (before vanish)grid.elementList:');
-					console.log(grid.elementList);				
-					e.applyBuff(bm);
-					console.log('[CoreBMM.vanishBuffValidation] grid.removeElement: '+e.classname);				
+					};			
+					e.applyBuff(bm);			
 					grid.removeElement(e);
-					console.log('[CoreBMM.vanishBuffValidation] (after vanish)grid.elementList:');
-					console.log(grid.elementList);
 					break;
 				}
 			}

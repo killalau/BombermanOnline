@@ -1096,17 +1096,16 @@ function room_newGame(data, gServer, gClient){
 function removeSession(data, gServer, gClient){
 	try{		
 		var mysqlConnection = require('./node-mysql').createConnection();
-		
-		console.log('[removeSession]');
+
 		var _in = JSON.parse(data);
-		console.log('[removeSession] session: '+_in.session);
+
 		if (_in !== null){
 			var session = _in.session;
-			console.log('[wsHandler] Request for logout for: '+session);
+			console.log('[wsRequestHandler] removeSession: '+session);
 			var query = 'DELETE FROM bbm_session WHERE session=' + mysqlConnection.escape(session);
 			mysqlConnection.query(query, function(err){
 				if (err){
-					console.log('[wsHandler] MySQL mysqlConnection error code:' + err.code);
+					console.log('[wsRequestHandler] MySQL mysqlConnection error code:' + err.code);
 					result(false, s, callback);
 				}
 			});

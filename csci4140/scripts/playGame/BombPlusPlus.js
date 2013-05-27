@@ -27,11 +27,9 @@ BMO.BombPlusPlus.prototype.applyBuff = function(targetBM){
 	var playerId = bmm.wsClient.username;
 	
 	try{
-	console.log('[BombPlusPlus.applyBuff] targetBM:'+targetBM+' playerId:'+playerId);
 	if (targetBM == playerId){
 		var bm = bmm.getElementById(playerId);
 		bm.increaseCurrentBombMax();
-		console.log('[BombPlusPlus.applyBuff] classname:'+this.classname+' targetBM.id:'+bm.id+' targetBM.currentBombMax:'+bm.currentBombMax);		
 	}
 	this.vanish();
 	}catch(e){console.log("BombPlusPlus.applyBuff:err=",e);throw e;};

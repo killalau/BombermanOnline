@@ -43,7 +43,6 @@ BMO.Buff.prototype.vanish = function(){
  *	}
  */
 BMO.Buff.prototype.eventProcesser = function(event){
-	console.log('[Buff.eventProcesser]');
 	if (event.type == "vanish"){
 		console.log('[Buff.eventProcesser] vanish');
 		this.vanish();

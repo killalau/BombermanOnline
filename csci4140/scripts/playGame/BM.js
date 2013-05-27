@@ -246,7 +246,6 @@ BMO.BM.prototype.setPosition = function(gridX, gridY, X, Y){
 BMO.BM.prototype.checkBuffExist = function(){//Andy
 	var elementList = this.grid.elementList;
 	var len = elementList.length;
-	console.log('[BM.checkBuffExist]');
 	for (var i = 0; i < len; i++){
 		var classname = elementList[i].classname;
 		if ((classname == 'BombPlusPlus') || (classname == 'FirePlusPlus') || (classname == 'SpeedPlusPlus')){

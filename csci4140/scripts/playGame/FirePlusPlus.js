@@ -1,7 +1,6 @@
 var BMO = window.BMO ? window.BMO : {};
 
 BMO.FirePlusPlus = function(_grid, _BMM, _wsClient){
-	console.log('[FirePlusPlus]');
 	try{
 	BMO.Buff.call(this,_grid,_BMM,_wsClient);
 	this.classname = "FirePlusPlus";
@@ -28,11 +27,9 @@ BMO.FirePlusPlus.prototype.applyBuff = function(targetBM){
 	var playerId = bmm.wsClient.username;
 	
 	try{
-	console.log('[FirePlusPlus.applyBuff] targetBM:'+targetBM+' playerId:'+playerId);
 	if (targetBM == playerId){
 		var bm = bmm.getElementById(playerId);
 		bm.increasePower();
-		console.log('[FirePlusPlus.applyBuff] classname:'+this.classname+' targetBM.id:'+bm.id+' targetBM.powerOfFire:'+bm.powerOfFire);
 	}
 	this.vanish();
 	}catch(e){console.log("FirePlusPlus.applyBuff:err=",e);throw e;};

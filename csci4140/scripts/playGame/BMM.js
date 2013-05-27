@@ -588,10 +588,8 @@ BMO.BMM.prototype.broadcastExplodeBomb =function(data,wsClient){
 BMO.BMM.prototype.broadcastVanishBuff = function(data,wsClient){//Andy
 	try{
 		var _in = JSON.parse(data);
-		console.log('[BMM.broadcastVanishBuff] receive vanish buff msg from server');
 		console.log('[BMM.broadcastVanishBuff] _in:'+JSON.stringify(_in));		
 		if((_in.classname == "FirePlusPlus") || (_in.classname == "SpeedPlusPlus") || (_in.classname == "BombPlusPlus")){
-			console.log('[BMM.broadcastVanishBuff] _in.classname:'+_in.classname);
 			var _grid = this.gridList[_in.id.y][_in.id.x];
 			var element;
 			for(var i =0;i<_grid.elementList.length;i++){
@@ -606,7 +604,6 @@ BMO.BMM.prototype.broadcastVanishBuff = function(data,wsClient){//Andy
 					type: "applyBuff",
 					payload: _in.payload
 			};
-			console.log('[BMM.broadcastVanishBuff] applyBuff');
 			element.eventProcesser(e);
 		}
 	}catch(e){console.log(e.message);throw 'vanishBuffErr='+e};
