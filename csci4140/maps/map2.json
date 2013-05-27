@@ -14,9 +14,6 @@
 		"WPSSSSSSSSSSSSSPW",
 		"WWWWWWWWWWWWWWWWW"
 	],
-	"box" : {
-		"NormalBox" : 0.9
-	},
 	"BM" : {
 		"bombCurrentMax" : 8,
 		"bombMax" : 8,
