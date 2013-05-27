@@ -187,7 +187,9 @@ function AddEventListenter(handlers, wsClient) {
 	
 	//The Logout Button
 	button = document.getElementById("logout");
-	button.addEventListener("click",logout,false);
+	button.addEventListener("click", function(e){
+		logout(handlers, wsClient);
+	},false);
 	
 	//The Map Back and Next Button
 	document.getElementById("map_back").addEventListener("click", map_change, false);
