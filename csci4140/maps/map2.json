@@ -3,30 +3,24 @@
 	"height" : 11,
 	"map" : [
 		"WWWWWWWWWWWWWWWWW",
-		"WPSBBBBBBBBBBBSPW",
-		"WSWBWBWBWBWBWBWSW",
-		"WBBBBBBBBBBBBBBBW",
-		"WBWBWBWBWBWBWBWBW",
-		"WBBBBBBBBBBBBBBBW",
-		"WBWBWBWBWBWBWBWBW",
-		"WBBBBBBBBBBBBBBBW",
-		"WSWBWBWBWBWBWBWSW",
-		"WPSBBBBBBBBBBBSPW",
+		"WPSSSSSSSSSSSSSPW",
+		"WSWSWSWSWSWSWSWSW",
+		"WSSSSSSSSSSSSSSSW",
+		"WSWSWSWSWSWSWSWSW",
+		"WSSSSSSSSSSSSSSSW",
+		"WSWSWSWSWSWSWSWSW",
+		"WSSSSSSSSSSSSSSSW",
+		"WSWSWSWSWSWSWSWSW",
+		"WPSSSSSSSSSSSSSPW",
 		"WWWWWWWWWWWWWWWWW"
 	],
-	"buff" : {
-		"BombPlusPlus" : 0.2,
-		"FirePlusPlus" : 0.2,
-		"SpeedPlusPlus" : 0.2,
-		"None" : 0.4
-	},
 	"box" : {
 		"NormalBox" : 0.9
 	},
 	"BM" : {
-		"bombCurrentMax" : 1,
+		"bombCurrentMax" : 8,
 		"bombMax" : 8,
-		"power" : 2,
+		"power" : 8,
 		"powerMax": 8,
 		"speed" : 0.1,
 		"speedMax" : 0.5
@@ -34,7 +28,6 @@
 	"PIXI" : {
 		"map" : "pixi-MAP1.json",
 		"fire" : "fire.json",
-		"item" : "item.json",
 		"bomb" : "bomb2.json",
 		"avatar"	: [
 			"hamster_1.json",
