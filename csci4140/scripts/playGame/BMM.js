@@ -70,7 +70,8 @@ BMO.BMM.prototype.init = function(data){
 **/
 BMO.BMM.prototype.setThumbnail = function(playerID){
 	try{
-	((playerID == null) || (playerID == "")) && console.log("");throw "setThumbnail:err=playerID cannot be null";
+	if ((playerID == null) || (playerID == "")) 
+		throw "setThumbnail:err=playerID cannot be null";
 	var _infoBlock = {
 		id:null,
 		icon:null,
@@ -80,7 +81,7 @@ BMO.BMM.prototype.setThumbnail = function(playerID){
 	var pass = false;
 	for(var i = 0, blk; blk = this.thumbnailList[i];i++){
 			if ( blk.id.text == playerID ) pass = true;
-			pass && (_infoBlock = blk ) && console.log("");break;
+			if ( pass && (_infoBlock = blk )) break;
 	}
 	if ( pass ){
 		//SET hamster && ICON
