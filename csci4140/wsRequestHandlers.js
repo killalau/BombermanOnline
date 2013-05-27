@@ -1070,6 +1070,35 @@ function room_newGame(data, gServer, gClient){
 	
 }
 
+/* Handler for 'removeSession' message, called by Host when count down finish
+ *
+ * data : {
+		session : <player's session key>
+ *	}
+ * gServer : game server object
+ * gClient : game client object
+ */
+function removeSession(data, gServer, gClient){
+	try{		
+		var mysqlConnection = require('./node-mysql').createConnection();
+		
+		console.log('[removeSession]');
+		var _in = JSON.parse(data);
+		console.log('[removeSession] session: '+_in.session);
+		if (_in !== null){
+			var session = _in.session;
+			console.log('[wsHandler] Request for logout for: '+session);
+			var query = 'DELETE FROM bbm_session WHERE session=' + mysqlConnection.escape(session);
+			mysqlConnection.query(query, function(err){
+				if (err){
+					console.log('[wsHandler] MySQL mysqlConnection error code:' + err.code);
+					result(false, s, callback);
+				}
+			});
+		}
+	}catch(e){console.log(e);throw e;};
+}
+
 // Public function
 exports.setName = setName;
 exports.ping = ping;
@@ -1102,4 +1131,5 @@ exports.game_playerMove = game_playerMove;
 exports.game_playerStopMove = game_playerStopMove;
 
 exports.game_playerPlantBomb = game_playerPlantBomb;
-exports.game_vanishBuff = game_vanishBuff;//Andy
+exports.game_vanishBuff = game_vanishBuff;
+exports.removeSession = removeSession;

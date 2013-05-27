@@ -22,10 +22,28 @@ function goBack(handlers, wsClient){
 	}
 }
 
-function logout(e){
+function logout(handlers, wsClient){
 	var value = window.confirm("Are your sure to logout?");
+	
 	if(value){
-		alert("logout success");
+		var clientSession = function (name){
+							name += '=';
+							var parts = document.cookie.split(/;\s*/);
+							var cookieValue = null;
+							for (var i = 0; i < parts.length; i++){
+								var part = parts[i];
+								if (part.indexOf(name) == 0){
+									cookieValue =  part.substring(name.length);									
+									return (cookieValue.split(/\:/))[1];
+								}
+							}
+							return cookieValue;
+						};
+		var json = {
+			session : clientSession('BomberManCookie')
+		};
+		console.log(json.session);
+		wsClient.sendData("removeSession", JSON.stringify(json));
 	}
 }
 
