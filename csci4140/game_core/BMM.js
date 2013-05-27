@@ -328,26 +328,28 @@ BMM.prototype.vanishBuffValidation = function(X, Y, buffname, requestBM, callbac
 	
 	console.log('[CoreBMM.vanishBuffValidation]');
 	try{
-		for (var i = 0, e; e = grid.elementList[i]; i++){
-			if (e.classname == buffname){
-				var out = {
-						classname: buffname,
-						id:	{	x:X,
-								y:Y},
-						payload: requestBM 
-				};
-				console.log('[CoreBMM.vanishBuffValidation] (before vanish)grid.elementList:');
-				console.log(grid.elementList);
-				var bm = this.getElementById(requestBM);
-				e.applyBuff(bm);
-				console.log('[CoreBMM.vanishBuffValidation] grid.removeElement: '+e.classname);				
-				grid.removeElement(e);
-				console.log('[CoreBMM.vanishBuffValidation] (after vanish)grid.elementList:');
-				console.log(grid.elementList);
-				break;
+		var bm = this.getElementById(requestBM);
+		if (bm.alive){
+			for (var i = 0, e; e = grid.elementList[i]; i++){
+				if (e.classname == buffname){
+					var out = {
+							classname: buffname,
+							id:	{	x:X,
+									y:Y},
+							payload: requestBM 
+					};
+					console.log('[CoreBMM.vanishBuffValidation] (before vanish)grid.elementList:');
+					console.log(grid.elementList);				
+					e.applyBuff(bm);
+					console.log('[CoreBMM.vanishBuffValidation] grid.removeElement: '+e.classname);				
+					grid.removeElement(e);
+					console.log('[CoreBMM.vanishBuffValidation] (after vanish)grid.elementList:');
+					console.log(grid.elementList);
+					break;
+				}
 			}
+			callback(out);
 		}
-		callback(out);
 	}catch(e){console.log('[CoreBMM.vanishBuffValidation] err:', e);};
 }
 
