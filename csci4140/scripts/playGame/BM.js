@@ -135,7 +135,9 @@ BMO.BM.prototype.move = function(dest_row,dest_col){
 				this.Y -= this.speed;
 				if(this.Y <= -24){					
 					changeGrid(this, dest_grid, "Y", 1);
-					this.checkBuffExist();//Andy
+					if (this.id == this.wsClient.username){
+						this.checkBuffExist();
+					}
 					console.log('[BM] X:'+this.grid.X+' Y:'+this.grid.Y);
 				}else if(this.Y <= 0 && oldY >0){
 					changeGridView = true;
@@ -146,7 +148,9 @@ BMO.BM.prototype.move = function(dest_row,dest_col){
 				this.Y += this.speed;
 				if(this.Y > 24){
 					changeGrid(this, dest_grid, "Y", -1);
-					this.checkBuffExist();//Andy
+					if (this.id == this.wsClient.username){
+						this.checkBuffExist();
+					}
 					console.log('[BM] X:'+this.grid.X+' Y:'+this.grid.Y);
 				}else if(this.Y > 0 && oldY <=0){
 					changeGridView = true;
@@ -157,7 +161,9 @@ BMO.BM.prototype.move = function(dest_row,dest_col){
 				this.X -= this.speed;
 				if(this.X <= -24){
 					changeGrid(this, dest_grid, "X", 1);
-					this.checkBuffExist();//Andy
+					if (this.id == this.wsClient.username){
+						this.checkBuffExist();
+					}
 					console.log('[BM] X:'+this.grid.X+' Y:'+this.grid.Y);
 				}else if(this.X <= 0 && oldX >0){
 					changeGridView = true;
@@ -168,7 +174,9 @@ BMO.BM.prototype.move = function(dest_row,dest_col){
 				this.X += this.speed;
 				if(this.X > 24){
 					changeGrid(this, dest_grid, "X", -1);
-					this.checkBuffExist();//Andy
+					if (this.id == this.wsClient.username){
+						this.checkBuffExist();
+					}
 					console.log('[BM] X:'+this.grid.X+' Y:'+this.grid.Y);
 				}else if(this.X > 0 && oldX <=0){
 					changeGridView = true;
