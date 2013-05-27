@@ -70,7 +70,7 @@ BMO.BMM.prototype.init = function(data){
 **/
 BMO.BMM.prototype.setThumbnail = function(playerID){
 	try{
-	((playerID === null) || (playerID === "")) && throw "setThumbnail:err=playerID cannot be null";
+	((playerID === null) || (playerID === "")) && console.log("");throw "setThumbnail:err=playerID cannot be null";
 	var _infoBlock = {
 		id:null,
 		icon:null,
