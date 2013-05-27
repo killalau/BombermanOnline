@@ -29,6 +29,7 @@ handlers.read["scripts"] = requestHandlers.readJS;
 handlers.read["styles"] = requestHandlers.readCSS;
 handlers.read["images"] = requestHandlers.readImage;
 handlers.read["icon"] = requestHandlers.readImage;
+handlers.read["audios"] = requestHandlers.readImage;
 handlers.invalid[302] = requestHandlers.error302;
 handlers.invalid[404] = requestHandlers.error404;
 handlers.invalid[500] = requestHandlers.error500;
