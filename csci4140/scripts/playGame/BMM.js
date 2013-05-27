@@ -9,6 +9,7 @@ BMO.BMM = function(wsClient, handlers){
 	this.height = 11;
 	this.gridList = [];
 	this.elementList = [];
+	this.thumbnailList = [];
 	this.view = new PIXI.Stage(0x000000); 
 	this.wsClient = wsClient;
 	this.handlers = handlers;
@@ -30,7 +31,16 @@ BMO.BMM.consturctor = BMO.BMM;
 				{username : 
 				seat : 
 				viewPrefix : "hamster" + (this.seat+1) + "_",
+				alive: boolean
 				pos : { x : px, y : py}			//which grid
+				  bombNum : bm.bombNum,
+					bombCurrentMax : bm.bombCurrentMax,
+					bombMax : bm.bombMax,
+					power : bm.power,
+					powerMax : bm.powerMax,
+					speed : bm.speed,
+					speedMax : bm.speedMax		ombNum
+
 				},
 				...
 			],
@@ -56,9 +66,53 @@ BMO.BMM.prototype.init = function(data){
 
 /*
 @pravite method 
+@param playerID
 **/
-BMO.BMM.prototype.setPlayerImage = function(){
+BMO.BMM.prototype.setThumbnail = function(playerID){
+	try{
+	((playerID === null) || (playerID === "")) && throw "setThumbnail:err=playerID cannot be null";
+	var _infoBlock = {
+		id:null,
+		icon:null,
+		hamster:null,
+		container:null
+	};
+	var pass = false;
+	for(var i = 0, blk; blk = this.thumbnailList[i];i++){
+			if ( blk.id.text == playerID ) pass = true;
+			pass && (_infoBlock = blk ) && break;
+	}
+	if ( pass ){
+		//SET hamster && ICON
+	}else{
+		//SET position
+		var len = this.thumbnailList.length;
+		var _text = playerID;
+		if (_text.length > 11 ){
+			var re = /([.]{8})/;
+			re.test(_text);
+			_text = RegExp.$1 + "...";
+		}
+		_infoBlock.container = new PIXI.DisplayObjectContainer();
+		//this.timer.position = {x:(17*48),y:(11*48)};
+		_infoBlock.container.position = {x:(17*96),y:(len*96)};
+	  _infoBlock.hamster = new PIXI.DisplayObject();
+	  _infoBlock.icon = new PIXI.DisplayObject();
+	  _infoBlock.id = new PIXI.Text(_text); 
+	  _infoBlock.id.setStyle({fill:white});
+	  _infoBlock.id.position = {x:0,y:0};
+	  _infoBlock.icon.position = {x:0,y:48};
+	  _infoBlock.hamster.position = {x:48,y:48};
+	  _infoBlock.container.addChild(_infoBlock.id);
+	  _infoBlock.container.addChild(_infoBlock.icon);
+	  _infoBlock.container.addChild(_infoBlock.hamster);
+	  this.view.addChild(_infoBlock.container);
+	  this.thumbnailList.push(_infoBlock);
+	}
 
+	}catch(e){console.error(e);throw e;};
+
+	
 	
 }
 
@@ -111,6 +165,7 @@ BMO.BMM.prototype.setPlayer = function(data){
 			_grid.view.addChild(_BM.view);
 			_grid.addElement(_BM);	
 		}
+		this.setThumbnail(_player.username);
 	}
 	}catch(e){console.log(e);alert(e);throw e};	
 }
