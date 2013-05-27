@@ -29,11 +29,11 @@ BMO.BombPlusPlus.prototype.applyBuff = function(targetBM){
 	try{
 	console.log('[BombPlusPlus.applyBuff] targetBM:'+targetBM+' playerId:'+playerId);
 	if (targetBM == playerId){
-		var bm = bmm.getElementById(targetBM);
+		var bm = bmm.getElementById(playerId);
 		bm.increaseCurrentBombMax();
-		console.log('[BombPlusPlus.applyBuff] classname:'+this.classname+' targetBM.id:'+bm.id+' targetBM.currentBombMax:'+bm.currentBombMax);
-		this.vanish();
+		console.log('[BombPlusPlus.applyBuff] classname:'+this.classname+' targetBM.id:'+bm.id+' targetBM.currentBombMax:'+bm.currentBombMax);		
 	}
+	this.vanish();
 	}catch(e){console.log("BombPlusPlus.applyBuff:err=",e);throw e;};
 }
 

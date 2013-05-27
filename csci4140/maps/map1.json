@@ -29,7 +29,7 @@
 		"power" : 2,
 		"powerMax": 8,
 		"speed" : 0.1,
-		"speedMax" : 0.8
+		"speedMax" : 0.5
 	},
 	"PIXI" : {
 		"map" : "pixi-MAP1.json",

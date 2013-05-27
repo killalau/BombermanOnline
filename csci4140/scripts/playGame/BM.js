@@ -284,7 +284,7 @@ BMO.BM.prototype.increaseCurrentBombMax = function(num){
 @param num: the amount of speed to be increased
 **/
 BMO.BM.prototype.increaseSpeed = function(num){
-	num = num ? parseInt(num) : 0.05 * 48;
+	num = num ? parseInt(num) : 0.025 * 48;
 	this.speed += num;
 	if (this.speed > this.speedMax) this.speed = this.speedMax;
 	if (this.speed < 0.1*48) this.speed = 0.1*48;

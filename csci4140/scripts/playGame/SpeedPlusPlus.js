@@ -29,12 +29,12 @@ BMO.SpeedPlusPlus.prototype.applyBuff = function(targetBM){
 	
 	try{
 	console.log('[SpeedPlusPlus.applyBuff] targetBM:'+targetBM+' playerId:'+playerId);
-	if (targetBM == playerId){
+
 		var bm = bmm.getElementById(targetBM);
 		bm.increaseSpeed();
 		console.log('[SpeedPlusPlus.applyBuff] classname:'+this.classname+' targetBM.id:'+bm.id+' targetBM.speed:'+bm.speed);
-		this.vanish();
-	}
+	
+	this.vanish();
 	}catch(e){console.log("SpeedPlusPlus.applyBuff:err=",e);throw e;};
 }
 

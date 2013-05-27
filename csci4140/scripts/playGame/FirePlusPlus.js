@@ -30,11 +30,11 @@ BMO.FirePlusPlus.prototype.applyBuff = function(targetBM){
 	try{
 	console.log('[FirePlusPlus.applyBuff] targetBM:'+targetBM+' playerId:'+playerId);
 	if (targetBM == playerId){
-		var bm = bmm.getElementById(targetBM);
+		var bm = bmm.getElementById(playerId);
 		bm.increasePower();
 		console.log('[FirePlusPlus.applyBuff] classname:'+this.classname+' targetBM.id:'+bm.id+' targetBM.powerOfFire:'+bm.powerOfFire);
-		this.vanish();
 	}
+	this.vanish();
 	}catch(e){console.log("FirePlusPlus.applyBuff:err=",e);throw e;};
 }
 
