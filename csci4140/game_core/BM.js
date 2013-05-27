@@ -47,7 +47,7 @@ BM.prototype.increaseBombCurrentMax = function(num){
 }
 
 BM.prototype.increaseSpeed = function(num){
-	num = num ? parseInt(num) : 0.05;
+	num = num ? parseInt(num) : 0.025;
 	this.speed += num;
 	if (this.speed > this.speedMax) this.speed = this.speedMax;
 	if (this.speed < 0.05) this.speed = 0.05;
