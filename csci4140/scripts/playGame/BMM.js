@@ -96,19 +96,19 @@ BMO.BMM.prototype.setThumbnail = function(playerID){
 		}
 		_infoBlock.container = new PIXI.DisplayObjectContainer();
 		//this.timer.position = {x:(17*48),y:(11*48)};
-		_infoBlock.container.position = {x:(17*96),y:(len*96)};
-	  _infoBlock.hamster = new PIXI.DisplayObject();
-	  _infoBlock.icon = new PIXI.DisplayObject();
+		_infoBlock.container.position = {x:(17*48),y:(len*96)};
+	  //_infoBlock.hamster = new PIXI.DisplayObject();
+	  //_infoBlock.icon = new PIXI.DisplayObject();
 	  _infoBlock.id = new PIXI.Text(_text); 
-	  _infoBlock.id.setStyle({fill:white});
+	  _infoBlock.id.setStyle({fill:"white"});
 	  _infoBlock.id.position = {x:0,y:0};
-	  _infoBlock.icon.position = {x:0,y:48};
-	  _infoBlock.hamster.position = {x:48,y:48};
+	  //_infoBlock.icon.position = {x:0,y:48};
+	  //_infoBlock.hamster.position = {x:48,y:48};
 	  _infoBlock.container.addChild(_infoBlock.id);
-	  _infoBlock.container.addChild(_infoBlock.icon);
-	  _infoBlock.container.addChild(_infoBlock.hamster);
-	  this.view.addChild(_infoBlock.container);
+	  //_infoBlock.container.addChild(_infoBlock.icon);
+	  //_infoBlock.container.addChild(_infoBlock.hamster);
 	  this.thumbnailList.push(_infoBlock);
+	  this.view.addChild(this.thumbnailList[len].container);
 	}
 
 	}catch(e){console.error(e);throw e;};
