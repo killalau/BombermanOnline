@@ -9,6 +9,7 @@ function Bomb(grid,owner){
 	this.owner = owner;
 	this.powerOfFire = owner.power;
 	this.comboSrc = [];
+	this.immuteGrid = [];
 	
 	this.isBlockable = true;
 }
@@ -17,10 +18,14 @@ Bomb.prototype.destroyRule = function(_grid,_out,direction){
 	try{
 	var _object;	
 	var ret;
-	if ( (_object = _grid.getElementByClass("Wall")) === null ){
-		if ( (_object = _grid.getElementByClass("Box")) !== null ){
+	if ( ((_object = _grid.getElementByClass("Wall")) === null) ){
+		if ( this.immuteGrid.indexOf(_grid) != -1 ){
+			ret = false;
+			_out[direction].push({type:"immute",extra:null});
+		}else if ( (_object = _grid.getElementByClass("Box")) !== null ){
 			ret = false;
 			_out[direction].push({type:"Box",extra:_object.buff});
+			this.immuteGrid.push(_grid);
 			new Fire.Fire(_grid);
 		}else if ( (_object = _grid.getElementByClass("Buff")) !== null ){
 			ret = false;
@@ -94,6 +99,15 @@ Bomb.prototype.vanish = function(){
 		if (this.comboSrc.indexOf("R") == -1 )
 			for(var i=x+1;i<=x1;i++) if ( ! (this.destroyRule(_BMM.gridList[y][i],_out,"R"))) break;
 		this.destroyRule(_BMM.gridList[y][x],_out,"C");
+		
+		for(var i=0,b ; b =_out.Combo[i] ; i++){ 
+			var _object = b.bomb;
+			for(var j =0,g; g = this.immuteGrid[j];j++)	_object.immuteGrid.push(g);
+			//console.log("Bomb.destroyRule:_object.immuteGrid=",_object.immuteGrid);
+		}
+		
+		this.comboSrc = [];
+		this.immuteGrid = [];
 		
 		return _out;
 	}

@@ -830,7 +830,11 @@ function game_init(data, gServer, gClient){
 			height : bmm.height,
 			timer: bmm.timer,
 			players : [],
-			elements : []
+			elements : [],
+			walls: [],
+			buffs: [],
+			boxes: []
+			
 		};
 		for(var i = 0, c; c = gServer.roomList[gClient.room].clientList[i]; i++){
 			var bm = bmm.getElementById(c.username);
@@ -868,7 +872,18 @@ function game_init(data, gServer, gClient){
 						classname : e.classname,
 						pos : grid.position
 					};
-					json.elements.push(obj);
+					var bufftest = /Plus$/;
+					var boxtest = /^Box$/;
+					var walltest = /^Wall$/;
+					if ( bufftest.test(e.classname) ){
+						json.buffs.push(obj);
+					}else if (boxtest.test(e.classname)){
+						json.boxes.push(obj);
+					}else if (walltest.test(e.classname)){
+						json.walls.push(obj);
+					}else{
+						json.elements.push(obj);
+					}
 				}
 			}
 		}
@@ -1099,6 +1114,22 @@ function removeSession(data, gServer, gClient){
 	}catch(e){console.log(e);throw e;};
 }
 
+/* Handler for 'game_sync' message, called by Host when count down finish
+ *
+ * data : {
+		id : <player's id>
+		gameState: player.gameState
+ *	}
+ * gServer : game server object
+ * gClient : game client object
+ */
+function game_sync(data, gServer, gClient){
+	
+}
+
+
+
+
 // Public function
 exports.setName = setName;
 exports.ping = ping;
@@ -1129,7 +1160,7 @@ exports.game_jsonList = game_jsonList;
 exports.game_init = game_init;
 exports.game_playerMove = game_playerMove;
 exports.game_playerStopMove = game_playerStopMove;
-
+exports.game_sync = game_sync;
 exports.game_playerPlantBomb = game_playerPlantBomb;
 exports.game_vanishBuff = game_vanishBuff;
 exports.removeSession = removeSession;

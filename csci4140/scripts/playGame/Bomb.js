@@ -110,8 +110,10 @@ BMO.Bomb.prototype.explode = function(payload){
 
 		for(var i =0;i<payload[_direction].length;i++){
 			if ( (_direction !== "C") && ( payload[_direction][i] != null ) &&
-					(payload[_direction][i].type === "Bomb")) {
-					continue;
+				(payload[_direction][i].type === "Bomb")) {
+				continue;
+			}else if ( ( payload[_direction][i] != null ) && (payload[_direction][i].type === "immute")){
+				continue;
 			}
 			placeFire(_direction,i);
 			_fire.vanish(payload[_direction][i]);
