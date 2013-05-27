@@ -58,6 +58,7 @@ BMO.BMM.prototype.init = function(data){
 @pravite method 
 **/
 BMO.BMM.prototype.setPlayerImage = function(){
+
 	
 }
 
