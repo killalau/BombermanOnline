@@ -62,11 +62,16 @@ BMO.BMM.prototype.init = function(data){
 		this.setBox({'default':true,payload:null});
 	}else{
 		this.setWall({'default':false,payload:data.walls});this.gameState++;
+		//wsClient.sendData('game_sync',JSON.stringify({id:this.id,gameState:this.gameState}));
 		this.setBuff({'default':false,payload:data.buffs});this.gameState++;
+		//wsClient.sendData('game_sync',JSON.stringify({id:this.id,gameState:this.gameState}));
 		this.setBox({'default':false,payload:data.boxes});this.gameState++;
-	}
-	if (data.timer) this.setTimer(data.timer);
-	this.setPlayer(data);
+		//wsClient.sendData('game_sync',JSON.stringify({id:this.id,gameState:this.gameState}));
+		this.setTimer(data.timer);this.gameState++;
+		//wsClient.sendData('game_sync',JSON.stringify({id:this.id,gameState:this.gameState}));
+	}	
+	this.setPlayer(data);this.gameState++;
+	//wsClient.sendData('game_sync',JSON.stringify({id:this.id,gameState:this.gameState}));
 	this.setController();
 	console.log("BMM.init() end");
 }

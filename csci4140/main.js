@@ -69,6 +69,7 @@ wsHandlers.utf8["rename"] = wsRequestHandlers.rename;
 //playGame handler--------------------------------------------
 wsHandlers.utf8["game_jsonList"] = wsRequestHandlers.game_jsonList;
 wsHandlers.utf8["game_init"] = wsRequestHandlers.game_init;
+wsHandlers.utf8["game_sync"] = wsRequestHandlers.game_sync;
 wsHandlers.utf8["game_playerMove"] = wsRequestHandlers.game_playerMove;
 wsHandlers.utf8["game_playerStopMove"] = wsRequestHandlers.game_playerStopMove;
 wsHandlers.utf8["game_playerPlantBomb"] = wsRequestHandlers.game_playerPlantBomb;
