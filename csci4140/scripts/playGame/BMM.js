@@ -61,9 +61,9 @@ BMO.BMM.prototype.init = function(data){
 		this.setBuff({'default':true,payload:null});//Andy
 		this.setBox({'default':true,payload:null});
 	}else{
-		this.setWall({'default':false,payload:data.walls});
-		this.setBuff({'default':false,payload:data.buffs});//Andy
-		this.setBox({'default':false,payload:data.boxes});		
+		this.setWall({'default':false,payload:data.walls});this.gameState++;
+		this.setBuff({'default':false,payload:data.buffs});this.gameState++;
+		this.setBox({'default':false,payload:data.boxes});this.gameState++;
 	}
 	if (data.timer) this.setTimer(data.timer);
 	this.setPlayer(data);
@@ -73,12 +73,16 @@ BMO.BMM.prototype.init = function(data){
 
 /*
 @pravite method 
-@param playerID
+@param info{
+			id: playerID;
+			hamster: null or FrameID
+			icon: null or FrameID
+		}
 **/
-BMO.BMM.prototype.setThumbnail = function(playerID){
+BMO.BMM.prototype.setThumbnail = function(info){
 	try{
-	if ((playerID == null) || (playerID == "")) 
-		throw "setThumbnail:err=playerID cannot be null";
+	if ((info.id == null) || (info.id == "")) 
+		throw "setThumbnail:err=info.id cannot be null";
 	var _infoBlock = {
 		id:null,
 		icon:null,
@@ -87,15 +91,15 @@ BMO.BMM.prototype.setThumbnail = function(playerID){
 	};
 	var pass = false;
 	for(var i = 0, blk; blk = this.thumbnailList[i];i++){
-			if ( blk.id.text == playerID ) pass = true;
+			if ( blk.id.text == info.id ) pass = true;
 			if ( pass && (_infoBlock = blk )) break;
 	}
 	if ( pass ){
-		//SET hamster && ICON
+		//SET ICON
 	}else{
-		//SET position
+		//SET position && hamster
 		var len = this.thumbnailList.length;
-		var _text = playerID;
+		var _text = info.id;
 		if (_text.length > 11 ){
 			var re = /^([.]{8})/;
 			re.test(_text);
@@ -104,16 +108,19 @@ BMO.BMM.prototype.setThumbnail = function(playerID){
 		_infoBlock.container = new PIXI.DisplayObjectContainer();
 		//this.timer.position = {x:(17*48),y:(11*48)};
 		_infoBlock.container.position = {x:(17*48),y:(len*96)};
-	  //_infoBlock.hamster = new PIXI.DisplayObject();
+	  _infoBlock.hamster = new PIXI.Sprite.fromFrame(info.hamster);
 	  //_infoBlock.icon = new PIXI.DisplayObject();
 	  _infoBlock.id = new PIXI.Text(_text); 
-	  _infoBlock.id.setStyle({fill:"white"});
-	  _infoBlock.id.position = {x:0,y:0};
+	  _infoBlock.id.setStyle({fill:"orange"});
+	  _infoBlock.id.position = {x:72,y:0};
+	  _infoBlock.id.anchor.x = 0.5;
 	  //_infoBlock.icon.position = {x:0,y:48};
-	  //_infoBlock.hamster.position = {x:48,y:48};
+	  _infoBlock.hamster.position = {x:108,y:60};
+	  _infoBlock.hamster.anchor = {x:0.5,y:0.5};
+	  _infoBlock.hamster.scale = {x:1.5,y:1.5};
 	  _infoBlock.container.addChild(_infoBlock.id);
 	  //_infoBlock.container.addChild(_infoBlock.icon);
-	  //_infoBlock.container.addChild(_infoBlock.hamster);
+	  _infoBlock.container.addChild(_infoBlock.hamster);
 	  this.thumbnailList.push(_infoBlock);
 	  this.view.addChild(this.thumbnailList[len].container);
 	}
@@ -173,7 +180,7 @@ BMO.BMM.prototype.setPlayer = function(data){
 			_grid.view.addChild(_BM.view);
 			_grid.addElement(_BM);	
 		}
-		this.setThumbnail(_player.username);
+		this.setThumbnail({id:_player.username,hamster:(_player.viewPrefix + "D0"),icon:null});
 	}
 	}catch(e){console.log(e);alert(e);throw e};	
 }

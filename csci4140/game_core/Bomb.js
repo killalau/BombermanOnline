@@ -103,7 +103,7 @@ Bomb.prototype.vanish = function(){
 		for(var i=0,b ; b =_out.Combo[i] ; i++){ 
 			var _object = b.bomb;
 			for(var j =0,g; g = this.immuteGrid[j];j++)	_object.immuteGrid.push(g);
-			console.log("Bomb.destroyRule:_object.immuteGrid=",_object.immuteGrid);
+			//console.log("Bomb.destroyRule:_object.immuteGrid=",_object.immuteGrid);
 		}
 		
 		this.comboSrc = [];

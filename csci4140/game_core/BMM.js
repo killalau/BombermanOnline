@@ -215,7 +215,7 @@ BMM.prototype.plantBombValidation = function(x,y,id,callback){
 		var _grid = this.gridList[y][x];
 		var _BM = this.getElementById(id);
 		var _out = {result:null,bombNum:_BM.bombNum};		
-		console.log("BMM.plantBValid: in.out=",_out);
+		//console.log("BMM.plantBValid: in.out=",_out);
 		if (_grid === null || _BM === null ) throw "_grid or _BM is null";
 		if (! _BM.alive ) return {result:false,bombNum:0};
 		//Any trick things on that grid atm
@@ -238,7 +238,7 @@ BMM.prototype.plantBombValidation = function(x,y,id,callback){
 										);},3000);
 			}
 		}
-		console.log("BMM.plantBValid: out.out=",_out);
+		//console.log("BMM.plantBValid: out.out=",_out);
 		return _out;
 	}catch(e){console.error("[plantBombValidtation]err=",e);};
 }
