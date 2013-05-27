@@ -47,7 +47,10 @@ BMO.BMM.consturctor = BMO.BMM;
 			elements:[
 				{classname:
 				pos: {x : x, y : y}			//which grid
-				}
+				},
+			walls: [],
+			buffs: [],
+			boxes: []				
 			]
 		}
 **/
@@ -57,6 +60,10 @@ BMO.BMM.prototype.init = function(data){
 		this.setWall({'default':true,payload:null});
 		this.setBuff({'default':true,payload:null});//Andy
 		this.setBox({'default':true,payload:null});
+	}else{
+		this.setWall({'default':false,payload:data.walls});
+		this.setBuff({'default':false,payload:data.buffs});//Andy
+		this.setBox({'default':false,payload:data.boxes});		
 	}
 	if (data.timer) this.setTimer(data.timer);
 	this.setPlayer(data);
@@ -90,7 +97,7 @@ BMO.BMM.prototype.setThumbnail = function(playerID){
 		var len = this.thumbnailList.length;
 		var _text = playerID;
 		if (_text.length > 11 ){
-			var re = /([.]{8})/;
+			var re = /^([.]{8})/;
 			re.test(_text);
 			_text = RegExp.$1 + "...";
 		}
@@ -208,54 +215,14 @@ BMO.BMM.prototype.setMap = function(data){
 		}
 	}
 	
-	//initialize wall, box
+	//initialize 
 	if(data.gameState && data.gameState[0] >= 3){
-		console.log('set wall set box');
 		for(var i = 0, e; e = data.elements[i]; i++){
 			var _grid = this.gridList[e.pos.y][e.pos.x];
 			switch(e.classname){
-			case "Wall":
-				var _wall = new BMO.Wall(_grid,this,this.wsClient);
-				_wall.setView("wall");
-				_grid.addElement(_wall);
-				_grid.view.addChild(_wall.view);			
-			break;
-			case "Box":
-				var _box = new BMO.Box(_grid,this,this.wsClient);
-				_box.setView("box");							
-				_grid.addElement(_box);
-				_grid.view.addChild(_box.view);
-			break;
-			case "Bomb":
-			//TO-DO
-			break;
-			case "BombPlusPlus":
-				console.log('[BMM] new BombPlusPlus');
-				var _bombPP = new BMO.BombPlusPlus(_grid,this,this.wsClient);
-				console.log('[BMM] setView BombPlusPlus');
-				_bombPP.setView("BombPlusPlus");							
-				_grid.addElement(_bombPP);
-				_grid.view.addChild(_bombPP.view);
-			//TO-DO
-			break;
-			case "FirePlusPlus":
-				console.log('[BMM] new FirePlusPlus');
-				var _bombPP = new BMO.FirePlusPlus(_grid,this,this.wsClient);
-				console.log('[BMM] setView FirePlusPlus');
-				_bombPP.setView("FirePlusPlus");
-				console.log('[BMM] grid.addElement FirePlusPlus');
-				_grid.addElement(_bombPP);
-				console.log('[BMM] view.addChild FirePlusPlus');
-				_grid.view.addChild(_bombPP.view);
-			//TO-DO
-			break;
-			case "SpeedPlusPlus":
-				var _bombPP = new BMO.SpeedPlusPlus(_grid,this,this.wsClient);
-				_bombPP.setView("SpeedPlusPlus");							
-				_grid.addElement(_bombPP);
-				_grid.view.addChild(_bombPP.view);
-			//TO-DO
-			break;
+			default:
+				console.log(e.classname);
+				break;
 			}
 		}
 	}
@@ -303,12 +270,18 @@ BMO.BMM.prototype.setWall = function(data){
 			}
 		}
 	}else{//special handle
-		
+		for(var i = 0, e; e = data.payload[i]; i++){
+			var _grid = this.gridList[e.pos.y][e.pos.x];
+			var _wall = new BMO.Wall(_grid,this,this.wsClient);
+			_wall.setView("wall");
+			_grid.addElement(_wall);
+			_grid.view.addChild(_wall.view);			
+		}					
 	}
 	}catch(e){console.log(e);alert(e);throw e;};
 }
 
-//Below method BMM.setBuff() is no longer used
+
 /*
 @private method setBuff
 @param data: {
@@ -316,10 +289,9 @@ BMO.BMM.prototype.setWall = function(data){
 			payload: {}
 		}
 **/
-/*
+
 BMO.BMM.prototype.setBuff = function(data){//Andy
 	try{
-		console.log("setBuff");
 		if(data.default){
 		//default position for planting buff
 			for(var i = 0; i < this.height; i++){
@@ -336,11 +308,42 @@ BMO.BMM.prototype.setBuff = function(data){//Andy
 				}
 			}
 		}else{
-		//map posiiton for planting buff
+			for(var i = 0, e; e = data.payload[i]; i++){
+				var _grid = this.gridList[e.pos.y][e.pos.x];
+				switch(e.classname){
+				case "BombPlusPlus":
+					console.log('[BMM] new BombPlusPlus');
+					var _bombPP = new BMO.BombPlusPlus(_grid,this,this.wsClient);
+					console.log('[BMM] setView BombPlusPlus');
+					_bombPP.setView("BombPlusPlus");							
+					_grid.addElement(_bombPP);
+					_grid.view.addChild(_bombPP.view);
+				//TO-DO
+				break;
+				case "FirePlusPlus":
+					console.log('[BMM] new FirePlusPlus');
+					var _bombPP = new BMO.FirePlusPlus(_grid,this,this.wsClient);
+					console.log('[BMM] setView FirePlusPlus');
+					_bombPP.setView("FirePlusPlus");
+					console.log('[BMM] grid.addElement FirePlusPlus');
+					_grid.addElement(_bombPP);
+					console.log('[BMM] view.addChild FirePlusPlus');
+					_grid.view.addChild(_bombPP.view);
+				//TO-DO
+				break;
+				case "SpeedPlusPlus":
+					var _bombPP = new BMO.SpeedPlusPlus(_grid,this,this.wsClient);
+					_bombPP.setView("SpeedPlusPlus");							
+					_grid.addElement(_bombPP);
+					_grid.view.addChild(_bombPP.view);
+				//TO-DO
+				break;
+				}
+			}
 		}
 	}catch(e){console.log(e);alert(e);throw e;};
 }
-*/
+
 
 /*
 @private method setBox
@@ -368,6 +371,13 @@ BMO.BMM.prototype.setBox = function(data){
 			}
 		}
 	}else{//Special handle
+		for(var i = 0, e; e = data.payload[i]; i++){
+			var _grid = this.gridList[e.pos.y][e.pos.x];
+			var _box = new BMO.Box(_grid,this,this.wsClient);
+			_box.setView("box");							
+			_grid.addElement(_box);
+			_grid.view.addChild(_box.view);	
+		}
 	}
 	}catch(e){console.log(e);alert(e);throw e;};
 }
