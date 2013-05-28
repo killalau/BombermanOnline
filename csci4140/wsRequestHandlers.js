@@ -330,7 +330,7 @@ function joinRoom(data,gServer,gClient){
 				if(gServer.roomList[bufRm].clientList.length > 1){
 					gServer.roomList[bufRm].host = gServer.roomList[bufRm].clientList[1];
 					gServer.roomList[bufRm].clientList[1].isHost = true;
-					gServer.roomList[bufRm].clientList[1].isReady = false;
+					gServer.roomList[bufRm].clientList[1].isReady = true;
 				}
 				//console.log(gServer.roomList[bufRm].clientList);
 				var host = gServer.roomList[bufRm].host;
@@ -581,6 +581,7 @@ function seat_maintain(gServer, gClient, rmnum){
 	}
 	//console.log(reply);
 	var room = gServer.roomList[rmnum];
+	ready_refresh(gServer, rmnum);
 	for(var i=0;i<room.clientList.length;i++){	
 	if(room.clientList[i].isHost)
 		room.sendData('H_seat_update_ACK', JSON.stringify(reply), room.clientList[i]);
@@ -588,7 +589,7 @@ function seat_maintain(gServer, gClient, rmnum){
 		room.sendData('seat_update_ACK', JSON.stringify(reply), room.clientList[i]);		
 	}
 	
-	ready_refresh(gServer, gClient);
+
 
 }
 
@@ -624,7 +625,7 @@ try{
 	
 	var room = gServer.roomList[gClient.room];
 	
-	ready_refresh(gServer, gClient); //tell client to refresh player_div border
+	ready_refresh(gServer, gClient.room); //tell client to refresh player_div border
 
 
 	gClient.sendData("state_change_ACK" , gClient.isReady);
@@ -715,12 +716,13 @@ function rename(data, gServer, gClient){
 	}
 }
 
-function ready_refresh(gServer, gClient){
-	var room = gServer.roomList[gClient.room];
+function ready_refresh(gServer, rmnum){
+	var room = gServer.roomList[rmnum];
+	var reply = [];
 	try{
 		for(var i=0;i<room.clientList.length;i++){
 			reply[i] = [];
-			reply[i].push(room.clientList[i].name);
+			reply[i].push(room.clientList[i].username);
 			reply[i].push(room.clientList[i].seat);
 			reply[i].push(room.clientList[i].isReady);
 		}		

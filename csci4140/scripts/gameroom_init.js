@@ -68,7 +68,7 @@ function AddEventListenter(handlers, wsClient) {
 						if(!(message[i][0] == wsClient.username)) {
 							var cross_img = document.createElement('img');
 							//console.log(wsClient.username);
-							cross_img.setAttribute("id", "cross"+playernum);
+							cross_img.setAttribute("id", "cross_"+message[i][0]);
 							cross_img.setAttribute("class", "cross");
 							cross_img.setAttribute("src", "../images/cross.png");
 							//setAttributes(cross_img, {"id": "cross" + playernumm, "class": "cross", "src": "../images/cross.png"});
@@ -76,7 +76,8 @@ function AddEventListenter(handlers, wsClient) {
 							cross_img.addEventListener("click",function(e) {
 								e.stopPropagation();
 								e.preventDefault();
-								var string = e.currentTarget.parentNode.getAttribute("id").substring(4);
+								var string = e.currentTarget.getAttribute("id").substring(6);
+								console.log("kick: " + string);
 								var json = {
 									username : string,
 								};
@@ -157,15 +158,21 @@ function AddEventListenter(handlers, wsClient) {
 		
 		handlers["Ready_Notify"] = function(data, wsClient) {
 			try{
+				//to deal with player left and donesn't change back to black
+				for(var i=1;i<=4;i++){
+					document.getElementById("player"+i).style.border = "2px solid black";
+				}
+				
 				var message = JSON.parse(data);
 				for(var i = 0;i<message.length;i++){
-					var player_div = document.getElementById("player"+num);
+					var num = message[i][1] +1;	//get the seat number
 					if(message[i][2]){
-						var num = message[i][1] +1;	//get the seat number
-						player_div.style.border = "2px solid rgb(0,243,0)";
+						document.getElementById("player"+num).style.border = "2px solid rgb(0,243,0)";
 					}
 					else
-						player_div.style.border = "2px solid rgb black";
+						document.getElementById("player"+num).style.border = "2px solid black";
+					
+					
 			
 				}
 			}

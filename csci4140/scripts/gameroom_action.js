@@ -26,6 +26,8 @@ function logout(handlers, wsClient){
 	var value = window.confirm("Are your sure to logout?");
 	
 	if(value){
+	
+	//clear server session
 		var clientSession = function (name){
 							name += '=';
 							var parts = document.cookie.split(/;\s*/);
@@ -45,6 +47,8 @@ function logout(handlers, wsClient){
 		console.log(json.session);
 		wsClient.sendData("removeSession", JSON.stringify(json));
 	}
+	document.cookie = "BomberManCookie=logout;expires=Thu, 01 Jan 1970 00:00:01 GMT";
+	document.location.href = "http://137.189.89.214:18028/index/index.php";
 }
 
 function map_change(e){

@@ -15,7 +15,8 @@ function create(connection, server, room){
 		username: false,		// username
 		ping: false,			// ping value
 		seat: -1,				// cleint seat number
-		isHost: false,			
+		isHost: false,
+		isReady: false,
 		requestTimestamp: false,	// prevous request timestamp, for client side ping calculation
 		disconnectFunction: false,	// timeout function when connection break, or change page
 		sendData : function(type, data){	// send data to client
