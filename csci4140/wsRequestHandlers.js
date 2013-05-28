@@ -1217,8 +1217,10 @@ function game_sync(data, gServer, gClient){
 	}
 	if(valid){
 		gClient.broadcastData('game_gameStart', bmm.gameState);
-		bmm.gameState[0] = 4;
-		bmm.startTimer();
+		if(bmm.gameState[0] == 3){
+			bmm.gameState[0] = 4;
+			bmm.startTimer();
+		}
 		var _out = [];
 		for(var i=0, c; c = bmm.elementList[i] ;i++){
 			var _id = c.id;
