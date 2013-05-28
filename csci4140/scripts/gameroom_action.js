@@ -26,7 +26,7 @@ function logout(handlers, wsClient){
 	var value = window.confirm("Are your sure to logout?");
 	
 	if(value){
-	wsClient.sendData("gameroom_logout", JSON.stringify(wsClient.username);
+	wsClient.sendData("gameroom_logout", JSON.stringify(wsClient.username));
 	//clear server session
 	
 	

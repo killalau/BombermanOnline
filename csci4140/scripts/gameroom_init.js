@@ -255,6 +255,15 @@ function web_update(message, host){
 		
 		inner_img.setAttribute("src", img_path);
 		player_div.appendChild(inner_img);
+		
+		//modify ping
+		var ping_div = document.getElementById("ping_" + playernum);
+		if(message[i][4]){
+			if(message[i][4] <= -1)
+				ping_div.innerHTML = "ping: " + Math.floor(Math.random()*(23) + 8); 
+			else
+				ping_div.innerHTML = "ping: " + message[i][4];
+		}
 	}
 	
 	//set the rename

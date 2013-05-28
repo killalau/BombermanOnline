@@ -592,6 +592,7 @@ function seat_maintain(gServer, gClient, rmnum){
 		reply[i].push(gServer.roomList[rmnum].clientList[i].seat);	
 		reply[i].push(havepic);		//this is to tell client the user have profile or not
 		reply[i].push(gServer.roomList[rmnum].name);
+		reply[i].push(gServer.roomList[rmnum].clientList[i].ping.avgping);
 		//reply[i].push(gServer.roomList[rmnum].clientList[i].ping);
 	}
 	//console.log(reply);
@@ -603,6 +604,7 @@ function seat_maintain(gServer, gClient, rmnum){
 	else
 		room.sendData('seat_update_ACK', JSON.stringify(reply), room.clientList[i]);		
 	}
+
 	
 
 
