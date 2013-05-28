@@ -238,7 +238,8 @@ Lobby.init_phase2 = function(handlers,wsClient){
 	//End of roomList event-------------------------
 
 	//stat event
-	wsClient.sendData("getPlayerStat",null);//***YOU MUST send the player's id to server side
+	wsClient.sendData("stat",null);
+	//wsClient.sendData("getPlayerStat",null);//***YOU MUST send the player's id to server side
 	
 	var re = /;?BomberManCookie=(.*):(.*);?/i;
 	re.exec(document.cookie);
@@ -263,15 +264,15 @@ Lobby.init_phase2 = function(handlers,wsClient){
 	//End Of Up&Down Button-----------------------	
 
 	//Player Stat
-	handlers["getPlayerStatACK"]=function(data,wsClient){
+	handlers["statACK"]=function(data,wsClient){
 		try{
 			var message = JSON.parse(data);
 			var playerNameBox = document.getElementById("player_name");
 			var statBox = document.getElementById("player_stat");
-			playerNameBox.innerHTML = message.id;
-			statBox.innerHTML = "Player Level:"+ message.level +"<br>";
+			playerNameBox.innerHTML = message.playerName;
+			statBox.innerHTML = "Player Level:"+ message.playerLevel  +"<br>";
 			statBox.innerHTML += "Win:"+message.win + "<br>";
-			statBox.innerHTML += "Lose:"+message.loss;
+			statBox.innerHTML += "Lose:"+message.lose;
 			//console.log(message);
 		}catch(e){
 			console.log(e);
@@ -348,13 +349,6 @@ Lobby.init_phase2 = function(handlers,wsClient){
 		}
 	}
 	//---------------------------------------------
-	/*
-	var _out = {
-			level: level,
-			win: win,
-			loss: loss
-		};*/
-
 }
 
 Lobby.init_phase1 = function(){
