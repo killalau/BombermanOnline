@@ -1,11 +1,14 @@
+.body{
+	font-family: 'Century Gothic';
+}
+
 .title{
     margin-bottom:10px;
-    border:2px solid black;
     color:white;
     font-size:12pt;
     width:960px;
     height:20px;
-    background-color:red;
+    background-color:C1272D;
     text-align:center;
 }
 
@@ -16,13 +19,23 @@
 .goback{
     width:68px;
     float:left;
-    background-color:black;
+    background-color:7F1F26;
+	cursor: default;
+}
+
+.goback:hover{
+	background-color:FF3333;
 }
 
 .logout{
     width:68px;
     float:left;
-    background-color:black;
+    background-color:7F1F26;
+	cursor: default;
+}
+
+.logout:hover{
+	background-color:FF3333;
 }
 
 .room_name{
@@ -31,6 +44,11 @@
     width:960px;
     height:20px;
     text-align:center;
+	cursor: default;
+}
+
+.room_name{
+	cursor:pointer;
 }
 
 .host_div{
