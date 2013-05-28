@@ -26,7 +26,7 @@ function logout(handlers, wsClient){
 	var value = window.confirm("Are your sure to logout?");
 	
 	if(value){
-	wsClient.sendData("gameroom_logout", null);
+	wsClient.sendData("gameroom_logout", JSON.stringify(wsClient.username);
 	//clear server session
 	
 	
@@ -51,6 +51,7 @@ function logout(handlers, wsClient){
 	
 	document.cookie = "BomberManCookie=logout;expires=Thu, 01 Jan 1970 00:00:01 GMT";
 	document.location.href = "http://137.189.89.214:18028/index/index.php";
+	
 	}
 }
 
@@ -89,9 +90,7 @@ function state_change(handlers, wsClient){
 		else 
 			state_button.style.backgroundColor = "rgb(243,0,0)";
 		
-	
-	}
-	
+	}	
 }
 
 function change_name(handlers, wsClient){

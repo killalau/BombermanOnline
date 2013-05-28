@@ -751,7 +751,7 @@ function ready_refresh(gServer, rmnum){
 function gameroom_logout(data, gServer, gClient){
 	try{
 		var room = gServer.roomList[gClient.room];
-		var rmnum = room.rid;
+		var rmnum = room.rid+1;
 
 		room.seatList[gClient.seat] = false;
 		gClient.seat = -1;
@@ -772,8 +772,9 @@ function gameroom_logout(data, gServer, gClient){
 
 			room.broadcastData('host_update_ACK', JSON.stringify(_data));
 			room.removeClient(gServer,gClient);
-			
+			console.log("before");
 			seat_maintain(gServer, gClient, rmnum);
+			console.log("after");
 		}
 		else{
 			//remove client from gameroom and maintain seat
@@ -789,7 +790,7 @@ function gameroom_logout(data, gServer, gClient){
 		rmList(JSON.stringify(_data),gServer,gClient);
 	}
 	catch(e){
-		console.log("gameroom_logout error: " + e
+		console.log("gameroom_logout error: " + e);
 	}
 
 }
