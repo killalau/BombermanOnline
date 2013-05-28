@@ -88,14 +88,19 @@ BMO.BMM.prototype.init = function(data){
 }
 **/
 BMO.BMM.prototype.game_syncACK = function(data){
-	if ( data.gameState[0] < 4 ){
-		//for (var i =0, c ; c = data.payload[i] ; i++){
-		//	var _id = c.id;
-		//	
-		//}
-	}else{
-		
-	}
+	try{
+		console.log("game_syncACK:_in=",data);
+		var _in = JSON.parse(data);
+		console.log("game_syncACK:_in=",_in);
+		if ( _in.gameState[0] < 4 ){
+			//for (var i =0, c ; c = data.payload[i] ; i++){
+			//	var _id = c.id;
+			//	
+			//}
+		}else{
+			
+		}
+	}catch(e){console.error("game_syncACK=err",e);};
 }
 
 /*
@@ -501,10 +506,7 @@ BMO.BMM.prototype.setController = function(){
 	self.handlers["game_broadcastVanishBuff"] = function(data,wsClient){//Andy
 												self.broadcastVanishBuff(data,wsClient);};	
 	self.handlers["game_syncACK"] = function(data,wsClient){
-												try{
-													//if (data != null)
-													//	self.game_syncACK(JSON.parse(data));
-												}catch(e){console.error("game_syncACK:err=",e);};
+												self.game_syncACK(data);
 											}
 	self.handlers["game_gameStart"] = function(data,wsClient){
 										self.game_gameStart(data, wsClient);};

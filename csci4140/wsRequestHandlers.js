@@ -1210,7 +1210,7 @@ function game_sync(data, gServer, gClient){
 	var valid = true;
 	for(var i = 0, e; e = bmm.elementList[i]; i++){
 		//when all player ready, player.gameState == {id:e.id,gameState:_in.gameState};
-		if(bmm.gameState[i+1] != 5){
+		if(bmm.gameState[i+1].gameState != 5){
 			valid = false;
 			break;
 		}
