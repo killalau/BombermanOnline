@@ -438,6 +438,9 @@ BMM.prototype.checkWinCondition = function(){
 		for(var i = 0, e; e = this.elementList[i]; i++){
 			if(e.alive){
 				_out.winner = e.id;
+				this.increaseWinStat(e.id);
+			}else{
+				this.increaseLossStat(e.id);
 			}
 		}
 	}
