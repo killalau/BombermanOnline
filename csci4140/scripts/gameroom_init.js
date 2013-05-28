@@ -98,6 +98,9 @@ function AddEventListenter(handlers, wsClient) {
 				inner_div.appendChild(new_state_button);
 				if(!flag){
 				change_name(data, wsClient);
+				//The Map Back and Next Button
+				document.getElementById("map_back").addEventListener("click", map_change, false);
+				document.getElementById("map_next").addEventListener("click", map_change, false);
 				}
 			}
 			catch(e){
@@ -216,9 +219,7 @@ function AddEventListenter(handlers, wsClient) {
 		logout(handlers, wsClient);
 	},false);
 	
-	//The Map Back and Next Button
-	document.getElementById("map_back").addEventListener("click", map_change, false);
-	document.getElementById("map_next").addEventListener("click", map_change, false);
+
 	
 	//The State button
 	document.getElementById("State").addEventListener("click", function(e){
