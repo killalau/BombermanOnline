@@ -350,10 +350,10 @@ BMM.prototype.vanishBuffValidation = function(X, Y, buffname, requestBM, callbac
 	}catch(e){console.log('[CoreBMM.vanishBuffValidation] err:', e);};
 }
 
-<<<<<<< HEAD
 /*
 @private method increaseWinStat
 @param playerId: the player ID of the player whose win # to be incremented
+***level of the player in DBMS will also be increased for winning every 10 games by this function
 */
 BMM.prototype.increaseWinStat = function (playerId){
 	try{
@@ -385,7 +385,8 @@ BMM.prototype.increaseLossStat = function (playerId){
 		});		
 		
 	}catch(e){console.log(e);throw e;};
-=======
+}
+
 BMM.prototype.startTimer = function(){
 	var self = this;
 	this.timer.timerFunc = setInterval(function(){
@@ -397,7 +398,6 @@ BMM.prototype.startTimer = function(){
 			}
 		};
 	}(), 1000);
->>>>>>> ffaeefe70e76d1274a2f5438d6ebd2c10688f7a4
 }
 
 exports.BMM = BMM;
