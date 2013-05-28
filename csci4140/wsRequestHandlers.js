@@ -1123,7 +1123,39 @@ function removeSession(data, gServer, gClient){
  * gClient : game client object
  */
 function game_sync(data, gServer, gClient){
+	var bmm = gServer.roomList[gClient.room].bmm;
 	
+	var _in = JSON.parse(data);
+	
+	//core/BMM is not ready
+	if(bmm == null || bmm.gameState[0] < 3){
+		gClient.sendData('game_syncACK', false);
+		return;
+	}
+	
+	//increase player.gameState
+	for(var i = 0, e; e = bmm.elementList[i]; i++){
+		if(e.id == gClient.username){
+			if(bmm.gameState[i+1] < _in.gameState){
+				bmm.gameState[i+1] = _in.gameState;
+			}
+			break;
+		}
+	}
+	gClient.sendData('game_syncACK', bmm.gameState);
+	
+	//check all player ready
+	var valid = true;
+	for(var i = 0, e; e = bmm.elementList[i]; i++){
+		//when all player ready, player.gameState == 5
+		if(bmm.gameState[i+1] != 5){
+			valid = false;
+			break;
+		}
+	}
+	if(valid){
+		gClient.broadcastData('game_gameStart', bmm.gameState);
+	}
 }
 
 
