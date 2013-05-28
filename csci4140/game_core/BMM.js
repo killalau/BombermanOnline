@@ -336,7 +336,7 @@ BMM.prototype.vanishBuffValidation = function(X, Y, buffname, requestBM, callbac
 							id:	{	x:X,
 									y:Y},
 							payload: requestBM 
-					};			
+					};
 					e.applyBuff(bm);			
 					grid.removeElement(e);
 					break;
