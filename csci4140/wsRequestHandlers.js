@@ -1185,7 +1185,7 @@ function getPlayerStat(data, gServer, gClient){
 				}
 			
 				if (err){
-					console.log('[wsRequestHandler] MySQL mysqlConnection error code:' + err.code););
+					console.log('[wsRequestHandler] MySQL mysqlConnection error code:' + err.code);
 				}
 			});
 		}
@@ -1215,9 +1215,7 @@ function game_sync(data, gServer, gClient){
 	//increase player.gameState
 	for(var i = 0, e; e = bmm.elementList[i]; i++){
 		if(e.id == gClient.username){
-			if(bmm.gameState[i+1] < _in.gameState){
-				bmm.gameState[i+1] = _in.gameState;
-			}
+			bmm.gameState[i+1] = _in.gameState;
 			break;
 		}
 	}
@@ -1234,6 +1232,7 @@ function game_sync(data, gServer, gClient){
 	}
 	if(valid){
 		gClient.broadcastData('game_gameStart', bmm.gameState);
+		bmm.gameState[0] = 4;
 	}
 }
 

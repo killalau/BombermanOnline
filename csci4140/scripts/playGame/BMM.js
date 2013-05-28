@@ -446,10 +446,13 @@ BMO.BMM.prototype.setController = function(){
 		self.getElementById( self.wsClient.username).eventProcesser(e);
 	};
 	
+	//key event is add, untill all player ready (gameStart())
+	/*
 	if ( self.getElementById(self.wsClient.username) !== null){
 		document.body.addEventListener("keydown",this.myKeyDown,false);
 		document.body.addEventListener("keyup",this.myKeyUp,false);
 	}   
+	*/
 	
 	self.handlers["game_playerMoveACK"] = function(){};
 	self.handlers["game_playerStopMoveACK"] = function(){};
@@ -662,11 +665,76 @@ BMO.BMM.prototype.timerStart = function(){
 			}
 		},1000);
 };
+/* Count down for "3,2,1,GO"
+ * Start rancing during the "GO" is displayed
+ */
+BMO.BMM.prototype.countDown = function(){
+	function createText(text){
+		var obj = new PIXI.Text(text);
+		obj.setStyle({font: "bold 100px Arial", fill:"white"});
+		obj.position = {x:408, y:264};
+		obj.anchor = {x:0.5,y:0.5};
+		return obj;
+	}
+	
+	var self = this;
+	self.countDown.obj = null;
+	var textAry = ["3", "2", "1", "GO", ""];
+	
+	for(var i = 0; i < 5; i++){			
+		setTimeout(function(){
+			var index = i;
+			return function(){
+				if(self.countDown.obj != null){
+					self.view.removeChild(self.countDown.obj);
+				}
+				if(textAry[index].length > 0){
+					var obj = createText(textAry[index]);
+					self.view.addChild(obj);
+					self.countDown.obj = obj;
+				}else{
+					self.countDown.obj = null;
+				}
+			}
+		}(), 1000 * i);
+	}
+	
+	setTimeout(function(){
+		self.gameStart();
+	}, 3000);
+}
+
+/* Start counting Time, addEventListener
+ * Will only run once
+ */
+BMO.BMM.prototype.gameStart = function(){
+	if(!this.gameStart.already){
+		this.timerStart();
+		if ( this.getElementById(this.wsClient.username) !== null){
+			document.body.addEventListener("keydown",this.myKeyDown,false);
+			document.body.addEventListener("keyup",this.myKeyUp,false);
+		}
+		
+		this.gameStart.already = true;
+	}
+}
 
 /*
 @public method game_gameStart
 called when server said, all player ready (initialize finished)
+
+@param
+data: [3,5,5,5,5] //gameState
 **/
 BMO.BMM.prototype.game_gameStart = function(data, wsClient){
-	this.timerStart();
+	//The first time, all players ready
+	if(data[0] == 3){
+		this.countDown();
+		this.game_gameStart.already = true;
+	
+	//Someone refresh the page, so that data[0] == 4
+	//and which is the guy didn't run game_gameStart before
+	}else if(!this.game_gameStart.already){
+		this.gameStart();
+	}
 }
