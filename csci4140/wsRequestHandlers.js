@@ -749,46 +749,48 @@ function ready_refresh(gServer, rmnum){
 }
 
 function gameroom_logout(data, gServer, gClient){
-	var room = gServer.roomList[gClient.room];
-	var rmnum = room.rid;
-	
-	room.seatList[gClient.seat] = false;
-	gClient.seat = -1;
-	gClient.isReady = false;
+	try{
+		var room = gServer.roomList[gClient.room];
+		var rmnum = room.rid;
 
-	if(gClient.isHost){
-		room.host = false;
-		gClient.isHost = false;
-		if(room.clientList.length > 1){
-			room.host = room.clientList[1];
-			room.clientList[1].isHost = true
-			room.clientList[1].isReady = true;
-		}
-		var host = room.host;
-		var _data = {
-		host_seat: host.seat
-		};
+		room.seatList[gClient.seat] = false;
+		gClient.seat = -1;
+		gClient.isReady = false;
 
-		room.broadcastData('host_update_ACK', JSON.stringify(_data));
-		room.removeClient(gServer,gClient);
-		
-		seat_maintain(gServer, gClient, rmnum);
-	}
-	
-	if(!gClient.isHost){		
-		//remove client from gameroom and maintain seat
-		room.removeClient(gServer,gClient);
-		seat_maintain(gServer,gClient,rmnum);
-	}
+		if(gClient.isHost){
+			room.host = false;
+			gClient.isHost = false;
+			if(room.clientList.length > 1){
+				room.host = room.clientList[1];
+				room.clientList[1].isHost = true
+				room.clientList[1].isReady = true;
+			}
+			var host = room.host;
+			var _data = {
+			host_seat: host.seat
+			};
 
+			room.broadcastData('host_update_ACK', JSON.stringify(_data));
+			room.removeClient(gServer,gClient);
 			
-	var _data = {
-		rid: room.rid,
-		name : room.name,
-		np : room.np(),
-		ping : room.ping()
-	};
-	rmList(JSON.stringify(_data),gServer,gClient);
+			seat_maintain(gServer, gClient, rmnum);
+		}
+		else{
+			//remove client from gameroom and maintain seat
+			room.removeClient(gServer,gClient);
+			seat_maintain(gServer,gClient,rmnum);
+		}		
+		var _data = {
+			rid: room.rid,
+			name : room.name,
+			np : room.np(),
+			ping : room.ping()
+		};
+		rmList(JSON.stringify(_data),gServer,gClient);
+	}
+	catch(e){
+		console.log("gameroom_logout error: " + e
+	}
 
 }
 
