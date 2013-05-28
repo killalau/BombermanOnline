@@ -234,7 +234,9 @@ function AddEventListenter(handlers, wsClient) {
 function web_update(message, host){	
 	for(var i=1;i<=4;i++){
 		var player_div = document.getElementById("player" +i);
+		var ping_div = document.getElementById("ping_" + i);
 		player_div.innerHTML = "";
+		ping_div.innerHTML = "ping: 888";
 	}
 	for(var i=0;i<message.length;i++){
 		var playernum = message[i][1] + 1;
@@ -262,7 +264,7 @@ function web_update(message, host){
 			if(message[i][4] <= -1)
 				ping_div.innerHTML = "ping: " + Math.floor(Math.random()*(23) + 8); 
 			else
-				ping_div.innerHTML = "ping: " + message[i][4];
+				ping_div.innerHTML = "ping: " + Math.ceil(message[i][4]);
 		}
 	}
 	

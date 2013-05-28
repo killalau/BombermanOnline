@@ -347,6 +347,8 @@ function joinRoom(data,gServer,gClient){
 					gServer.roomList[bufRm].clientList[1].isHost = true;
 					gServer.roomList[bufRm].clientList[1].isReady = true;
 				}
+				else 
+					gServer.roomList[bufRm].name = "Room " + bufRm;
 				//console.log(gServer.roomList[bufRm].clientList);
 				var host = gServer.roomList[bufRm].host;
 	
@@ -364,7 +366,7 @@ function joinRoom(data,gServer,gClient){
 				
 			}
 			//normal client want to go back Lobby
-			if(message.rid == -1 && !gClient.isHost){
+			else if(message.rid == -1 && !gClient.isHost){
 				gServer.roomList[bufRm].seatList[gClient.seat] = false;
 				gClient.seat = -1;
 				gClient.isReady = false;
