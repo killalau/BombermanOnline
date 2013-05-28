@@ -17,7 +17,10 @@ function BMM(server, room, mapConfig, timer){
 	this.gridList = [];
 	this.elementList = [];	//BM only
 	this.numOfPlayer = 0;
-	this.timer = timer;
+	this.timer = {
+		count : timer,
+		timerFunc : null
+	};
 	this.gameState = [0,0,0,0,0];//Server state, p1 state, p2 state.....
 }
 
@@ -345,6 +348,58 @@ BMM.prototype.vanishBuffValidation = function(X, Y, buffname, requestBM, callbac
 			callback(out);
 		}
 	}catch(e){console.log('[CoreBMM.vanishBuffValidation] err:', e);};
+}
+
+/*
+@private method increaseWinStat
+@param playerId: the player ID of the player whose win # to be incremented
+***level of the player in DBMS will also be increased for winning every 10 games by this function
+*/
+BMM.prototype.increaseWinStat = function (playerId){
+	try{
+		var mysqlConnection = require('../node-mysql').createConnection();
+
+		var query = 'UPDATE bbm_account SET win=win+1, level=ceil(win/10) WHERE id=' + mysqlConnection.escape(playerId);
+		mysqlConnection.query(query, function(err){
+			if (err){
+				console.log('[BMM] MySQL mysqlConnection error code:' + err.code);
+			}
+		});		
+		
+	}catch(e){console.log(e);throw e;};
+}
+
+/*
+@private method increaseLossStat
+@param playerId: the player ID of the player whose win # to be incremented
+*/
+BMM.prototype.increaseLossStat = function (playerId){
+	try{
+		var mysqlConnection = require('../node-mysql').createConnection();
+
+		var query = 'UPDATE bbm_account SET loss=loss+1 WHERE id=' + mysqlConnection.escape(playerId);
+		mysqlConnection.query(query, function(err){
+			if (err){
+				console.log('[BMM] MySQL mysqlConnection error code:' + err.code);
+			}
+		});		
+		
+	}catch(e){console.log(e);throw e;};
+}
+
+BMM.prototype.startTimer = function(){
+	var self = this;
+	setTimeout(function(){
+		self.timer.timerFunc = setInterval(function(){
+			if(--self.timer.count == 0){
+				console.log("[BMM] Game Time's up");
+				clearInterval(self.timer.timerFunc);
+				self.timer.timerFunc = null;
+			}else{
+				
+			}
+		}, 1000);
+	}, 3000);	
 }
 
 exports.BMM = BMM;

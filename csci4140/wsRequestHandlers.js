@@ -895,7 +895,7 @@ function game_init(data, gServer, gClient){
 			gameState : bmm.gameState,
 			width : bmm.width,
 			height : bmm.height,
-			timer: bmm.timer,
+			timer: bmm.timer.count,
 			players : [],
 			elements : [],
 			walls: [],
@@ -1218,8 +1218,11 @@ function game_sync(data, gServer, gClient){
 		}
 	}
 	if(valid){
-		gClient.broadcastData('game_gameStart', bmm.gameState);		
-		bmm.gameState[0] = 4;
+		gClient.broadcastData('game_gameStart', bmm.gameState);
+		if(bmm.gameState[0] == 3){
+			bmm.gameState[0] = 4;
+			bmm.startTimer();
+		}
 		var _out = [];
 		for(var i=0, c; c = bmm.elementList[i] ;i++){
 			var _id = c.id;
@@ -1233,7 +1236,7 @@ function game_sync(data, gServer, gClient){
 			else _out.push({id:_id,picSrc:'icon/default/default'});
 		}
 		
-		gClient.broadcastData('game_syncACK', JSON.stringify({gameState:bmm.gameState,payload:JSON.stringify(_out)}));		
+		gClient.broadcastData('game_syncACK', JSON.stringify({gameState:bmm.gameState,payload:_out}));		
 	}
 }
 
