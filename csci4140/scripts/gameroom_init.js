@@ -66,13 +66,16 @@ function AddEventListenter(handlers, wsClient) {
 						var playernum = message[i][1] + 1;
 						var player_div = document.getElementById("player"+ playernum);
 						if(!(message[i][0] == wsClient.username)) {
+							var span_tag = document.createElement('span');
+							span_tag.setAttribute("class", "span1");
+							player_div.appendChild(span_tag);
 							var cross_img = document.createElement('img');
 							//console.log(wsClient.username);
 							cross_img.setAttribute("id", "cross_"+message[i][0]);
 							cross_img.setAttribute("class", "cross");
 							cross_img.setAttribute("src", "../images/cross.png");
 							//setAttributes(cross_img, {"id": "cross" + playernumm, "class": "cross", "src": "../images/cross.png"});
-							player_div.appendChild(cross_img);
+							span_tag.appendChild(cross_img);
 							cross_img.addEventListener("click",function(e) {
 								e.stopPropagation();
 								e.preventDefault();
@@ -99,6 +102,8 @@ function AddEventListenter(handlers, wsClient) {
 				if(!flag){
 				change_name(data, wsClient);
 				//The Map Back and Next Button
+				document.getElementById("map_back").style.display= "block";
+				document.getElementById("map_next").style.display = "block";
 				document.getElementById("map_back").addEventListener("click", map_change, false);
 				document.getElementById("map_next").addEventListener("click", map_change, false);
 				}
