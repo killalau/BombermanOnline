@@ -61,17 +61,21 @@ BMO.BMM.prototype.init = function(data){
 		this.setBuff({'default':true,payload:null});//Andy
 		this.setBox({'default':true,payload:null});
 	}else{
-		this.setWall({'default':false,payload:data.walls});this.gameState++;
-		//wsClient.sendData('game_sync',JSON.stringify({id:this.id,gameState:this.gameState}));
-		this.setBuff({'default':false,payload:data.buffs});this.gameState++;
-		//wsClient.sendData('game_sync',JSON.stringify({id:this.id,gameState:this.gameState}));
-		this.setBox({'default':false,payload:data.boxes});this.gameState++;
-		//wsClient.sendData('game_sync',JSON.stringify({id:this.id,gameState:this.gameState}));
-		this.setTimer(data.timer);this.gameState++;
-		//wsClient.sendData('game_sync',JSON.stringify({id:this.id,gameState:this.gameState}));
-	}	
+		this.setWall({'default':false,payload:data.walls});
+		this.gameState++;
+		this.wsClient.sendData('game_sync',JSON.stringify({id:this.wsClient.username,gameState:this.gameState}));
+		this.setBuff({'default':false,payload:data.buffs});
+		this.gameState++;
+		this.wsClient.sendData('game_sync',JSON.stringify({id:this.wsClient.username,gameState:this.gameState}));
+		this.setBox({'default':false,payload:data.boxes});
+		this.gameState++;
+		this.wsClient.sendData('game_sync',JSON.stringify({id:this.wsClient.username,gameState:this.gameState}));
+		this.setTimer(data.timer);
+		this.gameState++;
+		this.wsClient.sendData('game_sync',JSON.stringify({id:this.wsClient.username,gameState:this.gameState}));
+	}
 	this.setPlayer(data);this.gameState++;
-	//wsClient.sendData('game_sync',JSON.stringify({id:this.id,gameState:this.gameState}));
+	this.wsClient.sendData('game_sync',JSON.stringify({id:this.wsClient.username,gameState:this.gameState}));
 	this.setController();
 	console.log("BMM.init() end");
 }
@@ -457,6 +461,9 @@ BMO.BMM.prototype.setController = function(){
 												self.broadcastExplodeBomb(data,wsClient);};
 	self.handlers["game_broadcastVanishBuff"] = function(data,wsClient){//Andy
 												self.broadcastVanishBuff(data,wsClient);};	
+	self.handlers["game_syncACK"] = function(){};
+	self.handlers["game_gameStart"] = function(data,wsClient){
+										self.game_gameStart(data, wsClient);};
 	}catch(e){console.log(e);alert(e);throw e;};
 }
 
@@ -655,3 +662,11 @@ BMO.BMM.prototype.timerStart = function(){
 			}
 		},1000);
 };
+
+/*
+@public method game_gameStart
+called when server said, all player ready (initialize finished)
+**/
+BMO.BMM.prototype.game_gameStart = function(data, wsClient){
+	this.timerStart();
+}
