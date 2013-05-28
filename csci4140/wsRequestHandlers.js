@@ -1195,7 +1195,7 @@ function game_sync(data, gServer, gClient){
 	
 	//core/BMM is not ready
 	if(bmm == null || bmm.gameState[0] < 3){
-		gClient.sendData('game_syncACK', false);
+		gClient.broadcastData('game_syncACK', false);
 		return;
 	}
 	
@@ -1206,7 +1206,7 @@ function game_sync(data, gServer, gClient){
 			break;
 		}
 	}
-	gClient.sendData('game_syncACK', JSON.stringify({gameState:bmm.gameState,payload:null}));
+	gClient.broadcastData('game_syncACK', JSON.stringify({gameState:bmm.gameState,payload:null}));
 	
 	//check all player ready
 	var valid = true;
