@@ -15,7 +15,7 @@ BMO.BMM = function(wsClient, handlers){
 	this.handlers = handlers;
 	this.timer = null;
 	this.gameState = 0;
-	this.announcement = null;
+	this.announcement = {};
 };
 
 //constructor
@@ -146,7 +146,8 @@ BMO.BMM.prototype.setThumbnail = function(info){
 		id:null,
 		icon:null,
 		hamster:null,
-		container:null
+		container:null,
+		frameID:null
 	};
 	var pass = false;
 	for(var i = 0, blk; blk = this.thumbnailList[i];i++){
@@ -187,6 +188,7 @@ BMO.BMM.prototype.setThumbnail = function(info){
 			}else{							
 				var _img = new PIXI.ImageLoader(info.icon.payload,false);
 				_infoBlock.container.removeChild(_infoBlock.icon);
+				_infoBlock.frameID = info.icon.payload;
 				_img.addEventListener("loaded",function(){
 					return function(){
 					var w,h,ratio;
@@ -585,8 +587,9 @@ BMO.BMM.prototype.setController = function(){
 	winner : username
 }
 **/
-BMO.BMM.prototype.game_gameEnd(data){
+BMO.BMM.prototype.game_gameEnd = function(data){
 	try{
+		
 		var _in = JSON.parse(data);
 		document.body.removeEventListener("keydown",this.myKeyDown,false);
 		document.body.removeEventListener("keyup",this.myKeyUp,false);	
@@ -595,22 +598,71 @@ BMO.BMM.prototype.game_gameEnd(data){
 			id:"",
 			payload:{
 				dir:"D",
-				grid:{},
+				grid:null,
 				pos:{x:0.5,y:0.5}
 			}			
-		}
+		};
 		for(var i =0, e; e = this.elementList[i];i++){
 			_data.id = e.id;
 			_data.payload.grid = {x:e.grid.X,y:e.grid.Y};
 			this.broadcastPlayerStopMove(_data,{username:this.wsClient.username});
 		}
 		if ( _in.result == "win"){
+			/*
+			this.announcement.text
+			position={x:408,y:264}
+			anchor={x:0.5,y:0.5}
+			style={fill:"white",font:"bold 50pt Arial"};
+			this.announcement.icon
+			position={x:408,y:384}
+			anchor={x:0.5,y:0.5}			
+			**/
 			
+			/*w = _infoBlock.icon.width;
+			h = _infoBlock.icon.height;
+			ratio = w/h;
+			_infoBlock.icon.height = _infoBlock.icon.height > 48 ? 48 : _infoBlock.icon.height;
+			w = ratio * _infoBlock.icon.height;
+			_infoBlock.icon.width = w > 72 ? 72 : w;*/
+			var _blk;
+			for (var i =0,e;e=this.thumbnailList[i];i++){
+				if (_in.winner == e.id){
+					_blk = e;
+					break;
+				}
+			}
+			var _text = new PIXI.Text("Winner is "+_in.winner);
+			_text.anchor = {x:0.5,y:0.5};
+			_text.position = {x:408,y:264};
+			_text.setStyle({fill:"white",font:"bold 50pt Arial"});
+			var _icon = new PIXI.Sprite.fromFrame(_blk.frameID);
+			_icon.anchor = {x:0.5,y:0.5};
+			_icon.position = {x:408,y:384};
+			var w,h,ratio;			
+			//w = 480;
+			//h = 192;
+			ratio = _icon.width/_icon.height;
+			_icon.height = _icon.height > 192 ? 192 : _icon.height;
+			w = ratio * _icon.height;
+			_icon.width = w;			
+			this.announcement.text = _text;
+			this.announcement.icon = _icon;
+			this.view.addChild(this.announcement.text);
+			this.view.addChild(this.announcement.icon);			
 		}else{//draw
-			
+			var _text = new PIXI.Text("Draw Game");
+			_text.anchor = {x:0.5,y:0.5};
+			_text.position = {x:408,y:264};	
+			_text.setStyle({fill:"white",font:"bold 50pt Arial"});
+			this.announcement.text = _text;
+			this.view.addChild(this.announcement.text);
 		}
+		
+		setTimeout(function(){
+			document.location.pathname = "/gameroom.html";
+		},5000);
 	}catch(e){console.error("gameEnd:err=",e);};
-}
+};
 
 
 /* boardcast message about a player move
