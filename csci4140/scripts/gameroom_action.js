@@ -26,21 +26,23 @@ function logout(handlers, wsClient){
 	var value = window.confirm("Are your sure to logout?");
 	
 	if(value){
-	
+	wsClient.sendData("gameroom_logout", null);
 	//clear server session
-		var clientSession = function (name){
-							name += '=';
-							var parts = document.cookie.split(/;\s*/);
-							var cookieValue = null;
-							for (var i = 0; i < parts.length; i++){
-								var part = parts[i];
-								if (part.indexOf(name) == 0){
-									cookieValue =  part.substring(name.length);									
-									return (cookieValue.split(/\:/))[1];
-								}
-							}
-							return cookieValue;
-						};
+	
+	
+	var clientSession = function (name){
+		name += '=';
+		var parts = document.cookie.split(/;\s*/);
+		var cookieValue = null;
+		for (var i = 0; i < parts.length; i++){
+			var part = parts[i];
+			if (part.indexOf(name) == 0){
+				cookieValue =  part.substring(name.length);									
+				return (cookieValue.split(/\:/))[1];
+			}
+		}
+		return cookieValue;
+	};
 		var json = {
 			session : clientSession('BomberManCookie')
 		};
