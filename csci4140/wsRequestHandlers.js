@@ -347,8 +347,10 @@ function joinRoom(data,gServer,gClient){
 					gServer.roomList[bufRm].clientList[1].isHost = true;
 					gServer.roomList[bufRm].clientList[1].isReady = true;
 				}
-				else 
+				else{
 					gServer.roomList[bufRm].name = "Room " + bufRm;
+					console.log(gServer.roomList[bufRm].name);
+				}
 				//console.log(gServer.roomList[bufRm].clientList);
 				var host = gServer.roomList[bufRm].host;
 	
@@ -1217,8 +1219,10 @@ function game_sync(data, gServer, gClient){
 	}
 	if(valid){
 		gClient.broadcastData('game_gameStart', bmm.gameState);
-		bmm.gameState[0] = 4;
-		bmm.startTimer();
+		if(bmm.gameState[0] == 3){
+			bmm.gameState[0] = 4;
+			bmm.startTimer();
+		}
 		var _out = [];
 		for(var i=0, c; c = bmm.elementList[i] ;i++){
 			var _id = c.id;

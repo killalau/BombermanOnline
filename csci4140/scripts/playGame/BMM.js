@@ -103,10 +103,9 @@ BMO.BMM.prototype.game_syncACK = function(data){
 						payload:_gs
 					}
 				};
-				console.log("game_syncACK:_blk=",_blk);
+				//console.log("game_syncACK:_blk=",_blk);
 				this.setThumbnail(_blk);				
-			}else{
-				/*
+			}else{				
 				for (var i =0, c ; c = _in.payload[i] ; i++){
 					var _blk = {
 						id:c.id,
@@ -115,9 +114,9 @@ BMO.BMM.prototype.game_syncACK = function(data){
 							payload:c.picSrc
 						}
 					};
-					console.log("game_syncACK:_blk=",_blk);
+					//console.log("game_syncACK:_blk=",_blk);
 					this.setThumbnail(_blk);
-				}*/
+				}
 			}
 		}
 	}catch(e){console.error("game_syncACK=err",e);};
@@ -175,8 +174,7 @@ BMO.BMM.prototype.setThumbnail = function(info){
 				_infoBlock.container.addChild(_infoBlock.icon);
 			}
 		}else{//image
-			var _img;
-			if (_infoBlock.icon instanceof PIXI.Sprite){
+			if ((_infoBlock.icon instanceof PIXI.Sprite) && (!(_infoBlock.icon instanceof PIXI.Text)) ){
 				_infoBlock.icon.setTexture(PIXI.Texture.fromFrame(info.icon.payload)); 
 				var w,h,ratio;
 				w = _infoBlock.icon.width;
@@ -185,19 +183,26 @@ BMO.BMM.prototype.setThumbnail = function(info){
 				_infoBlock.icon.height = _infoBlock.icon.height > 48 ? 48 : _infoBlock.icon.height;
 				w = ratio * _infoBlock.icon.height;
 				_infoBlock.icon.width = w > 72 ? 72 : w;				
-			}else{
-				var w,h,ratio;
-				_infoBlock.removeChild(_infoBlock.icon);
-				_infoBlock.icon = new PIXI.Sprite(info.icon.payload);
-				_infoBlock.icon.anchor = {x:0.5,y:0.5};
-				_infoBlock.icon.position = {x:48,y:60};	
-				w = _infoBlock.icon.width;
-				h = _infoBlock.icon.height;
-				ratio = w/h;
-				_infoBlock.icon.height = _infoBlock.icon.height > 48 ? 48 : _infoBlock.icon.height;
-				w = ratio * _infoBlock.icon.height;
-				_infoBlock.icon.width = w > 72 ? 72 : w;
-				_infoBlock.container.addChild(_infoBlock.icon);
+			}else{							
+				var _img = new PIXI.ImageLoader(info.icon.payload,false);
+				_infoBlock.container.removeChild(_infoBlock.icon);
+				_img.addEventListener("loaded",function(){
+					return function(){
+					var w,h,ratio;
+					_infoBlock.icon = new PIXI.Sprite.fromFrame(info.icon.payload);
+					_infoBlock.icon.anchor = {x:0.5,y:0.5};
+					_infoBlock.icon.position = {x:48,y:60};	
+					
+					w = _infoBlock.icon.width;
+					h = _infoBlock.icon.height;
+					ratio = w/h;
+					_infoBlock.icon.height = _infoBlock.icon.height > 48 ? 48 : _infoBlock.icon.height;
+					w = ratio * _infoBlock.icon.height;
+					_infoBlock.icon.width = w > 72 ? 72 : w;
+					_infoBlock.container.addChild(_infoBlock.icon);
+					}
+				}());
+				_img.load();
 			}
 		}
 		
