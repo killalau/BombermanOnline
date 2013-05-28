@@ -347,6 +347,8 @@ function joinRoom(data,gServer,gClient){
 					gServer.roomList[bufRm].clientList[1].isHost = true;
 					gServer.roomList[bufRm].clientList[1].isReady = true;
 				}
+				else 
+					gServer.roomList[bufRm].name = "Room " + bufRm;
 				//console.log(gServer.roomList[bufRm].clientList);
 				var host = gServer.roomList[bufRm].host;
 	
@@ -364,7 +366,7 @@ function joinRoom(data,gServer,gClient){
 				
 			}
 			//normal client want to go back Lobby
-			if(message.rid == -1 && !gClient.isHost){
+			else if(message.rid == -1 && !gClient.isHost){
 				gServer.roomList[bufRm].seatList[gClient.seat] = false;
 				gClient.seat = -1;
 				gClient.isReady = false;
@@ -891,7 +893,7 @@ function game_init(data, gServer, gClient){
 			gameState : bmm.gameState,
 			width : bmm.width,
 			height : bmm.height,
-			timer: bmm.timer,
+			timer: bmm.timer.count,
 			players : [],
 			elements : [],
 			walls: [],
@@ -1208,14 +1210,15 @@ function game_sync(data, gServer, gClient){
 	var valid = true;
 	for(var i = 0, e; e = bmm.elementList[i]; i++){
 		//when all player ready, player.gameState == {id:e.id,gameState:_in.gameState};
-		if(bmm.gameState[i+1] != 5){
+		if(bmm.gameState[i+1].gameState != 5){
 			valid = false;
 			break;
 		}
 	}
 	if(valid){
-		gClient.broadcastData('game_gameStart', bmm.gameState);		
+		gClient.broadcastData('game_gameStart', bmm.gameState);
 		bmm.gameState[0] = 4;
+		bmm.startTimer();
 		var _out = [];
 		for(var i=0, c; c = bmm.elementList[i] ;i++){
 			var _id = c.id;

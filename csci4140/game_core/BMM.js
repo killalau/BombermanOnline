@@ -17,7 +17,10 @@ function BMM(server, room, mapConfig, timer){
 	this.gridList = [];
 	this.elementList = [];	//BM only
 	this.numOfPlayer = 0;
-	this.timer = timer;
+	this.timer = {
+		count : timer,
+		timerFunc : null
+	};
 	this.gameState = [0,0,0,0,0];//Server state, p1 state, p2 state.....
 }
 
@@ -347,6 +350,7 @@ BMM.prototype.vanishBuffValidation = function(X, Y, buffname, requestBM, callbac
 	}catch(e){console.log('[CoreBMM.vanishBuffValidation] err:', e);};
 }
 
+<<<<<<< HEAD
 /*
 @private method increaseWinStat
 @param playerId: the player ID of the player whose win # to be incremented
@@ -381,6 +385,19 @@ BMM.prototype.increaseLossStat = function (playerId){
 		});		
 		
 	}catch(e){console.log(e);throw e;};
+=======
+BMM.prototype.startTimer = function(){
+	var self = this;
+	this.timer.timerFunc = setInterval(function(){
+		return function(){
+			if(--self.timer.count == 0){
+				console.log("[BMM] Game Time's up");
+				clearInterval(self.timer.timerFunc);
+				self.timer.timerFunc = null;
+			}
+		};
+	}(), 1000);
+>>>>>>> ffaeefe70e76d1274a2f5438d6ebd2c10688f7a4
 }
 
 exports.BMM = BMM;
