@@ -81,15 +81,40 @@ BMO.BMM.prototype.init = function(data){
 }
 
 /*
-@pravite method 
+@pravite method game_syncACK
+@param data = {
+		gameState:[],
+		payload:[{id:_id,picSrc:filepath}||]
+}
+**/
+BMO.BMM.prototype.game_syncACK = function(data){
+	if ( data.gameState[0] < 4 ){
+		//for (var i =0, c ; c = data.payload[i] ; i++){
+		//	var _id = c.id;
+		//	
+		//}
+	}else{
+		
+	}
+}
+
+/*
+@pravite method setThumbnail
 @param info{
 			id: playerID;
 			hamster: null or FrameID
-			icon: null or FrameID
+			icon: {type:"text" || "image"
+				   payload: "";
+			}
 		}
 **/
 BMO.BMM.prototype.setThumbnail = function(info){
 	try{
+	/*
+	each block 
+	width: 144 px
+	height: 96 px
+	**/
 	if ((info.id == null) || (info.id == "")) 
 		throw "setThumbnail:err=info.id cannot be null";
 	var _infoBlock = {
@@ -105,6 +130,15 @@ BMO.BMM.prototype.setThumbnail = function(info){
 	}
 	if ( pass ){
 		//SET ICON
+		/*
+		info = [{id:_id, picSrc:srcUrl,gameState= bmm.gameState}]);		
+			
+		b.anchor = {x:0.5,y:0.5};
+		
+		b.position = {x:48,y:60};
+		
+		*/
+		
 	}else{
 		//SET position && hamster
 		var len = this.thumbnailList.length;
@@ -118,17 +152,19 @@ BMO.BMM.prototype.setThumbnail = function(info){
 		//this.timer.position = {x:(17*48),y:(11*48)};
 		_infoBlock.container.position = {x:(17*48),y:(len*96)};
 	  _infoBlock.hamster = new PIXI.Sprite.fromFrame(info.hamster);
-	  //_infoBlock.icon = new PIXI.DisplayObject();
+	  _infoBlock.icon = new PIXI.Text("0%");
 	  _infoBlock.id = new PIXI.Text(_text); 
 	  _infoBlock.id.setStyle({fill:"orange"});
 	  _infoBlock.id.position = {x:72,y:0};
 	  _infoBlock.id.anchor.x = 0.5;
-	  //_infoBlock.icon.position = {x:0,y:48};
+	  _infoBlock.icon.anchor = {x:0.5,y:0.5};
+	  _infoBlock.icon.position = {x:48,y:60};
+	  _infoBlock.icon.setStyle({fill:"white"});
 	  _infoBlock.hamster.position = {x:108,y:60};
 	  _infoBlock.hamster.anchor = {x:0.5,y:0.5};
 	  _infoBlock.hamster.scale = {x:1.5,y:1.5};
 	  _infoBlock.container.addChild(_infoBlock.id);
-	  //_infoBlock.container.addChild(_infoBlock.icon);
+	  _infoBlock.container.addChild(_infoBlock.icon);
 	  _infoBlock.container.addChild(_infoBlock.hamster);
 	  this.thumbnailList.push(_infoBlock);
 	  this.view.addChild(this.thumbnailList[len].container);
@@ -464,7 +500,12 @@ BMO.BMM.prototype.setController = function(){
 												self.broadcastExplodeBomb(data,wsClient);};
 	self.handlers["game_broadcastVanishBuff"] = function(data,wsClient){//Andy
 												self.broadcastVanishBuff(data,wsClient);};	
-	self.handlers["game_syncACK"] = function(){};
+	self.handlers["game_syncACK"] = function(data,wsClient){
+												try{
+													//if (data != null)
+													//	self.game_syncACK(JSON.parse(data));
+												}catch(e){console.error("game_syncACK:err=",e);};
+											}
 	self.handlers["game_gameStart"] = function(data,wsClient){
 										self.game_gameStart(data, wsClient);};
 	}catch(e){console.log(e);alert(e);throw e;};
@@ -724,7 +765,7 @@ BMO.BMM.prototype.gameStart = function(){
 called when server said, all player ready (initialize finished)
 
 @param
-data: [3,5,5,5,5] //gameState
+data: [3,{id:e.id,gameState:5},{id:e.id,gameState:5},..,..] //gameState
 **/
 BMO.BMM.prototype.game_gameStart = function(data, wsClient){
 	//The first time, all players ready

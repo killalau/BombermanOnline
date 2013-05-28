@@ -57,7 +57,7 @@ wsHandlers.utf8["icon"] = wsRequestHandlers.lobbyIcon;
 wsHandlers.utf8["stat"] = wsRequestHandlers.playerStat;
 wsHandlers.utf8["rmList"] = wsRequestHandlers.rmList;
 wsHandlers.utf8["joinRoom"] = wsRequestHandlers.joinRoom;
-wsHandlers.utf8["getPlayerStat"] = wsRequestHandlers.getPlayerStat;
+//wsHandlers.utf8["getPlayerStat"] = wsRequestHandlers.getPlayerStat;
 //End Of Lobby handler----------------------------------------
 //Gameroom handler--------------------------------------------
 wsHandlers.utf8["host_update"] = wsRequestHandlers.host_update;
