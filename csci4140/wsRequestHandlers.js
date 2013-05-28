@@ -1175,28 +1175,6 @@ function removeSession(data, gServer, gClient){
 	}catch(e){console.log(e);throw e;};
 }
 
-/* Handler for 'getPlayerStat' message, called by Host when count down finish
- *
- * data : {
-		playerId : <player's ID>
- *	}
- * gServer : game server object
- * gClient : game client object
- * 
- * RESPONSE 'getPlayerStatACK' to client
-	var _out = {
-			level: level,
-			win: win,
-			loss: lose
-		};
- */
- //***player stat API
-function getPlayerStat(data, gServer, gClient){
-	try{		
-
-	}catch(e){console.log(e);throw e;};
-}
-
 /* Handler for 'game_sync' message, called by Host when count down finish
  *
  * data : {
@@ -1220,24 +1198,38 @@ function game_sync(data, gServer, gClient){
 	//increase player.gameState
 	for(var i = 0, e; e = bmm.elementList[i]; i++){
 		if(e.id == gClient.username){
-			bmm.gameState[i+1] = _in.gameState;
+			bmm.gameState[i+1] = {id:e.id,gameState:_in.gameState};
 			break;
 		}
 	}
-	gClient.sendData('game_syncACK', bmm.gameState);
+	gClient.sendData('game_syncACK', JSON.stringify({gameState:bmm.gameState,payload:null}));
 	
 	//check all player ready
 	var valid = true;
 	for(var i = 0, e; e = bmm.elementList[i]; i++){
-		//when all player ready, player.gameState == 5
+		//when all player ready, player.gameState == {id:e.id,gameState:_in.gameState};
 		if(bmm.gameState[i+1] != 5){
 			valid = false;
 			break;
 		}
 	}
 	if(valid){
-		gClient.broadcastData('game_gameStart', bmm.gameState);
+		gClient.broadcastData('game_gameStart', bmm.gameState);		
 		bmm.gameState[0] = 4;
+		var _out = [];
+		for(var i=0, c; c = bmm.elementList[i] ;i++){
+			var _id = c.id;
+			var filepath = "icon/" + _id;
+			var havepic = true;
+			try{fs.statSync(filepath).isFile();}
+			catch(e){
+				havepic = false;
+			}
+			if (havepic) _out.push({id:_id,picSrc:filepath});
+			else _out.push({id:_id,picSrc:'icon/default/default'});
+		}
+		
+		gClient.broadcastData('game_syncACK', JSON.stringify({gameState:bmm.gameState,payload:JSON.stringify(_out)}));		
 	}
 }
 
@@ -1279,4 +1271,4 @@ exports.game_sync = game_sync;
 exports.game_playerPlantBomb = game_playerPlantBomb;
 exports.game_vanishBuff = game_vanishBuff;
 exports.removeSession = removeSession;
-exports.getPlayerStat = getPlayerStat;
+//exports.getPlayerStat = getPlayerStat;
