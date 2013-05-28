@@ -325,6 +325,8 @@ function joinRoom(data,gServer,gClient){
 				
 				gClient.seat = -1;
 				gClient.isHost = false;
+				gClient.isReady = false;
+				ready_refresh(gServer, gClient);
 
 				if(gServer.roomList[bufRm].clientList.length > 1){
 					gServer.roomList[bufRm].host = gServer.roomList[bufRm].clientList[1];
@@ -351,6 +353,8 @@ function joinRoom(data,gServer,gClient){
 			if(message.rid == -1 && !gClient.isHost){
 				gServer.roomList[bufRm].seatList[gClient.seat] = false;
 				gClient.seat = -1;
+				gClient.isReady = false;
+				ready_refresh(gServer, gClient);
 				
 				//remove client from gameroom and maintain seat
 				gServer.roomList[bufRm].removeClient(gServer,gClient);
@@ -644,9 +648,15 @@ function kick_your_ass(data, gServer, gClient){
 function state_change(data, gServer, gClient) {
 try{
 	gClient.isReady = gClient.isReady ? false : true;	//change state of Ready
-	gClient.sendData("state_change_ACK" , gClient.isReady);
 	
 	var room = gServer.roomList[gClient.room];
+	
+	ready_refresh(gServer, gClient); //tell client to refresh player_div border
+
+
+	gClient.sendData("state_change_ACK" , gClient.isReady);
+	
+	
 	var host = room.host;
 	
 	//var seatnum = host.seat;
@@ -703,7 +713,6 @@ function GameClickStart(data, gServer, gClient) {
 	catch(e){
 		console.log(e);
 	}
-
 }
 
 function rename(data, gServer, gClient){
@@ -731,7 +740,22 @@ function rename(data, gServer, gClient){
 	catch(e){	
 		console.log("room rename error:" +e)
 	}
+}
 
+function ready_refresh(gServer, gClient){
+	var room = gServer.roomList[gClient.room];
+	try{
+		for(var i=0;i<room.clientList.length;i++){
+			reply[i] = [];
+			reply[i].push(room.clientList[i].name);
+			reply[i].push(room.clientList[i].seat);
+			reply[i].push(room.clientList[i].isReady);
+		}		
+		room.broadcastData("Ready_Notify",  JSON.stringify(reply));	
+	}
+	catch(e){
+		console.log("ready_refresh error: " + e);
+	}
 }
 
 
