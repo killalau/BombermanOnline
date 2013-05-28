@@ -273,3 +273,7 @@ text-align:center;
 font-size: 18pt;
 
 }
+
+.State:hover{
+	cursor:pointer;
+}

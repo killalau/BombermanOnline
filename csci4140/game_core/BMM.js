@@ -387,6 +387,10 @@ BMM.prototype.increaseLossStat = function (playerId){
 	}catch(e){console.log(e);throw e;};
 }
 
+/*
+@private method startTimer
+start countdown, check winning condition every second
+*/
 BMM.prototype.startTimer = function(){
 	var self = this;
 	setTimeout(function(){
@@ -395,11 +399,54 @@ BMM.prototype.startTimer = function(){
 				console.log("[BMM] Game Time's up");
 				clearInterval(self.timer.timerFunc);
 				self.timer.timerFunc = null;
-			}else{
-				
 			}
+			self.checkWinCondition();
 		}, 1000);
 	}, 3000);	
+}
+
+/*
+@private method checkWinCondition
+win, only 1 player alive
+draw, all player die
+draw, timer.count == 0 && more than 1 players alive
+none, else
+
+_out = {
+	result : "win" / "draw"
+	winner : username
+}
+*/
+BMM.prototype.checkWinCondition = function(){
+	var numAlive = 0;
+	var _out = {
+		result : null,
+		winner : null
+	};
+	
+	for(var i = 0, e; e = this.elementList[i]; i++){
+		if(e.alive){
+			numAlive++;
+		}
+	}
+	if(numAlive == 0){
+		_out.result = "draw";
+	}else if(this.timer.count == 0 && numAlive != 1){
+		_out.result = "draw";
+	}else if(numAlive == 1){
+		_out.result = "win";
+		for(var i = 0, e; e = this.elementList[i]; i++){
+			if(e.alive){
+				_out.winner = e.id;
+			}
+		}
+	}
+	if(_out.result != null){
+		console.log("[BMM] End Game: " + JSON.stringify(_out));
+		clearInterval(this.timer.timerFunc);
+		this.timer.timerFunc = null;
+		this.room.broadcastData('game_endGame', JSON.stringify(_out));
+	}
 }
 
 exports.BMM = BMM;

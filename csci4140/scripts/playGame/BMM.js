@@ -15,6 +15,7 @@ BMO.BMM = function(wsClient, handlers){
 	this.handlers = handlers;
 	this.timer = null;
 	this.gameState = 0;
+	this.announcement = null;
 };
 
 //constructor
@@ -91,7 +92,7 @@ BMO.BMM.prototype.game_syncACK = function(data){
 	try{
 		//console.log("game_syncACK:_in=",data);
 		var _in = JSON.parse(data);
-		console.log("game_syncACK:_in=",_in);
+		//console.log("game_syncACK:_in=",_in);
 		for (var i =0, c ; c = _in.gameState[i+1] ; i++){
 			if ( (c.gameState < 5) || ((c.gameState == 5) && (_in.payload == null))){				
 				var _gs = c.gameState;
@@ -572,8 +573,45 @@ BMO.BMM.prototype.setController = function(){
 											}
 	self.handlers["game_gameStart"] = function(data,wsClient){
 										self.game_gameStart(data, wsClient);};
+	self.handlers["game_gameEnd"] = function(data,wsClient){
+										self.game_gameEnd(data);};										
 	}catch(e){console.log(e);alert(e);throw e;};
 }
+
+/*
+@private method game_gameEnd(data)
+@param data = {
+	result : "win" / "draw"
+	winner : username
+}
+**/
+BMO.BMM.prototype.game_gameEnd(data){
+	try{
+		var _in = JSON.parse(data);
+		document.body.removeEventListener("keydown",this.myKeyDown,false);
+		document.body.removeEventListener("keyup",this.myKeyUp,false);	
+		var _data = {
+			classname:"BM",
+			id:"",
+			payload:{
+				dir:"D",
+				grid:{},
+				pos:{x:0.5,y:0.5}
+			}			
+		}
+		for(var i =0, e; e = this.elementList[i];i++){
+			_data.id = e.id;
+			_data.payload.grid = {x:e.grid.X,y:e.grid.Y};
+			this.broadcastPlayerStopMove(_data,{username:this.wsClient.username});
+		}
+		if ( _in.result == "win"){
+			
+		}else{//draw
+			
+		}
+	}catch(e){console.error("gameEnd:err=",e);};
+}
+
 
 /* boardcast message about a player move
  *
