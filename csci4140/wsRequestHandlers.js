@@ -1232,7 +1232,7 @@ function game_sync(data, gServer, gClient){
 			else _out.push({id:_id,picSrc:'icon/default/default'});
 		}
 		
-		gClient.broadcastData('game_syncACK', JSON.stringify({gameState:bmm.gameState,payload:JSON.stringify(_out)}));		
+		gClient.broadcastData('game_syncACK', JSON.stringify({gameState:bmm.gameState,payload:_out}));		
 	}
 }
 

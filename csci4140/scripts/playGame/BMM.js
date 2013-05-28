@@ -83,22 +83,42 @@ BMO.BMM.prototype.init = function(data){
 /*
 @pravite method game_syncACK
 @param data = {
-		gameState:[],
+		gameState:[0-4,{id:e.id,gameState:5},{id:e.id,gameState:5},..,..],
 		payload:[{id:_id,picSrc:filepath}||]
 }
 **/
 BMO.BMM.prototype.game_syncACK = function(data){
 	try{
-		console.log("game_syncACK:_in=",data);
+		//console.log("game_syncACK:_in=",data);
 		var _in = JSON.parse(data);
 		console.log("game_syncACK:_in=",_in);
-		if ( _in.gameState[0] < 4 ){
-			//for (var i =0, c ; c = data.payload[i] ; i++){
-			//	var _id = c.id;
-			//	
-			//}
-		}else{
-			
+		for (var i =0, c ; c = _in.gameState[i+1] ; i++){
+			if ( (c.gameState < 5) || ((c.gameState == 5) && (_in.payload == null))){				
+				var _gs = c.gameState;
+				_gs = 100/5*_gs + "%";
+				var _blk = {
+					id: c.id,
+					hamster:null,
+					icon:{type:'text',
+						payload:_gs
+					}
+				};
+				console.log("game_syncACK:_blk=",_blk);
+				this.setThumbnail(_blk);				
+			}else{
+				/*
+				for (var i =0, c ; c = _in.payload[i] ; i++){
+					var _blk = {
+						id:c.id,
+						hamster:null,
+						icon:{type:'image',
+							payload:c.picSrc
+						}
+					};
+					console.log("game_syncACK:_blk=",_blk);
+					this.setThumbnail(_blk);
+				}*/
+			}
 		}
 	}catch(e){console.error("game_syncACK=err",e);};
 }
@@ -143,6 +163,43 @@ BMO.BMM.prototype.setThumbnail = function(info){
 		b.position = {x:48,y:60};
 		
 		*/
+		if ( info.icon.type == "text"){
+			if (_infoBlock.icon instanceof PIXI.Text)
+				_infoBlock.icon.setText(info.icon.payload);
+			else{
+				_infoBlock.removeChild(_infoBlock.icon);
+				_infoBlock.icon = new PIXI.Text(info.icon.payload);
+				_infoBlock.icon.anchor = {x:0.5,y:0.5};
+				_infoBlock.icon.position = {x:48,y:60};
+				_infoBlock.icon.setStyle({fill:"white"});
+				_infoBlock.container.addChild(_infoBlock.icon);
+			}
+		}else{//image
+			var _img;
+			if (_infoBlock.icon instanceof PIXI.Sprite){
+				_infoBlock.icon.setTexture(PIXI.Texture.fromFrame(info.icon.payload)); 
+				var w,h,ratio;
+				w = _infoBlock.icon.width;
+				h = _infoBlock.icon.height;
+				ratio = w/h;
+				_infoBlock.icon.height = _infoBlock.icon.height > 48 ? 48 : _infoBlock.icon.height;
+				w = ratio * _infoBlock.icon.height;
+				_infoBlock.icon.width = w > 72 ? 72 : w;				
+			}else{
+				var w,h,ratio;
+				_infoBlock.removeChild(_infoBlock.icon);
+				_infoBlock.icon = new PIXI.Sprite(info.icon.payload);
+				_infoBlock.icon.anchor = {x:0.5,y:0.5};
+				_infoBlock.icon.position = {x:48,y:60};	
+				w = _infoBlock.icon.width;
+				h = _infoBlock.icon.height;
+				ratio = w/h;
+				_infoBlock.icon.height = _infoBlock.icon.height > 48 ? 48 : _infoBlock.icon.height;
+				w = ratio * _infoBlock.icon.height;
+				_infoBlock.icon.width = w > 72 ? 72 : w;
+				_infoBlock.container.addChild(_infoBlock.icon);
+			}
+		}
 		
 	}else{
 		//SET position && hamster
