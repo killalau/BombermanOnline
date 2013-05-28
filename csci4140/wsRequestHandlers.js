@@ -326,12 +326,11 @@ function joinRoom(data,gServer,gClient){
 				gClient.seat = -1;
 				gClient.isHost = false;
 				gClient.isReady = false;
-				ready_refresh(gServer, gClient);
 
 				if(gServer.roomList[bufRm].clientList.length > 1){
 					gServer.roomList[bufRm].host = gServer.roomList[bufRm].clientList[1];
 					gServer.roomList[bufRm].clientList[1].isHost = true;
-					gServer.roomList[bufRm].clientList[1].isReady = true;
+					gServer.roomList[bufRm].clientList[1].isReady = false;
 				}
 				//console.log(gServer.roomList[bufRm].clientList);
 				var host = gServer.roomList[bufRm].host;
@@ -354,7 +353,6 @@ function joinRoom(data,gServer,gClient){
 				gServer.roomList[bufRm].seatList[gClient.seat] = false;
 				gClient.seat = -1;
 				gClient.isReady = false;
-				ready_refresh(gServer, gClient);
 				
 				//remove client from gameroom and maintain seat
 				gServer.roomList[bufRm].removeClient(gServer,gClient);
@@ -556,33 +554,7 @@ function seat_update(data, gServer, gClient){
 	var message = JSON.parse(data); 
 	var clientRm = gClient.room;
 	//console.log(gServer.roomList[clientRm].clientList[0]);
-	var reply = [];
-
-	for(var i=0;i<gServer.roomList[clientRm].clientList.length;i++){
-		var username = gServer.roomList[clientRm].clientList[i].username;
-		var filepath = "icon/" + username;
-		var havepic = true;
-		try{fs.statSync(filepath).isFile();}
-		catch(e){
-			havepic = false;
-		}
-		
-		reply[i] = [];
-		reply[i].push(username);
-		reply[i].push(gServer.roomList[clientRm].clientList[i].seat);
-		reply[i].push(havepic);
-		reply[i].push(gServer.roomList[clientRm].name);
-		//reply[i].push(gServer.roomList[clientRm].clientList[i].ping);
-
-	}
-	//console.log(reply);
-	var room = gServer.roomList[clientRm];
-	for(var i=0;i<room.clientList.length;i++){	
-	if(room.clientList[i].isHost)
-		room.sendData('H_seat_update_ACK', JSON.stringify(reply), room.clientList[i]);
-	else
-		room.sendData('seat_update_ACK', JSON.stringify(reply), room.clientList[i]);		
-	}
+	seat_maintain(gServer, gClient, clientRm);
 	}
 	catch(e){
 		console.log("seat_update error" + e);
@@ -606,7 +578,6 @@ function seat_maintain(gServer, gClient, rmnum){
 		reply[i].push(havepic);		//this is to tell client the user have profile or not
 		reply[i].push(gServer.roomList[rmnum].name);
 		//reply[i].push(gServer.roomList[rmnum].clientList[i].ping);
-
 	}
 	//console.log(reply);
 	var room = gServer.roomList[rmnum];
@@ -616,6 +587,8 @@ function seat_maintain(gServer, gClient, rmnum){
 	else
 		room.sendData('seat_update_ACK', JSON.stringify(reply), room.clientList[i]);		
 	}
+	
+	ready_refresh(gServer, gClient);
 
 }
 
