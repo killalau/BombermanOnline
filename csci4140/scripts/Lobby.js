@@ -52,8 +52,8 @@ Lobby.dropboxDrop = function(e,wsClient){
 	//console.log(file);
 	var myReader = new FileReader();
 	myReader.onloadend = function (e){
-		if ( e.total > 62*1024 ){
-			alert("Please a photo size within 62KB");
+		if ( e.total > 46*1024 ){
+			alert("Please a photo size within 46KB");
 			return;
 		}
 		var _file = {
