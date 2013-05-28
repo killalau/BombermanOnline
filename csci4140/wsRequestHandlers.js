@@ -196,20 +196,35 @@ function playerStat(data,gServer,gClient){
 	*/
 	
 	//Query from DBMS
-	var _name = gClient.username;
-	var _lv = -1;
-	var _win = 0;
-	var _lose = 0;
-	//--------------------------------------
 
-	var json = {
-		playerName : _name,
-		playerLevel : _lv,
-		win : _win,
-		lose : _lose
-	};
-	//console.log(JSON.stringify(json));
-	gClient.sendData("statACK",JSON.stringify(json));
+	try{
+		var mysqlConnection = require('./node-mysql').createConnection();	
+		var _name = gClient.username;	
+		var query = 'SELECT id, level, win, loss FROM bbm_account WHERE id=' + mysqlConnection.escape(_name);
+		mysqlConnection.query(query, function(err, rows){
+			if (rows.length > 0){
+				//case: player exist
+				var id = rows[0].id;
+				var level = rows[0].level;
+				var win = rows[0].win;
+				var lose = rows[0].loss;				
+				
+				var _out = {
+					playerName: id,
+					playerLevel: level,
+					win: win,
+					lose: lose
+				};
+				gClient.sendData('statACK', JSON.stringify(_out));					
+			}
+		
+			if (err){
+				console.log('[wsRequestHandler] MySQL mysqlConnection error code:' + err.code);
+			}
+		});
+		
+	//--------------------------------------
+	}catch(e){console.error("Lobby.playerState:err=",e);}
 }
 /* Handler for 'rmList' message
  *
@@ -1173,41 +1188,7 @@ function removeSession(data, gServer, gClient){
  //***player stat API
 function getPlayerStat(data, gServer, gClient){
 	try{		
-		var mysqlConnection = require('./node-mysql').createConnection();
 
-		var _in = JSON.parse(data);
-
-		if (_in !== null){
-			var playerId = _in.playerId;
-			
-			var query = 'SELECT id, level, win, loss FROM bbm_account WHERE id=' + mysqlConnection.escape(playerId);
-			mysqlConnection.query(query, function(err, rows){
-				if (rows.length > 0){
-					//case: player exist
-					var id = row[0].id;
-					var level = rows[0].level;
-					var win = rows[0].win;
-					var loss = rows[0].loss;
-					
-					console.log('[wsREquestHandler] getPlayerStat');
-					console.log(rows);
-					
-					var _out = {
-						id: id,
-						level: level,
-						win: win,
-						loss: lose
-					};
-					gClient.sendData('getPlayerStatACK', JSON.stringify(_out));					
-				}else{
-					console.log('[wsHandler] Player does not exist');
-				}
-			
-				if (err){
-					console.log('[wsRequestHandler] MySQL mysqlConnection error code:' + err.code);
-				}
-			});
-		}
 	}catch(e){console.log(e);throw e;};
 }
 
