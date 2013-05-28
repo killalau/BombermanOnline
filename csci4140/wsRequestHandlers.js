@@ -800,6 +800,14 @@ function gameroom_logout(data, gServer, gClient){
 	}
 
 }
+function gameroom_validate(data, gServer, gClient){
+	var valid = true;
+	if(gClient.room == "0"){
+		valid = false;
+	}
+	
+	gClient.sendData("gameroom_validate_ACK",JSON.stringify(valid));
+}
 
 
 /* Handler for 'game_jsonList' message
@@ -1271,6 +1279,7 @@ exports.state_change = state_change;
 exports.GameClickStart = GameClickStart;
 exports.rename = rename;
 exports.gameroom_logout = gameroom_logout;
+exports.gameroom_validate = gameroom_validate;
 //end
 
 exports.room_newGame = room_newGame;

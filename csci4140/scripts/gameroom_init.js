@@ -15,6 +15,25 @@ function init(e){
 	handlers["setNameACK"]=function(data,wsClient){
 		if(data === true){
 			console.log("Login success in websocket");
+			
+			//check correct procedure
+			if(!document.referrer){
+				wsClient.sendData("gameroom_validate", null);
+				handlers["gameroom_validate_ACK"] = function(data, wsClient) {
+					var message = JSON.parse(data);
+					if(!message){
+						alert("invalid Acition");
+						document.location.pathname = "/Lobby.html";
+					}
+				}
+			}
+			/*
+							window.onunload  = function(){
+								wsClient.sendData("hihi",JSON.stringify(null));
+							}
+							*/
+			
+			//Start to add event
 			AddEventListenter(handlers, wsClient);
 		}	
 	};
@@ -278,3 +297,7 @@ function web_update(message, host){
 	document.getElementById("room_name").innerHTML = message[0][3];
 }
 
+function pageUnloaded()
+{
+	alert("you are leaving");
+}

@@ -68,6 +68,7 @@ wsHandlers.utf8["GameClickStart"] = wsRequestHandlers.GameClickStart;
 wsHandlers.utf8["room_newGame"] = wsRequestHandlers.room_newGame;
 wsHandlers.utf8["rename"] = wsRequestHandlers.rename;
 wsHandlers.utf8["gameroom_logout"] = wsRequestHandlers.gameroom_logout;
+wsHandlers.utf8["gameroom_validate"] = wsRequestHandlers.gameroom_validate;
 //playGame handler--------------------------------------------
 wsHandlers.utf8["game_jsonList"] = wsRequestHandlers.game_jsonList;
 wsHandlers.utf8["game_init"] = wsRequestHandlers.game_init;
