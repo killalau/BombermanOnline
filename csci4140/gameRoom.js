@@ -39,6 +39,7 @@ function create(isLobby, name){
 			
 			// check exceed the room capacity
 			var valid = room.isLobby || room.clientList.length < 4 ? true : false;
+			valid = valid ? (room.bmm == null) : valid;
 			if(valid){
 				// find the room number
 				for(var i = 0, r; r = server.roomList[i]; i++){

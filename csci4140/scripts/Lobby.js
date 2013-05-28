@@ -340,8 +340,8 @@ Lobby.init_phase2 = function(handlers,wsClient){
 	//joinRoom------------------------------------
 	handlers["joinRoomACK"] = function(data,wsClient){
 		var message = JSON.parse(data);	
-				if ( message.result === false){
-			alert("This room is full");
+		if ( message.result === false){
+			alert("This room is full or playing");
 			Lobby.rmListRefresh();
 			return null;
 		}else{
