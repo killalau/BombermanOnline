@@ -893,7 +893,7 @@ function game_init(data, gServer, gClient){
 			gameState : bmm.gameState,
 			width : bmm.width,
 			height : bmm.height,
-			timer: bmm.timer,
+			timer: bmm.timer.count,
 			players : [],
 			elements : [],
 			walls: [],
@@ -1216,8 +1216,9 @@ function game_sync(data, gServer, gClient){
 		}
 	}
 	if(valid){
-		gClient.broadcastData('game_gameStart', bmm.gameState);		
+		gClient.broadcastData('game_gameStart', bmm.gameState);
 		bmm.gameState[0] = 4;
+		bmm.startTimer();
 		var _out = [];
 		for(var i=0, c; c = bmm.elementList[i] ;i++){
 			var _id = c.id;

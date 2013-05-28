@@ -17,7 +17,10 @@ function BMM(server, room, mapConfig, timer){
 	this.gridList = [];
 	this.elementList = [];	//BM only
 	this.numOfPlayer = 0;
-	this.timer = timer;
+	this.timer = {
+		count : timer,
+		timerFunc : null
+	};
 	this.gameState = [0,0,0,0,0];//Server state, p1 state, p2 state.....
 }
 
@@ -345,6 +348,19 @@ BMM.prototype.vanishBuffValidation = function(X, Y, buffname, requestBM, callbac
 			callback(out);
 		}
 	}catch(e){console.log('[CoreBMM.vanishBuffValidation] err:', e);};
+}
+
+BMM.prototype.startTimer = function(){
+	var self = this;
+	this.timer.timerFunc = setInterval(function(){
+		return function(){
+			if(--self.timer.count == 0){
+				console.log("[BMM] Game Time's up");
+				clearInterval(self.timer.timerFunc);
+				self.timer.timerFunc = null;
+			}
+		};
+	}(), 1000);
 }
 
 exports.BMM = BMM;
