@@ -389,15 +389,17 @@ BMM.prototype.increaseLossStat = function (playerId){
 
 BMM.prototype.startTimer = function(){
 	var self = this;
-	this.timer.timerFunc = setInterval(function(){
-		return function(){
+	setTimeout(function(){
+		self.timer.timerFunc = setInterval(function(){
 			if(--self.timer.count == 0){
 				console.log("[BMM] Game Time's up");
 				clearInterval(self.timer.timerFunc);
 				self.timer.timerFunc = null;
+			}else{
+				
 			}
-		};
-	}(), 1000);
+		}, 1000);
+	}, 3000);	
 }
 
 exports.BMM = BMM;
