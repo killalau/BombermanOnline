@@ -48,11 +48,19 @@ BMO.Fire.prototype.vanish = function(payload){
 			self.isDestroyable = true;
 			BMO.Element.prototype.vanish.call(self);
 			self.wsClient= null;
-			if ( payload !== null ){
-				var _elementList = [];
-				for(var i in _grid.elementList) _elementList.push(_grid.elementList[i]);//COPY
-				for(var i = 0 ; i < _elementList.length; i++)
-					_elementList[i].eventProcesser({type:"vanish",payload:payload.extra});			
+			if ( payload !== null ){				
+				if ( payload.type != "BM"){	
+					var _elementList = [];
+					for(var i in _grid.elementList) _elementList.push(_grid.elementList[i]);//COPY
+					for(var i = 0, e ; e = _elementList[i]; i++)
+						e.eventProcesser({type:"vanish",payload:payload.extra});			
+				}else{
+					var _BM;
+					for(var i =0,e;e=payload.extra[i];i++){
+						_BM = _grid.BMM.getElementById(e);
+						_BM.eventProcesser({type:"vanish",payload:null});
+					}
+				}
 			} 
 		},200);	
 	}	
