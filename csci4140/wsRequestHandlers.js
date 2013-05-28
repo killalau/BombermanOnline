@@ -347,8 +347,10 @@ function joinRoom(data,gServer,gClient){
 					gServer.roomList[bufRm].clientList[1].isHost = true;
 					gServer.roomList[bufRm].clientList[1].isReady = true;
 				}
-				else 
+				else{
 					gServer.roomList[bufRm].name = "Room " + bufRm;
+					console.log(gServer.roomList[bufRm].name);
+				}
 				//console.log(gServer.roomList[bufRm].clientList);
 				var host = gServer.roomList[bufRm].host;
 	

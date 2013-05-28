@@ -9,6 +9,10 @@
     text-align:center;
 }
 
+.cover{
+	margin: 0px auto;
+	width:960px;
+}
 .goback{
     width:68px;
     float:left;
@@ -34,26 +38,35 @@
 }
 
 .host_0{
-    position:absolute;
-    left: 105px;
+    position:relative;
+    left: 45px;
+	margin-left:40px;
+	width:70px;
     font-size:18pt;
+
 }
 
 .host_1{
-	position:absolute;
-	left:335px;
+	position:relative;
+	left:285px;
+	margin-left:40px;
+	width:70px;
 	font-size:18pt;
 }
 
 .host_2{
-	position:absolute;
-	left:565px;
+	position:relative;
+	left:525px;
+	margin-left:40px;
+	width:70px;
 	font-size:18pt;
 }
 
 .host_3{
-	position:absolute;
-	left:795px;
+	position:relative;
+	left:765px;
+	margin-left:40px;
+	width:70px;
 	font-size:18pt;
 }
 
@@ -72,8 +85,9 @@
     width:150px;
     border:2px solid black;
     float:left;
-    position: absolute;
-    margin-right:80px;
+    margin-right:40px;
+	margin-left: 45px;
+    
 }
 
 .player_img{
@@ -105,8 +119,10 @@
 .ping{
     font-size:12pt;
     width:150px;
-    position:absolute;
     text-align:center;
+	float:left;
+	margin-left:45px;
+	margin-right:45px;
     
 }
 
@@ -118,11 +134,14 @@
     
 }
 .left{
-    position:absolute;
-    left:61px;
+    //position:absolute;
+    //left:61px;
     width:420px;
     height:200px;
     border:2px solid black;
+	float:left;
+	margin-left:45px;
+	margin-right:50px;
 }
 
 .chat_content{
@@ -137,10 +156,12 @@
 
 
 .right{
-    position:absolute;
+    //position:absolute;
     width: 390px;
     height:200px;
-    left:521px;
+	float:left;
+	margin-left:50px;
+    //left:521px;
     //border:2px solid black;
 }
 
@@ -153,6 +174,7 @@
     width:150px;
     height:150px;
     float:left;
+	margin-right:45px;
     border:2px solid red;
 }
 .map_img{
@@ -161,19 +183,22 @@
 }
 
 .back{
-	position:absolute;
+	//position:absolute;
+	float:left;
 	bottom:5px;
 	left:30px;
 	width:15px;
 	height:15px;
+	margin-left:30px;
+	margin-right:50px;
 	
 }
 
 .next{
-	position:absolute;
+	//position:absolute;
+	float:left;
 	bottom:5px;
 	left:105px;
-
 	width:15px;
 	height:15px;
 }
@@ -182,7 +207,8 @@
 .map_setting{
     width:150px;
     height:150px;
-    position:absolute;
+    //position:absolute;
+	float:left;
     right:0px;
     border:2px solid red;
 }
@@ -212,8 +238,10 @@ float:left;
 width:150px;
 height:30px;
 background-color:rgb(243, 0, 0);
-position:absolute;
-right:0px;
+//position:absolute;
+float:left;
+margin-left:50px;
+//right:0px;
 text-align:center;
 font-size: 18pt;
 
