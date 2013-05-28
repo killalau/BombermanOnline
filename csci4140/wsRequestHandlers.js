@@ -1122,7 +1122,6 @@ function game_broadcastVanishBuff(_out, gServer, gClient){
  */
 function room_newGame(data, gServer, gClient){
 	console.log("[wsHandler] Request for 'room_newGame'");
-	
 	//check if gClient is host, the room status is ok to start game, etc.
 	var valid = true;
 	if(!valid){
@@ -1149,6 +1148,12 @@ function room_newGame(data, gServer, gClient){
 			gClient.broadcastData('room_newGame', '/playGame.html');
 		}
 	});
+	
+	//change back to false
+	for(var i=0;i<room.clientList.length;i++){
+		if(!room.clientList[i].isHost)
+			room.clientList[i].isReady = false;
+	}
 	
 }
 

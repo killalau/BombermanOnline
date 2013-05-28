@@ -276,6 +276,5 @@ function web_update(message, host){
 	
 	//set the rename
 	document.getElementById("room_name").innerHTML = message[0][3];
-	
 }
 
