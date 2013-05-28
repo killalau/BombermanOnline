@@ -1106,7 +1106,62 @@ function removeSession(data, gServer, gClient){
 			mysqlConnection.query(query, function(err){
 				if (err){
 					console.log('[wsRequestHandler] MySQL mysqlConnection error code:' + err.code);
-					result(false, s, callback);
+				}
+			});
+		}
+	}catch(e){console.log(e);throw e;};
+}
+
+/* Handler for 'getPlayerStat' message, called by Host when count down finish
+ *
+ * data : {
+		playerId : <player's ID>
+ *	}
+ * gServer : game server object
+ * gClient : game client object
+ * 
+ * RESPONSE 'getPlayerStatACK' to client
+	var _out = {
+			level: level,
+			win: win,
+			loss: lose
+		};
+ */
+ //***player stat API
+function getPlayerStat(data, gServer, gClient){
+	try{		
+		var mysqlConnection = require('./node-mysql').createConnection();
+
+		var _in = JSON.parse(data);
+
+		if (_in !== null){
+			var playerId = _in.playerId;
+			
+			var query = 'SELECT id, level, win, loss FROM bbm_account WHERE id=' + mysqlConnection.escape(playerId);
+			mysqlConnection.query(query, function(err, rows){
+				if (rows.length > 0){
+					//case: player exist
+					var id = row[0].id;
+					var level = rows[0].level;
+					var win = rows[0].win;
+					var loss = rows[0].loss;
+					
+					console.log('[wsREquestHandler] getPlayerStat');
+					console.log(rows);
+					
+					var _out = {
+						id: id,
+						level: level,
+						win: win,
+						loss: lose
+					};
+					gClient.sendData('getPlayerStatACK', JSON.stringify(_out));					
+				}else{
+					console.log('[wsHandler] Player does not exist');
+				}
+			
+				if (err){
+					console.log('[wsRequestHandler] MySQL mysqlConnection error code:' + err.code););
 				}
 			});
 		}
@@ -1163,3 +1218,4 @@ exports.game_sync = game_sync;
 exports.game_playerPlantBomb = game_playerPlantBomb;
 exports.game_vanishBuff = game_vanishBuff;
 exports.removeSession = removeSession;
+exports.getPlayerStat = getPlayerStat;
