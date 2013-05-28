@@ -76,11 +76,9 @@ function AddEventListenter(handlers, wsClient) {
 							cross_img.addEventListener("click",function(e) {
 								e.stopPropagation();
 								e.preventDefault();
-								var string = e.currentTarget.getAttribute("id").substring(5);
-								var i = string - 1;
-								var k_user = message[i][0];
+								var string = e.currentTarget.parentNode.getAttribute("id").substring(4);
 								var json = {
-									username : k_user,
+									username : string,
 								};
 		
 								wsClient.sendData("kick_your_ass", JSON.stringify(json));
@@ -155,7 +153,25 @@ function AddEventListenter(handlers, wsClient) {
 			catch(e){
 				console.log("rename error, " + e);
 			}
+		}
 		
+		handlers["Ready_Notify"] = function(data, wsClient) {
+			try{
+				var message = JSON.parse(data);
+				for(var i = 0;i<message.length;i++){
+					var player_div = document.getElementById("player"+num);
+					if(message[i][2]){
+						var num = message[i][1] +1;	//get the seat number
+						player_div.style.border = "2px solid rgb(0,243,0)";
+					}
+					else
+						player_div.style.border = "2px solid rgb black";
+			
+				}
+			}
+			catch(e){
+				console.log("Ready_Notify error" + e);	
+			}
 		
 		}
 		
@@ -165,6 +181,8 @@ function AddEventListenter(handlers, wsClient) {
 				document.location.pathname = data;
 			}
 		};
+		
+		
 		
 		//create chatroom
 		var div = document.getElementById('left');
@@ -216,7 +234,7 @@ function web_update(message, host){
 		var player_div = document.getElementById("player"+ playernum);
 		
 		var inner_img = document.createElement('img');
-		inner_img.setAttribute("id", "p1_img");
+		inner_img.setAttribute("id", "img_" + message[i][0]);
 		inner_img.setAttribute("class", "player_img");
 		inner_img.setAttribute("title", message[i][0]);
 		

@@ -325,6 +325,8 @@ function joinRoom(data,gServer,gClient){
 				
 				gClient.seat = -1;
 				gClient.isHost = false;
+				gClient.isReady = false;
+				ready_refresh(gServer, gClient);
 
 				if(gServer.roomList[bufRm].clientList.length > 1){
 					gServer.roomList[bufRm].host = gServer.roomList[bufRm].clientList[1];
@@ -351,6 +353,8 @@ function joinRoom(data,gServer,gClient){
 			if(message.rid == -1 && !gClient.isHost){
 				gServer.roomList[bufRm].seatList[gClient.seat] = false;
 				gClient.seat = -1;
+				gClient.isReady = false;
+				ready_refresh(gServer, gClient);
 				
 				//remove client from gameroom and maintain seat
 				gServer.roomList[bufRm].removeClient(gServer,gClient);
@@ -644,9 +648,15 @@ function kick_your_ass(data, gServer, gClient){
 function state_change(data, gServer, gClient) {
 try{
 	gClient.isReady = gClient.isReady ? false : true;	//change state of Ready
-	gClient.sendData("state_change_ACK" , gClient.isReady);
 	
 	var room = gServer.roomList[gClient.room];
+	
+	ready_refresh(gServer, gClient); //tell client to refresh player_div border
+
+
+	gClient.sendData("state_change_ACK" , gClient.isReady);
+	
+	
 	var host = room.host;
 	
 	//var seatnum = host.seat;
@@ -703,7 +713,6 @@ function GameClickStart(data, gServer, gClient) {
 	catch(e){
 		console.log(e);
 	}
-
 }
 
 function rename(data, gServer, gClient){
@@ -731,7 +740,22 @@ function rename(data, gServer, gClient){
 	catch(e){	
 		console.log("room rename error:" +e)
 	}
+}
 
+function ready_refresh(gServer, gClient){
+	var room = gServer.roomList[gClient.room];
+	try{
+		for(var i=0;i<room.clientList.length;i++){
+			reply[i] = [];
+			reply[i].push(room.clientList[i].name);
+			reply[i].push(room.clientList[i].seat);
+			reply[i].push(room.clientList[i].isReady);
+		}		
+		room.broadcastData("Ready_Notify",  JSON.stringify(reply));	
+	}
+	catch(e){
+		console.log("ready_refresh error: " + e);
+	}
 }
 
 
@@ -1106,7 +1130,62 @@ function removeSession(data, gServer, gClient){
 			mysqlConnection.query(query, function(err){
 				if (err){
 					console.log('[wsRequestHandler] MySQL mysqlConnection error code:' + err.code);
-					result(false, s, callback);
+				}
+			});
+		}
+	}catch(e){console.log(e);throw e;};
+}
+
+/* Handler for 'getPlayerStat' message, called by Host when count down finish
+ *
+ * data : {
+		playerId : <player's ID>
+ *	}
+ * gServer : game server object
+ * gClient : game client object
+ * 
+ * RESPONSE 'getPlayerStatACK' to client
+	var _out = {
+			level: level,
+			win: win,
+			loss: lose
+		};
+ */
+ //***player stat API
+function getPlayerStat(data, gServer, gClient){
+	try{		
+		var mysqlConnection = require('./node-mysql').createConnection();
+
+		var _in = JSON.parse(data);
+
+		if (_in !== null){
+			var playerId = _in.playerId;
+			
+			var query = 'SELECT id, level, win, loss FROM bbm_account WHERE id=' + mysqlConnection.escape(playerId);
+			mysqlConnection.query(query, function(err, rows){
+				if (rows.length > 0){
+					//case: player exist
+					var id = row[0].id;
+					var level = rows[0].level;
+					var win = rows[0].win;
+					var loss = rows[0].loss;
+					
+					console.log('[wsREquestHandler] getPlayerStat');
+					console.log(rows);
+					
+					var _out = {
+						id: id,
+						level: level,
+						win: win,
+						loss: lose
+					};
+					gClient.sendData('getPlayerStatACK', JSON.stringify(_out));					
+				}else{
+					console.log('[wsHandler] Player does not exist');
+				}
+			
+				if (err){
+					console.log('[wsRequestHandler] MySQL mysqlConnection error code:' + err.code););
 				}
 			});
 		}
@@ -1195,3 +1274,4 @@ exports.game_sync = game_sync;
 exports.game_playerPlantBomb = game_playerPlantBomb;
 exports.game_vanishBuff = game_vanishBuff;
 exports.removeSession = removeSession;
+exports.getPlayerStat = getPlayerStat;
