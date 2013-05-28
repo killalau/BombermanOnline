@@ -445,7 +445,7 @@ BMM.prototype.checkWinCondition = function(){
 		console.log("[BMM] End Game: " + JSON.stringify(_out));
 		clearInterval(this.timer.timerFunc);
 		this.timer.timerFunc = null;
-		this.room.broadcastData('game_endGame', JSON.stringify(_out));
+		this.room.broadcastData('game_gameEnd', JSON.stringify(_out));
 	}
 }
 

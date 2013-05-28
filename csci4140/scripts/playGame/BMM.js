@@ -626,7 +626,7 @@ BMO.BMM.prototype.game_gameEnd = function(data){
 			_infoBlock.icon.width = w > 72 ? 72 : w;*/
 			var _blk;
 			for (var i =0,e;e=this.thumbnailList[i];i++){
-				if (_in.winner == e.id){
+				if (_in.winner == e.id.text){
 					_blk = e;
 					break;
 				}
