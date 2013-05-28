@@ -347,4 +347,40 @@ BMM.prototype.vanishBuffValidation = function(X, Y, buffname, requestBM, callbac
 	}catch(e){console.log('[CoreBMM.vanishBuffValidation] err:', e);};
 }
 
+/*
+@private method increaseWinStat
+@param playerId: the player ID of the player whose win # to be incremented
+*/
+BMM.prototype.increaseWinStat = function (playerId){
+	try{
+		var mysqlConnection = require('../node-mysql').createConnection();
+
+		var query = 'UPDATE bbm_account SET win=win+1, level=ceil(win/10) WHERE id=' + mysqlConnection.escape(playerId);
+		mysqlConnection.query(query, function(err){
+			if (err){
+				console.log('[BMM] MySQL mysqlConnection error code:' + err.code);
+			}
+		});		
+		
+	}catch(e){console.log(e);throw e;};
+}
+
+/*
+@private method increaseLossStat
+@param playerId: the player ID of the player whose win # to be incremented
+*/
+BMM.prototype.increaseLossStat = function (playerId){
+	try{
+		var mysqlConnection = require('../node-mysql').createConnection();
+
+		var query = 'UPDATE bbm_account SET loss=loss+1 WHERE id=' + mysqlConnection.escape(playerId);
+		mysqlConnection.query(query, function(err){
+			if (err){
+				console.log('[BMM] MySQL mysqlConnection error code:' + err.code);
+			}
+		});		
+		
+	}catch(e){console.log(e);throw e;};
+}
+
 exports.BMM = BMM;
