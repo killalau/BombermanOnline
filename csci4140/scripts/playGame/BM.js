@@ -300,17 +300,14 @@ BMO.BM.prototype.increaseSpeed = function(num){
 	num = num ? parseInt(num) : 0.0625 * 48;
 	this.speed += num;
 	if (this.speed > this.speedMax) this.speed = this.speedMax;
-<<<<<<< HEAD
 	if (this.speed < 0.0625*48) this.speed = 0.0625*48;
-=======
-	if (this.speed < 0.1*48) this.speed = 0.1*48;
+	
 	var _out={BombNum:this.currentBombMax,
 		FireNum:this.powerOfFire,
-		ShoesNum:Math.round(this.speed*16)
+		ShoesNum:Math.round(this.speed*16/48)
 	};
 	console.log("inc:_out=",_out);
-	if(this.id == this.BMM.wsClient.username) this.BMM.setBuffStat(_out);	
->>>>>>> New feature - buffStat
+	if(this.id == this.BMM.wsClient.username) this.BMM.setBuffStat(_out);
 }
 
 /*

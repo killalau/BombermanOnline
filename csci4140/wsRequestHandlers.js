@@ -571,7 +571,7 @@ function room_getMap(data, gServer, gClient){
 		desc:[
 			{name : "Round", value : 1},
 			{name : "Time", value : 120},
-			{name : "Init Fire", value : 1},
+			{name : "Init Fire", value : 2},
 			{name : "Init Bomb", value : 1},
 			{name : "Init Speed", value : 1}
 		]
