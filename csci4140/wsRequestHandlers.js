@@ -567,11 +567,25 @@ function room_getMap(data, gServer, gClient){
 	var desc = [];
 	desc.push({
 		id : 0,
-		src : "images/map1.jpg"
+		src : "images/map1.jpg",
+		desc:[
+			{name : "Round", value : 1},
+			{name : "Time", value : 120},
+			{name : "Init Fire", value : 1},
+			{name : "Init Bomb", value : 1},
+			{name : "Init Speed", value : 1}
+		]
 	});
 	desc.push({
 		id : 1,
-		src : "images/map2.jpg"
+		src : "images/map2.jpg",
+		desc:[
+			{name : "Round", value : 1},
+			{name : "Time", value : 120},
+			{name : "Init Fire", value : 8},
+			{name : "Init Bomb", value : 8},
+			{name : "Init Speed", value : "Max"}
+		]
 	});
 	
 	var room = gServer.roomList[gClient.room];

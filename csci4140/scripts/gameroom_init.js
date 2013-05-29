@@ -228,6 +228,15 @@ function AddEventListenter(handlers, wsClient) {
 			var new_img = document.createElement("img");
 			setAttributes(new_img, {"id": data.id, "class": "map_img", "src": data.src});
 			map_div.appendChild(new_img);
+			
+			var div = document.getElementById('map_setting');
+			div.innerHTML = '';
+			for(var i = 0, row; row = data.desc[i]; i++){
+				var innerDiv = document.createElement('div');
+				innerDiv.className = "setting_text";
+				innerDiv.innerHTML = row.name + " : " + row.value;
+				div.appendChild(innerDiv);
+			}
 		};
 		get_map();
 		

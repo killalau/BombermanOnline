@@ -28,7 +28,7 @@
 		"bombMax" : 8,
 		"power" : 2,
 		"powerMax": 8,
-		"speed" : 0.1,
+		"speed" : 0.0625,
 		"speedMax" : 0.5
 	},
 	"PIXI" : {
