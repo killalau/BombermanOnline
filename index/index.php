@@ -31,6 +31,9 @@ if ($myCookie->cookieExist()){
 	<head>
 		<link rel="stylesheet" type="text/css" href="../css/frontpagestyle.css">
 		<title>Index - BomberMan by I4s</title>
+		<script>
+			window.history.forward();
+		</script>
     </head>
     <body style="font-family: 'Century Gothic';">
         <div class="page-wrap">

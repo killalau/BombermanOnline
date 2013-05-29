@@ -1,5 +1,7 @@
 var webSocket = window.webSocket = window.webSocket ? window.webSocket : {};
 
+window.history.forward();
+
 /* The mainly function to create connection
  * and which is encapsulated in a client object
  *
