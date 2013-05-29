@@ -449,6 +449,11 @@ BMM.prototype.checkWinCondition = function(){
 		clearInterval(this.timer.timerFunc);
 		this.timer.timerFunc = null;
 		this.room.broadcastData('game_gameEnd', JSON.stringify(_out));
+		
+		var self = this;
+		setTimeout(function(){
+			self.room.bmm = null;
+		}, 5000);
 	}
 }
 

@@ -2,6 +2,7 @@ var Lobby = window.lobby = window.lobby ? window.lobby : {};
 var chatroom = window.chatroom;
 
 Lobby.gameRoomList = [];// 0:rn,1:np,2:ping,3:button
+Lobby.roomIsPlaying = [];
 Lobby.firstRID = 0;
 Lobby.numOfRoom = 5;
 Lobby.wsClient = null;
@@ -140,6 +141,9 @@ Lobby.joinRoom = function(rid){
 		if ( np == 4){
 			alert("This room is full");
 			return null;
+		}else if(Lobby.roomIsPlaying[rid]){
+			alert("This room is playing");
+			return null;
 		}else{
 			var json = {
 				rid : rid
@@ -187,6 +191,10 @@ Lobby.rmListRefresh = function(){
 				else{
 					if ( rmObj.children[1].innerHTML === "4" ){//num of player
 						tmp.innerHTML = "Full";
+						tmp.className = "full";
+						tmp.id = "";
+					}else if(Lobby.roomIsPlaying[room_id]){
+						tmp.innerHTML = "Playing";
 						tmp.className = "full";
 						tmp.id = "";
 					}else{
@@ -327,6 +335,7 @@ Lobby.init_phase2 = function(handlers,wsClient){
 					Lobby.gameRoomList[message[i][1]] =[];
 					for(var j=2;j<5;j++) Lobby.gameRoomList[message[i][1]].push((message[i][j]));
 					//console.log(Lobby.gameRoomList[message[i][1]]);
+					Lobby.roomIsPlaying[message[i][1]] = message[i][5];
 				}
 				//console.log(i);
 			}	

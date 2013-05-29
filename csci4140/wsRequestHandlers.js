@@ -245,7 +245,7 @@ function rmList(data,gServer,gClient){
 					else update gServer
 			output message json format
 			[// input message == null
-				[0]:[isLobby,rid,name,np,ping]
+				[0]:[isLobby,rid,name,np,ping,isPlaying]
 						....
 				[n]:....
 			]
@@ -261,6 +261,7 @@ function rmList(data,gServer,gClient){
 			reply[i].push(gServer.roomList[i].name);
 			reply[i].push(gServer.roomList[i].np());
 			reply[i].push(gServer.roomList[i].ping());
+			reply[i].push(gServer.roomList[i].bmm != null);
 		}
 
 		if( !data )	gClient.sendData("rmListACK",JSON.stringify(reply));
@@ -562,6 +563,17 @@ function host_update(data, gServer, gClient){
 			};
 	gServer.roomList[clientRm].broadcastData('host_update_ACK', JSON.stringify(_data));
 	//gClient.sendData('gameroom_Update', JSON.stringify(_data));
+	
+	
+	//refresh lobby, since it is call when every refresh in gameroom
+	//I use it for telling looby whether the game is finish playing
+	gameroom = gServer.roomList[gClient.room];
+	var _data = {
+		rid : gameroom.rid
+	};
+	rmList(JSON.stringify(_data),gServer,gClient);
+	
+	
 	}
 	catch(e){
 		console.log("host_update error: " + e);
@@ -636,6 +648,13 @@ function kick_your_ass(data, gServer, gClient){
 	k_client.sendData("kick_ACK", true);
 	seat_maintain(gServer,gClient,bufRm);
 	
+	
+	//refresh lobby
+	gameroom = gServer.roomList[gClient.room];
+	var _data = {
+		rid : gameroom.rid
+	};
+	rmList(JSON.stringify(_data),gServer,gClient);
 	
 	//console.log(gServer.roomList[bufRm]);
 }
@@ -1154,15 +1173,21 @@ function room_newGame(data, gServer, gClient){
 			
 			//tell all room client, the game is ready, redirect to playGame.html
 			gClient.broadcastData('room_newGame', '/playGame.html');
+			
+			//refresh lobby
+			gameroom = gServer.roomList[gClient.room];
+			var _data = {
+				rid : gameroom.rid
+			};
+			rmList(JSON.stringify(_data),gServer,gClient);
+			
+			//change back to false
+			for(var i=0;i<room.clientList.length;i++){
+				if(!room.clientList[i].isHost)
+					room.clientList[i].isReady = false;
+			}
 		}
 	});
-	
-	//change back to false
-	for(var i=0;i<room.clientList.length;i++){
-		if(!room.clientList[i].isHost)
-			room.clientList[i].isReady = false;
-	}
-	
 }
 
 /* Handler for 'removeSession' message, called by Host when count down finish
