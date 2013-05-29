@@ -25,6 +25,7 @@
 	"PIXI" : {
 		"map" : "pixi-MAP1.json",
 		"fire" : "fire.json",
+		"item" : "item.json",
 		"bomb" : "bomb2.json",
 		"avatar"	: [
 			"hamster_1.json",
