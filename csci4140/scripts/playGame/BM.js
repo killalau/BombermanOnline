@@ -284,6 +284,12 @@ BMO.BM.prototype.increaseCurrentBombMax = function(num){
 	if(this.bombNum < 0) this.bombNum = 0;
 	if(this.currentBombMax < 0) this.currentBombMax = 0;
 	console.log('[BM.increaseCurrentBombMax] currentBombMax:'+this.currentBombMax);
+	var _out={BombNum:this.currentBombMax,
+		FireNum:this.powerOfFire,
+		ShoesNum:Math.round(this.speed*16)
+	};
+	console.log("inc:_out=",_out);	
+	if(this.id == this.BMM.wsClient.username) this.BMM.setBuffStat(_out);	
 }
 
 /*
@@ -294,7 +300,17 @@ BMO.BM.prototype.increaseSpeed = function(num){
 	num = num ? parseInt(num) : 0.0625 * 48;
 	this.speed += num;
 	if (this.speed > this.speedMax) this.speed = this.speedMax;
+<<<<<<< HEAD
 	if (this.speed < 0.0625*48) this.speed = 0.0625*48;
+=======
+	if (this.speed < 0.1*48) this.speed = 0.1*48;
+	var _out={BombNum:this.currentBombMax,
+		FireNum:this.powerOfFire,
+		ShoesNum:Math.round(this.speed*16)
+	};
+	console.log("inc:_out=",_out);
+	if(this.id == this.BMM.wsClient.username) this.BMM.setBuffStat(_out);	
+>>>>>>> New feature - buffStat
 }
 
 /*
@@ -306,6 +322,12 @@ BMO.BM.prototype.increasePower = function(num){
 	this.powerOfFire += num;
 	if(this.powerOfFire > this.powerMax) this.powerOfFire = this.powerMax;
 	if(this.powerOfFire < 0) this.powerOfFire = 0;
+	var _out={BombNum:this.currentBombMax,
+		FireNum:this.powerOfFire,
+		ShoesNum:Math.round(this.speed*16)
+	};
+	console.log("inc:_out=",_out);	
+	if(this.id == this.BMM.wsClient.username) this.BMM.setBuffStat(_out);	
 }
 
 /*

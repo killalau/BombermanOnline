@@ -16,6 +16,7 @@ BMO.BMM = function(wsClient, handlers){
 	this.timer = null;
 	this.gameState = 0;
 	this.announcement = {};
+	this.buffStat= null;
 };
 
 //constructor
@@ -76,8 +77,9 @@ BMO.BMM.prototype.init = function(data){
 		this.wsClient.sendData('game_sync',JSON.stringify({id:this.wsClient.username,gameState:this.gameState}));
 	}
 	this.setPlayer(data);this.gameState++;
-	this.wsClient.sendData('game_sync',JSON.stringify({id:this.wsClient.username,gameState:this.gameState}));
+	this.wsClient.sendData('game_sync',JSON.stringify({id:this.wsClient.username,gameState:this.gameState}));	
 	this.setController();
+	this.setBuffStat();
 	console.log("BMM.init() end");
 }
 
@@ -293,8 +295,9 @@ BMO.BMM.prototype.setPlayer = function(data){
 			_BM.speed = _player.speed * 48;
 			_BM.speedMax = _player.speedMax * 48;
 			_grid.view.addChild(_BM.view);
-			_grid.addElement(_BM);	
+			_grid.addElement(_BM);				
 		}
+
 		this.setThumbnail({id:_player.username,hamster:(_player.viewPrefix + "D0"),icon:null});
 	}
 	}catch(e){console.log(e);alert(e);throw e};	
@@ -579,6 +582,78 @@ BMO.BMM.prototype.setController = function(){
 										self.game_gameEnd(data);};										
 	}catch(e){console.log(e);alert(e);throw e;};
 }
+
+/*
+@public method setBuffStat
+@param info={
+		ShoesNum:
+		BombNum:
+		FireNum:
+}
+**/
+BMO.BMM.prototype.setBuffStat = function(info){
+	try{
+	if (this.buffStat == null){
+		var _BM=this.getElementById(this.wsClient.username);
+		
+		var _title = new PIXI.Text("Buff");
+		_title.position.y = 11*48;
+		_title.setStyle({fill:"white"});
+		var _bomb = new PIXI.Sprite.fromFrame("BombPlusPlus");
+		_bomb.position = {x:(2*48+24),y:(11*48+5)};
+		_bomb.anchor = {x:0.5,y:0};
+		_bomb.scale = {x:0.5,y:0.5};
+		var _text1 = ""+_BM.currentBombMax;
+		var _bn = new PIXI.Text(_text1);
+		_bn.position = {x:(3*48+24),y:11*48};
+		_bn.anchor = {x:0.5,y:0};
+		_bn.setStyle({fill:"white"});
+		var _fire = new PIXI.Sprite.fromFrame("FirePlusPlus");	
+		_fire.position = {x:(4*48+24),y:(11*48+5)};		
+		_fire.anchor = {x:0.5,y:0};
+		_fire.scale = {x:0.5,y:0.5};
+		var _text2 = ""+_BM.powerOfFire;
+		var _fn = new PIXI.Text(_text2);
+		_fn.position = {x:(5*48+24),y:11*48};
+		_fn.anchor = {x:0.5,y:0};
+		_fn.setStyle({fill:"white"});		
+		var _shoes = new PIXI.Sprite.fromFrame("SpeedPlusPlus");
+		_shoes.position = {x:(6*48+24),y:(11*48+5)};
+		_shoes.anchor = {x:0.5,y:0};
+		_shoes.scale = {x:0.5,y:0.5};
+		var _text3 = ""+Math.round(_BM.speed*16);
+		var _sn = new PIXI.Text(_text3);
+		_sn.position = {x:(7*48+24),y:11*48};
+		_sn.anchor = {x:0.5,y:0};
+		_sn.setStyle({fill:"white"});
+		
+		this.buffStat = {};
+		this.buffStat.title = _title;
+		this.buffStat.bomb = {pic:_bomb,num:_bn};
+		this.buffStat.fire = {pic:_fire,num:_fn};
+		this.buffStat.shoes = {pic:_shoes,num:_sn};
+		this.buffStat.container = new PIXI.DisplayObjectContainer();
+		this.buffStat.container.addChild(this.buffStat.title);
+		this.buffStat.container.addChild(this.buffStat.bomb.pic);
+		this.buffStat.container.addChild(this.buffStat.bomb.num);
+		this.buffStat.container.addChild(this.buffStat.fire.pic);
+		this.buffStat.container.addChild(this.buffStat.fire.num);
+		this.buffStat.container.addChild(this.buffStat.shoes.pic);
+		this.buffStat.container.addChild(this.buffStat.shoes.num);
+		this.view.addChild(this.buffStat.container);
+	}else{
+		var _bn = ""+info.BombNum;
+		var _fn = ""+info.FireNum;
+		var _sn = ""+info.ShoesNum;
+		this.buffStat.bomb.num.setText(_bn);
+		this.buffStat.fire.num.setText(_fn);
+		this.buffStat.shoes.num.setText(_sn);
+	}
+	}catch(e){console.error(e);};
+}
+
+
+
 
 /*
 @private method game_gameEnd(data)
