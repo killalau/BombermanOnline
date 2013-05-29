@@ -34,6 +34,10 @@ function create(isLobby, name){
 			if(n == 0) return n;
 			return Math.round(sum/n);
 		},
+		map : {
+			id : 0,
+			mapFile : "maps/map1.json"
+		},
 		addClient : function(server, client){	// add a client to the room
 
 			
@@ -89,11 +93,11 @@ function create(isLobby, name){
 				type: eventType,
 				data: data
 			};
-				if(client.connection)
-					client.connection.sendUTF(JSON.stringify(msg));
-				console.log("[gameRoom.sendData] src="+srcName+" target="+client.username);
-				console.log("[gameRoom.sendData] data="+data);
-			}
+			if(client.connection)
+				client.connection.sendUTF(JSON.stringify(msg));
+			console.log("[gameRoom.sendData] src="+srcName+" target="+client.username);
+			console.log("[gameRoom.sendData] data="+data);
+		}
 	};
 
 		

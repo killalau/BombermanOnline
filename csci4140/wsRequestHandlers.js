@@ -545,6 +545,42 @@ function lobbyIcon(data,gServer,gClient){
 
 };
 
+
+function room_setMap(data, gServer, gClient){var allowedMap = [];
+	allowedMap.push("maps/map1.json");
+	allowedMap.push("maps/map2.json");
+	
+	var id = data;
+	if(id < 0) id = 0;
+	if(id >= allowedMap.length) id = allowedMap.length -1;
+	
+	var room = gServer.roomList[gClient.room];
+	if(gClient.isHost){
+		room.map.id = id;
+		room.map.mapFile = allowedMap[id];
+	}
+	
+	gClient.sendData('room_setMapACK', true);
+}
+
+function room_getMap(data, gServer, gClient){
+	var desc = [];
+	desc.push({
+		id : 0,
+		src : "images/map1.jpg"
+	});
+	desc.push({
+		id : 1,
+		src : "images/map2.jpg"
+	});
+	
+	var room = gServer.roomList[gClient.room];
+	
+	gClient.sendData('room_getMapACK', true);
+	gClient.broadcastData('room_getMap', desc[room.map.id]);
+}
+
+
 //function host_Notify(data, gServer, gClient) {
 
 
@@ -1158,7 +1194,7 @@ function room_newGame(data, gServer, gClient){
 	gClient.sendData('room_newGameACK', true);
 	
 	// The map config file
-	mapFile = "maps/map1.json";
+	mapFile = gServer.roomList[gClient.room].map.mapFile;
 	
 	fs.readFile(mapFile, "utf-8", function(error, file){
 		if(error){
@@ -1308,6 +1344,8 @@ exports.gameroom_validate = gameroom_validate;
 //end
 
 exports.room_newGame = room_newGame;
+exports.room_getMap = room_getMap;
+exports.room_setMap = room_setMap;
 
 exports.game_jsonList = game_jsonList;
 exports.game_init = game_init;

@@ -59,22 +59,24 @@ function map_change(e){
     e.stopPropagation();
     e.preventDefault();
 	var action = e.currentTarget.getAttribute("id");
-	
-	var map_div = document.getElementById("map_choose");
-	map_div.innerHTML = '';
-	var new_img = document.createElement("img");
-	
 	if(action == "map_back")
-	{	
-		setAttributes(new_img, {"id": "map_img", "class": "map_img", "src": "../images/map1.jpg"});
-		map_div.appendChild(new_img);
-		
+	{
+		mapID--;
 	}
 	else if(action == "map_next")
 	{
-		setAttributes(new_img, {"id": "map_img", "class": "map_img", "src": "../images/map1.jpg"});
-		map_div.appendChild(new_img);
+		mapID++;
 	}
+	set_map(mapID);
+	get_map();
+}
+
+function set_map(mapID){
+	wsClient.sendData("room_setMap", mapID);
+}
+
+function get_map(){
+	wsClient.sendData("room_getMap", true);
 }
 
 function state_change(handlers, wsClient){

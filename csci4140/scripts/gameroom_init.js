@@ -1,5 +1,6 @@
 var wsClient = null;
 var flag = false;
+var mapID = 0;
 
 function init(e){
 	//Fetch from cookies
@@ -216,6 +217,19 @@ function AddEventListenter(handlers, wsClient) {
 			}
 		};
 		
+		handlers["room_setMapACK"] = function(data, wsClient){};
+		handlers["room_getMapACK"] = function(data, wsClient){};
+		handlers["room_getMap"] = function(data, wsClient){
+			if(!data) return;
+			mapID = data.id
+			
+			var map_div = document.getElementById("map_choose");
+			map_div.innerHTML = '';
+			var new_img = document.createElement("img");
+			setAttributes(new_img, {"id": data.id, "class": "map_img", "src": data.src});
+			map_div.appendChild(new_img);
+		};
+		get_map();
 		
 		
 		//create chatroom
