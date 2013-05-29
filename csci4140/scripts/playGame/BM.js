@@ -286,7 +286,7 @@ BMO.BM.prototype.increaseCurrentBombMax = function(num){
 	console.log('[BM.increaseCurrentBombMax] currentBombMax:'+this.currentBombMax);
 	var _out={BombNum:this.currentBombMax,
 		FireNum:this.powerOfFire,
-		ShoesNum:Math.round(this.speed*16)
+		ShoesNum:Math.round(this.speed*16/48)
 	};
 	console.log("inc:_out=",_out);	
 	if(this.id == this.BMM.wsClient.username) this.BMM.setBuffStat(_out);	
@@ -321,7 +321,7 @@ BMO.BM.prototype.increasePower = function(num){
 	if(this.powerOfFire < 0) this.powerOfFire = 0;
 	var _out={BombNum:this.currentBombMax,
 		FireNum:this.powerOfFire,
-		ShoesNum:Math.round(this.speed*16)
+		ShoesNum:Math.round(this.speed*16/48)
 	};
 	console.log("inc:_out=",_out);	
 	if(this.id == this.BMM.wsClient.username) this.BMM.setBuffStat(_out);	
