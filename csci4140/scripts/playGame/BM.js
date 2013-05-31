@@ -286,7 +286,7 @@ BMO.BM.prototype.increaseCurrentBombMax = function(num){
 	console.log('[BM.increaseCurrentBombMax] currentBombMax:'+this.currentBombMax);
 	var _out={BombNum:this.currentBombMax,
 		FireNum:this.powerOfFire,
-		ShoesNum:Math.round(this.speed*16/48)
+		ShoesNum:Math.round((this.speed/48-0.0625)*24)+1
 	};
 	console.log("inc:_out=",_out);	
 	if(this.id == this.BMM.wsClient.username) this.BMM.setBuffStat(_out);	
@@ -297,7 +297,7 @@ BMO.BM.prototype.increaseCurrentBombMax = function(num){
 @param num: the amount of speed to be increased
 **/
 BMO.BM.prototype.increaseSpeed = function(num){
-	num = num ? parseInt(num) : 0.0625 * 48;
+	num = num ? parseInt(num) : 1/24 * 48;
 	this.speed += num;
 	if (this.speed > this.speedMax) this.speed = this.speedMax;
 
@@ -311,7 +311,7 @@ BMO.BM.prototype.increaseSpeed = function(num){
 
 	var _out={BombNum:this.currentBombMax,
 		FireNum:this.powerOfFire,
-		ShoesNum:Math.round(this.speed*16/48)
+		ShoesNum:Math.round((this.speed/48-0.0625)*24)+1
 	};
 	console.log("inc:_out=",_out);
 
@@ -332,7 +332,7 @@ BMO.BM.prototype.increasePower = function(num){
 	if(this.powerOfFire < 0) this.powerOfFire = 0;
 	var _out={BombNum:this.currentBombMax,
 		FireNum:this.powerOfFire,
-		ShoesNum:Math.round(this.speed*16/48)
+		ShoesNum:Math.round((this.speed/48-0.0625)*24)+1
 	};
 	console.log("inc:_out=",_out);	
 	if(this.id == this.BMM.wsClient.username) this.BMM.setBuffStat(_out);	
